@@ -87,7 +87,7 @@ class AttendanceService
         $status = 'PRESENT';
 
         if ($now->greaterThan($maxOnTime)) {
-            $lateMinutes = $shiftStartTime->diffInMinutes($now);
+            $lateMinutes = (int) round($shiftStartTime->diffInMinutes($now));
             $status = 'LATE';
         }
 
@@ -105,7 +105,7 @@ class AttendanceService
                 'clock_in_distance_meters' => $distance,
                 'clock_in_photo_path' => $photoPath,
                 'status' => $status,
-                'late_minutes' => $lateMinutes,
+                'late_minutes' => (int) $lateMinutes,
             ]
         );
     }
@@ -150,7 +150,7 @@ class AttendanceService
 
         // Hitung total jam kerja
         $clockInTime = Carbon::parse($attendance->clock_in);
-        $totalWorkMinutes = $clockInTime->diffInMinutes($now);
+        $totalWorkMinutes = (int) round($clockInTime->diffInMinutes($now));
 
         // Cek pulang cepat (Early Leave)
         $earlyLeaveMinutes = 0;
@@ -159,7 +159,7 @@ class AttendanceService
         if ($attendance->shift) {
             $shiftEndTime = Carbon::parse($today.' '.$attendance->shift->end_time);
             if ($now->lessThan($shiftEndTime)) {
-                $earlyLeaveMinutes = $now->diffInMinutes($shiftEndTime);
+                $earlyLeaveMinutes = (int) round($now->diffInMinutes($shiftEndTime));
                 if ($status === 'PRESENT') {
                     $status = 'EARLY_LEAVE';
                 }
@@ -172,8 +172,8 @@ class AttendanceService
             'clock_out_lng' => $userLng,
             'clock_out_distance_meters' => $distance,
             'clock_out_photo_path' => $photoPath,
-            'total_work_minutes' => $totalWorkMinutes,
-            'early_leave_minutes' => $earlyLeaveMinutes,
+            'total_work_minutes' => (int) $totalWorkMinutes,
+            'early_leave_minutes' => (int) $earlyLeaveMinutes,
             'status' => $status,
         ]);
 

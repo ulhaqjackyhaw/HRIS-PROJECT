@@ -393,6 +393,8 @@
     // State variables
     let videoStream = null;
     let currentFacingMode = 'user';
+    let availableVideoDevices = [];
+    let currentDeviceIndex = 0;
     let userLat = null;
     let userLng = null;
     let userAccuracy = null;
@@ -406,43 +408,136 @@
         name: "{{ $targetLocation ? $targetLocation->name : 'Kantor Pusat' }}"
     };
 
+    // Helper: Perbarui daftar kamera fisik yang tersedia
+    async function enumerateCameraDevices() {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+            return [];
+        }
+        try {
+            const devices = await navigator.mediaDevices.enumerateDevices();
+            availableVideoDevices = devices.filter(d => d.kind === 'videoinput');
+            const switchBtnText = document.querySelector('#btn-switch-cam span');
+            if (availableVideoDevices.length > 1 && switchBtnText) {
+                switchBtnText.textContent = `Ganti Kamera (${availableVideoDevices.length})`;
+            }
+            return availableVideoDevices;
+        } catch (e) {
+            console.warn('Gagal membaca daftar kamera:', e);
+            return [];
+        }
+    }
+
     // 1. Inisialisasi Kamera Web
-    async function initCamera() {
+    async function initCamera(preferFacingMode = null, specificDeviceId = null) {
         const video = document.getElementById('webcam-video');
         const cameraStatus = document.getElementById('camera-status');
         const fallback = document.getElementById('camera-fallback');
 
+        if (preferFacingMode) {
+            currentFacingMode = preferFacingMode;
+        }
+
+        // Hentikan stream kamera lama jika ada
         if (videoStream) {
-            videoStream.getTracks().forEach(track => track.stop());
+            videoStream.getTracks().forEach(track => {
+                try { track.stop(); } catch (e) {}
+            });
+            videoStream = null;
+        }
+        if (video) {
+            video.srcObject = null;
+        }
+
+        // Siapkan constraints yang aman (gunakan ideal agar tidak melempar OverconstrainedError)
+        let constraints = {
+            audio: false,
+            video: {
+                width: { ideal: 1280, max: 1920 },
+                height: { ideal: 720, max: 1080 }
+            }
+        };
+
+        if (specificDeviceId) {
+            constraints.video.deviceId = { exact: specificDeviceId };
+        } else {
+            constraints.video.facingMode = { ideal: currentFacingMode };
         }
 
         try {
-            videoStream = await navigator.mediaDevices.getUserMedia({
-                video: {
-                    facingMode: currentFacingMode,
-                    width: { ideal: 640 },
-                    height: { ideal: 480 }
-                },
-                audio: false
-            });
-
+            videoStream = await navigator.mediaDevices.getUserMedia(constraints);
             video.srcObject = videoStream;
-            video.play();
-            cameraStatus.textContent = 'Kamera Aktif';
+            await video.play();
+
+            // Atur efek cermin (mirroring hanya untuk kamera depan/selfie)
+            if (currentFacingMode === 'user') {
+                video.classList.add('mirror');
+            } else {
+                video.classList.remove('mirror');
+            }
+
+            cameraStatus.textContent = currentFacingMode === 'user' ? 'Kamera Depan Aktif' : 'Kamera Belakang Aktif';
             cameraStatus.className = 'text-xs px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium';
             fallback.classList.add('hidden');
+
+            // Perbarui daftar kamera setelah izin kamera aktif (agar label deviceId terbaca)
+            await enumerateCameraDevices();
         } catch (err) {
-            console.warn('Camera access error:', err);
-            cameraStatus.textContent = 'Kamera Error / Izin Ditolak';
-            cameraStatus.className = 'text-xs px-2.5 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200 font-medium';
-            fallback.classList.remove('hidden');
+            console.warn('Percobaan kamera gagal, mencoba fallback aman:', err);
+            
+            // Fallback: Jika constraint spesifik gagal, coba minta video standar tanpa facingMode strict
+            try {
+                videoStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+                video.srcObject = videoStream;
+                await video.play();
+
+                currentFacingMode = 'user';
+                video.classList.add('mirror');
+                cameraStatus.textContent = 'Kamera Aktif';
+                cameraStatus.className = 'text-xs px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium';
+                fallback.classList.add('hidden');
+                await enumerateCameraDevices();
+            } catch (fallbackErr) {
+                console.error('Semua akses kamera ditolak/gagal:', fallbackErr);
+                cameraStatus.textContent = 'Kamera Error / Izin Ditolak';
+                cameraStatus.className = 'text-xs px-2.5 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200 font-medium';
+                fallback.classList.remove('hidden');
+            }
         }
     }
 
-    // Toggle Camera Facing Mode
-    document.getElementById('btn-switch-cam').addEventListener('click', () => {
-        currentFacingMode = currentFacingMode === 'user' ? 'environment' : 'user';
-        initCamera();
+    // Toggle Camera (Ganti Kamera Depan / Belakang / Multiple Webcams)
+    document.getElementById('btn-switch-cam').addEventListener('click', async () => {
+        const cameraStatus = document.getElementById('camera-status');
+        
+        // Pastikan daftar device up-to-date
+        await enumerateCameraDevices();
+
+        if (availableVideoDevices.length > 1) {
+            // Jika ada lebih dari 1 kamera fisik (misal: smartphone depan & belakang, atau laptop + webcam USB)
+            currentDeviceIndex = (currentDeviceIndex + 1) % availableVideoDevices.length;
+            const targetDevice = availableVideoDevices[currentDeviceIndex];
+            
+            // Deteksi apakah label mengindikasikan kamera belakang
+            const isBack = /back|rear|environment|belakang/i.test(targetDevice.label);
+            currentFacingMode = isBack ? 'environment' : 'user';
+
+            cameraStatus.textContent = 'Mengganti Kamera...';
+            await initCamera(currentFacingMode, targetDevice.deviceId);
+        } else {
+            // Jika hanya terdeteksi 1 kamera atau browser mobile menyembunyikan deviceId
+            const nextMode = currentFacingMode === 'user' ? 'environment' : 'user';
+            cameraStatus.textContent = 'Beralih ' + (nextMode === 'user' ? 'Kamera Depan...' : 'Kamera Belakang...');
+            await initCamera(nextMode);
+
+            // Jika setelah dicoba ternyata perangkat hanya punya 1 kamera
+            if (availableVideoDevices.length === 1) {
+                const toast = document.createElement('div');
+                toast.className = 'fixed bottom-5 right-5 z-50 bg-slate-900 text-white text-xs px-4 py-2.5 rounded-xl shadow-lg border border-slate-700 flex items-center gap-2';
+                toast.innerHTML = '<span>ℹ️ Hanya 1 kamera terdeteksi pada perangkat ini.</span>';
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 3500);
+            }
+        }
     });
 
     // 2. Ambil Geolocation GPS Browser

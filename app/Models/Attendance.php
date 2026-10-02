@@ -48,6 +48,21 @@ class Attendance extends Model
         ];
     }
 
+    public function setLateMinutesAttribute(mixed $value): void
+    {
+        $this->attributes['late_minutes'] = (int) round((float) $value);
+    }
+
+    public function setEarlyLeaveMinutesAttribute(mixed $value): void
+    {
+        $this->attributes['early_leave_minutes'] = (int) round((float) $value);
+    }
+
+    public function setTotalWorkMinutesAttribute(mixed $value): void
+    {
+        $this->attributes['total_work_minutes'] = (int) round((float) $value);
+    }
+
     public function employee(): BelongsTo
     {
         return $this->belongsTo(Employee::class);
