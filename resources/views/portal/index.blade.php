@@ -215,9 +215,9 @@
                     <!-- Action Button -->
                     <div class="mt-6 pt-4 border-t border-slate-800/80">
                         @if ($isActive)
-                            <a href="{{ route('dashboard') }}" 
+                            <a href="{{ route($domain['route']) }}" 
                                class="w-full py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-md shadow-indigo-600/30 flex items-center justify-center gap-2 transition-all cursor-pointer">
-                                <span>Buka Modul Core HR</span>
+                                <span>Buka Modul {{ $domain['name'] }}</span>
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
                                 </svg>
