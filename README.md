@@ -11,7 +11,7 @@ Aplikasi dirancang menggunakan pemisahan modul yang terstruktur:
 | Modul | Status | Dokumentasi & Panduan |
 | :--- | :--- | :--- |
 | **Core HR** | 🟢 **Aktif (Siap Pakai)** | 📖 [Baca Dokumentasi Lengkap Modul Core HR (CORE_HR.md)](./CORE_HR.md) |
-| **Time & Attendance** | 🟢 **Aktif (Siap Pakai)** | Presensi Biometrik Wajah & GPS Geofencing (Haversine), Roster Shift, & Lembur |
+| **Time & Attendance** | 🟢 **Aktif (Siap Pakai)** | 📖 [Baca Dokumentasi Modul Attendance (ATTENDANCE.md)](./ATTENDANCE.md) |
 | **Payroll & Tax (PPh 21/TER)** | 🟡 *Tahap Integrasi* | Slip Gaji Otomatis, Perhitungan BPJS, TER PPh 21, & Bank Transfer |
 | **Recruitment & ATS** | ⚪ *Roadmap* | Lowongan Kerja, Pipeline Pelamar, & CV Parsing |
 | **Performance Review** | ⚪ *Roadmap* | KPI/OKR Tracking & 360° Appraisal Review |
