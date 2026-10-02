@@ -1,0 +1,49 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+class EmployeeContract extends Model
+{
+    use HasFactory;
+
+    /**
+     * @var string
+     */
+    protected $table = 'employee_contracts';
+
+    /**
+     * @var list<string>
+     */
+    protected $fillable = [
+        'employee_id',
+        'contract_number',
+        'contract_type',
+        'start_date',
+        'end_date',
+        'document_path',
+        'notes',
+    ];
+
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'start_date' => 'date',
+            'end_date' => 'date',
+        ];
+    }
+
+    /**
+     * Employee to whom this contract belongs.
+     */
+    public function employee(): BelongsTo
+    {
+        return $this->belongsTo(Employee::class);
+    }
+}
