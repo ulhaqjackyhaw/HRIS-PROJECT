@@ -7,6 +7,7 @@ use App\Models\Department;
 use App\Models\Employee;
 use App\Models\EmployeeSchedule;
 use App\Models\OfficeLocation;
+use App\Models\OvertimeRequest;
 use App\Services\AttendanceService;
 use Carbon\Carbon;
 use Exception;
@@ -198,5 +199,62 @@ class AttendanceController extends Controller
             'totalActiveEmployees',
             'departments'
         ));
+    }
+
+    /**
+     * Rekapitulasi Presensi & Lembur Karyawan Bulanan untuk HR & Payroll
+     */
+    public function summary(Request $request): View
+    {
+        $month = $request->input('month', Carbon::now()->format('Y-m'));
+        $startDate = Carbon::parse($month)->startOfMonth()->toDateString();
+        $endDate = Carbon::parse($month)->endOfMonth()->toDateString();
+        $departmentId = $request->input('department_id');
+
+        $query = Employee::with(['department', 'position'])
+            ->where('is_active', true);
+
+        if ($departmentId) {
+            $query->where('department_id', $departmentId);
+        }
+
+        $employees = $query->orderBy('full_name')->get()
+            ->map(function ($emp) use ($startDate, $endDate) {
+                $attendances = Attendance::where('employee_id', $emp->id)
+                    ->whereBetween('date', [$startDate, $endDate])
+                    ->get();
+
+                $overtimes = OvertimeRequest::where('employee_id', $emp->id)
+                    ->where('status', 'APPROVED')
+                    ->whereBetween('date', [$startDate, $endDate])
+                    ->sum('total_hours');
+
+                return [
+                    'id' => $emp->id,
+                    'nik' => $emp->nik,
+                    'name' => $emp->full_name,
+                    'department' => $emp->department?->name ?? '-',
+                    'position' => $emp->position?->title ?? '-',
+                    'present_count' => $attendances->where('status', 'PRESENT')->count(),
+                    'late_count' => $attendances->where('status', 'LATE')->count(),
+                    'leave_count' => $attendances->where('status', 'LEAVE')->count(),
+                    'absent_count' => $attendances->where('status', 'ABSENT')->count(),
+                    'total_late_minutes' => (int) $attendances->sum('late_minutes'),
+                    'total_overtime_hours' => (float) $overtimes,
+                    'total_work_minutes' => (int) $attendances->sum('total_work_minutes'),
+                ];
+            });
+
+        $departments = Department::where('is_active', true)->orderBy('name')->get();
+
+        $kpi = [
+            'total_employees' => $employees->count(),
+            'total_present' => $employees->sum('present_count'),
+            'total_late' => $employees->sum('late_count'),
+            'total_leave' => $employees->sum('leave_count'),
+            'total_overtime_hours' => $employees->sum('total_overtime_hours'),
+        ];
+
+        return view('modules.attendance.summary', compact('employees', 'month', 'departments', 'kpi'));
     }
 }

@@ -172,4 +172,12 @@ class Employee extends Model
     {
         return $this->hasMany(OvertimeRequest::class)->orderByDesc('date');
     }
+
+    /**
+     * Leave and time-off requests.
+     */
+    public function leaveRequests(): HasMany
+    {
+        return $this->hasMany(LeaveRequest::class)->orderByDesc('start_date');
+    }
 }

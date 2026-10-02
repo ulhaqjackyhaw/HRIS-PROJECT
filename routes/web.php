@@ -9,6 +9,7 @@ use App\Http\Controllers\EmployeeContractController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EmployeeEducationController;
 use App\Http\Controllers\EmployeeScheduleController;
+use App\Http\Controllers\LeaveRequestController;
 use App\Http\Controllers\ModulePortalController;
 use App\Http\Controllers\OfficeLocationController;
 use App\Http\Controllers\OvertimeRequestController;
@@ -65,6 +66,16 @@ Route::middleware('auth')->group(function () {
 
         // Monitoring & Daily Attendance Log
         Route::get('/logs', [AttendanceController::class, 'index'])->name('attendance.index');
+
+        // Monthly Attendance Summary (HR & Payroll Engine Prep)
+        Route::get('/summary', [AttendanceController::class, 'summary'])->name('attendance.summary');
+
+        // Leave & Time-Off Management
+        Route::get('leaves', [LeaveRequestController::class, 'index'])->name('leaves.index');
+        Route::post('leaves', [LeaveRequestController::class, 'store'])->name('leaves.store');
+        Route::post('leaves/{leave}/approve', [LeaveRequestController::class, 'approve'])->name('leaves.approve');
+        Route::post('leaves/{leave}/reject', [LeaveRequestController::class, 'reject'])->name('leaves.reject');
+        Route::get('/time-off', fn () => redirect()->route('leaves.index'))->name('timeoff.index');
 
         // Shifts Management
         Route::resource('shifts', ShiftController::class)->except(['create', 'show', 'edit']);

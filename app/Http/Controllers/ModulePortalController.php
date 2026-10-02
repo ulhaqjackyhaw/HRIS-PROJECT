@@ -68,7 +68,9 @@ class ModulePortalController extends Controller
                     'Validasi Geofence Radius Kantor (Anti-Fake GPS)',
                     'Manajemen Shift Kerja Dinamis (Pagi, Reguler, Malam)',
                     'Roster & Penjadwalan Kerja Karyawan Bulanan',
+                    'Pengajuan Cuti & Izin Kerja Terintegrasi Kalender Kehadiran',
                     'Pengajuan & Approval Surat Perintah Lembur (SPL)',
+                    'Rekapitulasi Presensi & Lembur Bulanan (Siap Payroll)',
                 ],
             ],
             'payroll' => [

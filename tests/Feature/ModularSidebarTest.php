@@ -44,6 +44,8 @@ class ModularSidebarTest extends TestCase
 
         // Must NOT contain Attendance items
         $response->assertDontSee('Presensi Selfie & GPS', false);
+        $response->assertDontSee('Pengajuan Cuti & Izin', false);
+        $response->assertDontSee('Rekapitulasi Presensi HR', false);
         $response->assertDontSee('Master Shift Kerja');
         $response->assertDontSee('Lokasi & Geofence', false);
         $response->assertDontSee('Roster & Jadwal', false);
@@ -58,7 +60,9 @@ class ModularSidebarTest extends TestCase
 
         // Must contain Attendance items
         $response->assertSee('Presensi Selfie & GPS', false);
+        $response->assertSee('Pengajuan Cuti & Izin', false);
         $response->assertSee('Monitoring Presensi');
+        $response->assertSee('Rekapitulasi Presensi HR', false);
         $response->assertSee('Master Shift Kerja');
         $response->assertSee('Lokasi & Geofence', false);
         $response->assertSee('Roster & Jadwal', false);
