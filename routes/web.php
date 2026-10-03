@@ -10,6 +10,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EmployeeEducationController;
 use App\Http\Controllers\EmployeeScheduleController;
 use App\Http\Controllers\LeaveRequestController;
+use App\Http\Controllers\ManagerApprovalController;
 use App\Http\Controllers\ModulePortalController;
 use App\Http\Controllers\OfficeLocationController;
 use App\Http\Controllers\OvertimeRequestController;
@@ -76,6 +77,11 @@ Route::middleware('auth')->group(function () {
         Route::post('leaves/{leave}/approve', [LeaveRequestController::class, 'approve'])->name('leaves.approve');
         Route::post('leaves/{leave}/reject', [LeaveRequestController::class, 'reject'])->name('leaves.reject');
         Route::get('/time-off', fn () => redirect()->route('leaves.index'))->name('timeoff.index');
+
+        // Manager Self-Service (MSS) Approvals
+        Route::get('approvals', [ManagerApprovalController::class, 'index'])->name('approvals.index');
+        Route::post('approvals/leaves/{leaveRequest}/approve', [ManagerApprovalController::class, 'approveLeave'])->name('approvals.leave.approve');
+        Route::post('approvals/leaves/{leaveRequest}/reject', [ManagerApprovalController::class, 'rejectLeave'])->name('approvals.leave.reject');
 
         // Shifts Management
         Route::resource('shifts', ShiftController::class)->except(['create', 'show', 'edit']);

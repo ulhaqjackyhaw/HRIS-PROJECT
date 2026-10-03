@@ -12,11 +12,13 @@ class LeaveRequest extends Model
 
     protected $fillable = [
         'employee_id',
+        'leave_type_id',
         'type',
         'start_date',
         'end_date',
         'total_days',
         'reason',
+        'attachment_path',
         'status',
         'approved_by',
         'rejection_note',
@@ -36,6 +38,11 @@ class LeaveRequest extends Model
     public function employee(): BelongsTo
     {
         return $this->belongsTo(Employee::class);
+    }
+
+    public function leaveType(): BelongsTo
+    {
+        return $this->belongsTo(LeaveType::class);
     }
 
     public function approver(): BelongsTo

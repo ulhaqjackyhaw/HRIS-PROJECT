@@ -125,25 +125,34 @@
                             </td>
                             <td class="py-3.5 px-5">
                                 @php
-                                    $typeBadge = match($leave->type) {
-                                        'ANNUAL' => 'bg-indigo-50 text-indigo-700 border-indigo-200',
-                                        'SICK' => 'bg-rose-50 text-rose-700 border-rose-200',
-                                        'SPECIAL' => 'bg-purple-50 text-purple-700 border-purple-200',
-                                        'MATERNITY' => 'bg-pink-50 text-pink-700 border-pink-200',
-                                        default => 'bg-slate-100 text-slate-700 border-slate-200',
-                                    };
-                                    $typeLabel = match($leave->type) {
+                                    $isPaid = $leave->leaveType ? $leave->leaveType->is_paid : ($leave->type !== 'UNPAID');
+                                    $deductsQuota = $leave->leaveType ? $leave->leaveType->deducts_annual_quota : ($leave->type === 'ANNUAL');
+                                    $typeTitle = $leave->leaveType?->name ?? match($leave->type) {
                                         'ANNUAL' => 'Cuti Tahunan',
-                                        'SICK' => 'Izin Sakit',
+                                        'SICK', 'SICK_CERT' => 'Izin Sakit',
                                         'SPECIAL' => 'Cuti Khusus',
                                         'MATERNITY' => 'Cuti Melahirkan',
-                                        'UNPAID' => 'Tanpa Gaji',
+                                        'MARRIAGE' => 'Izin Menikah',
+                                        'PATERNITY' => 'Cuti Suami',
+                                        'BEREAVEMENT' => 'Izin Duka Cita',
+                                        'HAJJ' => 'Ibadah Haji',
+                                        'UNPAID' => 'Tanpa Gaji (Unpaid)',
                                         default => $leave->type,
                                     };
                                 @endphp
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border {{ $typeBadge }}">
-                                    {{ $typeLabel }}
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border {{ $isPaid ? 'bg-indigo-50 text-indigo-700 border-indigo-200' : 'bg-rose-50 text-rose-700 border-rose-200' }}">
+                                    {{ $typeTitle }}
                                 </span>
+                                @if ($deductsQuota)
+                                    <span class="block text-[10px] text-amber-600 font-semibold mt-1">
+                                        ⚡ Potong Kuota Cuti
+                                    </span>
+                                @endif
+                                @if (! $isPaid)
+                                    <span class="block text-[10px] text-rose-600 font-semibold mt-1">
+                                        ⚠️ Unpaid (Potong Upah)
+                                    </span>
+                                @endif
                             </td>
                             <td class="py-3.5 px-5">
                                 <div class="font-medium text-slate-900 text-xs">
@@ -153,11 +162,19 @@
                             </td>
                             <td class="py-3.5 px-5 text-center">
                                 <span class="inline-flex items-center justify-center px-2 py-0.5 rounded-lg bg-slate-100 text-slate-800 text-xs font-bold font-mono">
-                                    {{ $leave->total_days }} Hari
+                                    {{ $leave->total_days }} Hari Kerja
                                 </span>
                             </td>
                             <td class="py-3.5 px-5 max-w-xs">
                                 <p class="text-xs text-slate-700 line-clamp-2" title="{{ $leave->reason }}">{{ $leave->reason }}</p>
+                                @if ($leave->attachment_path)
+                                    <a href="{{ asset('storage/' . $leave->attachment_path) }}" target="_blank" class="inline-flex items-center gap-1 text-[11px] text-indigo-600 hover:text-indigo-800 font-medium mt-1 underline">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path>
+                                        </svg>
+                                        <span>Lihat Dokumen Bukti</span>
+                                    </a>
+                                @endif
                                 @if ($leave->rejection_note)
                                     <p class="text-[11px] text-rose-600 mt-1 font-medium">
                                         Catatan Tolak: {{ $leave->rejection_note }}
@@ -183,7 +200,7 @@
                                 @if ($leave->status === 'PENDING')
                                     <div class="inline-flex items-center gap-1.5">
                                         <!-- Approve Form -->
-                                        <form method="POST" action="{{ route('leaves.approve', $leave) }}" onsubmit="return confirm('Setujui pengajuan cuti ini? Sistem akan otomatis mencatat status LEAVE di tabel presensi.');">
+                                        <form method="POST" action="{{ route('leaves.approve', $leave) }}" onsubmit="return confirm('Setujui pengajuan cuti ini? Sistem akan otomatis mencatat status LEAVE di kalender presensi dan memotong saldo kuota cuti tahunan jika berlaku.');">
                                             @csrf
                                             <button type="submit" class="px-2.5 py-1 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 rounded-lg transition-colors cursor-pointer shadow-2xs">
                                                 Setujui
@@ -228,13 +245,13 @@
     <div class="bg-white rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl p-6 space-y-5 animate-in fade-in zoom-in-95 duration-200">
         <div class="flex items-center justify-between pb-3 border-b border-slate-100">
             <div>
-                <h3 class="font-bold text-slate-900 text-base">Form Pengajuan Cuti / Izin</h3>
-                <p class="text-xs text-slate-400">Masukkan detail permohonan cuti kerja karyawan</p>
+                <h3 class="font-bold text-slate-900 text-base">Form Pengajuan Cuti / Izin Karyawan</h3>
+                <p class="text-xs text-slate-400">Permohonan izin kerja sesuai regulasi UU Ketenagakerjaan</p>
             </div>
-            <button type="button" onclick="closeLeaveModal()" class="text-slate-400 hover:text-slate-700 text-2xl font-bold leading-none">&times;</button>
+            <button type="button" onclick="closeLeaveModal()" class="text-slate-400 hover:text-slate-700 text-2xl font-bold leading-none cursor-pointer">&times;</button>
         </div>
 
-        <form method="POST" action="{{ route('leaves.store') }}" class="space-y-4">
+        <form method="POST" action="{{ route('leaves.store') }}" enctype="multipart/form-data" class="space-y-4">
             @csrf
 
             <!-- Karyawan -->
@@ -244,8 +261,8 @@
                 </label>
                 <select id="employee_id" name="employee_id" required class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500">
                     @foreach ($employees as $emp)
-                        <option value="{{ $emp->id }}" {{ ($currentUserEmployee && $currentUserEmployee->id === $emp->id) ? 'selected' : '' }}>
-                            {{ $emp->full_name }} ({{ $emp->nik }} - {{ $emp->department?->name }})
+                        <option value="{{ $emp->id }}" data-quota="{{ $emp->remaining_annual_leave }}" {{ ($currentUserEmployee && $currentUserEmployee->id === $emp->id) ? 'selected' : '' }}>
+                            {{ $emp->full_name }} (NIK: {{ $emp->nik }} &bull; Sisa Cuti: {{ $emp->remaining_annual_leave }} hari)
                         </option>
                     @endforeach
                 </select>
@@ -253,17 +270,29 @@
 
             <!-- Tipe Cuti -->
             <div>
-                <label for="type" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
-                    Jenis Cuti / Izin <span class="text-rose-500">*</span>
+                <label for="leave_type_id" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+                    Jenis Izin / Cuti <span class="text-rose-500">*</span>
                 </label>
-                <select id="type" name="type" required class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500">
-                    <option value="ANNUAL">Cuti Tahunan (Annual Leave)</option>
-                    <option value="SICK">Izin Sakit dengan Surat Dokter (Sick Leave)</option>
-                    <option value="SPECIAL">Cuti Khusus (Menikah, Khitanan, Duka Cita)</option>
-                    <option value="MATERNITY">Cuti Melahirkan (Maternity Leave)</option>
-                    <option value="UNPAID">Izin Tanpa Gaji (Unpaid Leave)</option>
-                    <option value="OTHER">Lainnya / Dispensasi</option>
+                <select id="leave_type_id" name="leave_type_id" required onchange="handleLeaveTypeChange(this)" class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500">
+                    @foreach ($leaveTypes as $type)
+                        <option value="{{ $type->id }}" 
+                                data-deducts="{{ $type->deducts_annual_quota ? '1' : '0' }}" 
+                                data-paid="{{ $type->is_paid ? '1' : '0' }}"
+                                data-requires-attachment="{{ $type->requires_attachment ? '1' : '0' }}"
+                                data-max-days="{{ $type->max_days ?? '' }}">
+                            {{ $type->name }} 
+                            @if ($type->deducts_annual_quota) (Potong Kuota Cuti) @endif
+                            @if (! $type->is_paid) (Tanpa Upah / Unpaid) @endif
+                            @if ($type->max_days) - Maks {{ $type->max_days }} hari @endif
+                        </option>
+                    @endforeach
                 </select>
+
+                <!-- Helper Banner Dinamis -->
+                <div id="leave-type-hint" class="mt-2 p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-[11px] text-slate-600 flex items-start gap-2">
+                    <span id="hint-icon">ℹ️</span>
+                    <span id="hint-text">Pilih jenis cuti untuk melihat kebijakan pemotongan kuota dan upah.</span>
+                </div>
             </div>
 
             <!-- Rentang Tanggal -->
@@ -282,6 +311,19 @@
                 </div>
             </div>
 
+            <!-- Upload Dokumen Bukti (Surat Dokter / Undangan) -->
+            <div id="attachment-field-container">
+                <label for="attachment" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+                    Dokumen Lampiran Pendukung <span id="attachment-required-badge" class="hidden text-rose-500 font-bold">* (Wajib)</span>
+                </label>
+                <input type="file" 
+                       id="attachment" 
+                       name="attachment" 
+                       accept=".pdf,.jpg,.jpeg,.png"
+                       class="w-full text-xs text-slate-600 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-amber-50 file:text-amber-700 hover:file:bg-amber-100 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer">
+                <p class="text-[11px] text-slate-400 mt-1">Format PDF, JPG, PNG (Maksimal 5MB). Wajib untuk izin sakit dokter & perizinan khusus.</p>
+            </div>
+
             <!-- Alasan -->
             <div>
                 <label for="reason" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
@@ -291,11 +333,11 @@
             </div>
 
             <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
-                <button type="button" onclick="closeLeaveModal()" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition-colors">
+                <button type="button" onclick="closeLeaveModal()" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition-colors cursor-pointer">
                     Batal
                 </button>
                 <button type="submit" class="px-5 py-2 text-xs font-bold text-white bg-amber-600 hover:bg-amber-500 rounded-xl transition-colors shadow-xs cursor-pointer">
-                    Kirim Pengajuan Cuti
+                    Kirim Permohonan Izin
                 </button>
             </div>
         </form>
@@ -334,6 +376,10 @@
 <script>
     function openLeaveModal() {
         document.getElementById('modal-leave').classList.remove('hidden');
+        const select = document.getElementById('leave_type_id');
+        if (select) {
+            handleLeaveTypeChange(select);
+        }
     }
     function closeLeaveModal() {
         document.getElementById('modal-leave').classList.add('hidden');
@@ -346,5 +392,60 @@
     function closeRejectModal() {
         document.getElementById('modal-reject').classList.add('hidden');
     }
+
+    function handleLeaveTypeChange(selectElem) {
+        const selected = selectElem.options[selectElem.selectedIndex];
+        if (!selected) return;
+
+        const deducts = selected.getAttribute('data-deducts') === '1';
+        const isPaid = selected.getAttribute('data-paid') === '1';
+        const requiresAttachment = selected.getAttribute('data-requires-attachment') === '1';
+        const maxDays = selected.getAttribute('data-max-days');
+
+        const badge = document.getElementById('attachment-required-badge');
+        const fileInput = document.getElementById('attachment');
+        const hintText = document.getElementById('hint-text');
+        const hintIcon = document.getElementById('hint-icon');
+
+        if (requiresAttachment) {
+            badge?.classList.remove('hidden');
+            fileInput?.setAttribute('required', 'required');
+        } else {
+            badge?.classList.add('hidden');
+            fileInput?.removeAttribute('required');
+        }
+
+        let notes = [];
+        if (deducts) {
+            notes.push('⚠️ Mengurangi sisa kuota cuti tahunan berjalan');
+        } else {
+            notes.push('✓ Tidak mengurangi kuota cuti tahunan');
+        }
+
+        if (isPaid) {
+            notes.push('Gaji tetap dibayar penuh (Paid Leave)');
+        } else {
+            notes.push('⛔ Pemotongan upah harian pada Payroll (Unpaid Leave)');
+        }
+
+        if (maxDays) {
+            notes.push(`Maksimal ${maxDays} hari per pengajuan`);
+        }
+
+        if (requiresAttachment) {
+            notes.push('Wajib melampirkan file dokumen/surat bukti');
+        }
+
+        if (hintText) {
+            hintText.innerText = notes.join(' • ');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const select = document.getElementById('leave_type_id');
+        if (select) {
+            handleLeaveTypeChange(select);
+        }
+    });
 </script>
 @endsection

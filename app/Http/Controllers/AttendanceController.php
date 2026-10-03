@@ -6,6 +6,7 @@ use App\Models\Attendance;
 use App\Models\Department;
 use App\Models\Employee;
 use App\Models\EmployeeSchedule;
+use App\Models\LeaveRequest;
 use App\Models\OfficeLocation;
 use App\Models\OvertimeRequest;
 use App\Services\AttendanceService;
@@ -229,6 +230,39 @@ class AttendanceController extends Controller
                     ->whereBetween('date', [$startDate, $endDate])
                     ->sum('total_hours');
 
+                $approvedLeaves = LeaveRequest::with('leaveType')
+                    ->where('employee_id', $emp->id)
+                    ->where('status', 'APPROVED')
+                    ->where(function ($q) use ($startDate, $endDate) {
+                        $q->whereBetween('start_date', [$startDate, $endDate])
+                            ->orWhereBetween('end_date', [$startDate, $endDate])
+                            ->orWhere(function ($sub) use ($startDate, $endDate) {
+                                $sub->where('start_date', '<=', $startDate)
+                                    ->where('end_date', '>=', $endDate);
+                            });
+                    })
+                    ->get();
+
+                $unpaidLeaveDays = 0;
+                $paidLeaveDays = 0;
+                $leaveAttendances = $attendances->where('status', 'LEAVE');
+
+                foreach ($leaveAttendances as $leaveAtt) {
+                    $attDate = Carbon::parse($leaveAtt->date)->toDateString();
+                    $matchedLeave = $approvedLeaves->first(function ($l) use ($attDate) {
+                        $lStart = Carbon::parse($l->start_date)->toDateString();
+                        $lEnd = Carbon::parse($l->end_date)->toDateString();
+
+                        return $attDate >= $lStart && $attDate <= $lEnd;
+                    });
+
+                    if ($matchedLeave && ($matchedLeave->leaveType?->is_paid === false || $matchedLeave->type === 'UNPAID')) {
+                        $unpaidLeaveDays++;
+                    } else {
+                        $paidLeaveDays++;
+                    }
+                }
+
                 return [
                     'id' => $emp->id,
                     'nik' => $emp->nik,
@@ -238,7 +272,12 @@ class AttendanceController extends Controller
                     'present_count' => $attendances->where('status', 'PRESENT')->count(),
                     'late_count' => $attendances->where('status', 'LATE')->count(),
                     'leave_count' => $attendances->where('status', 'LEAVE')->count(),
+                    'paid_leave_count' => $paidLeaveDays,
+                    'unpaid_leave_count' => $unpaidLeaveDays,
                     'absent_count' => $attendances->where('status', 'ABSENT')->count(),
+                    'annual_leave_quota' => $emp->annual_leave_quota ?? 12,
+                    'annual_leave_used' => $emp->annual_leave_used ?? 0,
+                    'remaining_annual_leave' => $emp->remaining_annual_leave,
                     'total_late_minutes' => (int) $attendances->sum('late_minutes'),
                     'total_overtime_hours' => (float) $overtimes,
                     'total_work_minutes' => (int) $attendances->sum('total_work_minutes'),
@@ -252,6 +291,8 @@ class AttendanceController extends Controller
             'total_present' => $employees->sum('present_count'),
             'total_late' => $employees->sum('late_count'),
             'total_leave' => $employees->sum('leave_count'),
+            'total_paid_leave' => $employees->sum('paid_leave_count'),
+            'total_unpaid_leave' => $employees->sum('unpaid_leave_count'),
             'total_overtime_hours' => $employees->sum('total_overtime_hours'),
         ];
 

@@ -175,4 +175,55 @@ class LeaveAndSummaryTest extends TestCase
         // Harus ada angka cuti 2 hari dan lembur 3.0 jam
         $response->assertSee('3.0 jam');
     }
+
+    public function test_approving_leave_deducts_annual_quota(): void
+    {
+        $this->assertEquals(12, $this->employee->remaining_annual_leave);
+        $this->assertEquals(0, $this->employee->annual_leave_used);
+
+        $leave = LeaveRequest::create([
+            'employee_id' => $this->employee->id,
+            'type' => 'ANNUAL',
+            'start_date' => '2026-10-05',
+            'end_date' => '2026-10-07',
+            'total_days' => 3,
+            'reason' => 'Cuti tahunan',
+            'status' => 'PENDING',
+        ]);
+
+        $this->actingAs($this->user)->post(route('leaves.approve', $leave));
+
+        $this->employee->refresh();
+        $this->assertEquals(3, $this->employee->annual_leave_used);
+        $this->assertEquals(9, $this->employee->remaining_annual_leave);
+    }
+
+    public function test_manager_approval_controller_approves_and_syncs_attendance(): void
+    {
+        $leave = LeaveRequest::create([
+            'employee_id' => $this->employee->id,
+            'type' => 'ANNUAL',
+            'start_date' => '2026-10-12',
+            'end_date' => '2026-10-13',
+            'total_days' => 2,
+            'reason' => 'Urusan penting',
+            'status' => 'PENDING',
+        ]);
+
+        $response = $this->actingAs($this->user)->post(route('approvals.leave.approve', $leave));
+
+        $response->assertRedirect();
+        $this->assertDatabaseHas('leave_requests', [
+            'id' => $leave->id,
+            'status' => 'APPROVED',
+        ]);
+
+        $att1 = Attendance::where('employee_id', $this->employee->id)->whereDate('date', '2026-10-12')->first();
+        $att2 = Attendance::where('employee_id', $this->employee->id)->whereDate('date', '2026-10-13')->first();
+
+        $this->assertNotNull($att1);
+        $this->assertEquals('LEAVE', $att1->status);
+        $this->assertNotNull($att2);
+        $this->assertEquals('LEAVE', $att2->status);
+    }
 }

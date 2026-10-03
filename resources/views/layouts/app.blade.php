@@ -93,6 +93,14 @@
                     <span>Pengajuan Cuti & Izin</span>
                 </a>
 
+                <a href="{{ route('approvals.index') }}" 
+                   class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-medium text-sm transition-all {{ request()->routeIs('approvals.*') ? 'bg-amber-600 text-white shadow-md shadow-amber-600/30' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span>Persetujuan Manajer (MSS)</span>
+                </a>
+
                 <p class="px-3 text-xs font-semibold text-amber-400/80 uppercase tracking-wider mt-5 mb-2">Monitoring & Audit</p>
 
                 <a href="{{ route('attendance.index') }}" 

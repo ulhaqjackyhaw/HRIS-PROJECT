@@ -56,13 +56,13 @@
     </div>
 
     <!-- Metrik KPI Card Bulanan -->
-    <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+    <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-6 gap-4">
         <!-- Total Karyawan -->
         <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
             <div>
                 <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Karyawan</span>
                 <span class="text-2xl font-extrabold text-slate-800 mt-1 block">{{ $kpi['total_employees'] }}</span>
-                <span class="text-[11px] text-slate-500">Total data tercakup</span>
+                <span class="text-[11px] text-slate-500">Tercakup</span>
             </div>
             <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center font-bold">
                 👥
@@ -86,22 +86,34 @@
             <div>
                 <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Terlambat</span>
                 <span class="text-2xl font-extrabold text-amber-600 mt-1 block">{{ $kpi['total_late'] }}</span>
-                <span class="text-[11px] text-amber-600 font-medium">Frekuensi telat</span>
+                <span class="text-[11px] text-amber-600 font-medium">Frekuensi</span>
             </div>
             <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold">
                 ⏱️
             </div>
         </div>
 
-        <!-- Total Cuti / Izin -->
+        <!-- Cuti Berbayar (Paid) -->
         <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
             <div>
-                <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Cuti & Izin</span>
-                <span class="text-2xl font-extrabold text-blue-600 mt-1 block">{{ $kpi['total_leave'] }}</span>
-                <span class="text-[11px] text-blue-600 font-medium">Hari Disetujui</span>
+                <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Cuti Berbayar</span>
+                <span class="text-2xl font-extrabold text-blue-600 mt-1 block">{{ $kpi['total_paid_leave'] }}</span>
+                <span class="text-[11px] text-blue-600 font-medium">Gaji Penuh</span>
             </div>
             <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
                 🏖️
+            </div>
+        </div>
+
+        <!-- Cuti Tanpa Upah (Unpaid) -->
+        <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+            <div>
+                <span class="text-xs font-semibold text-rose-500 uppercase tracking-wider block">Cuti Unpaid</span>
+                <span class="text-2xl font-extrabold text-rose-600 mt-1 block">{{ $kpi['total_unpaid_leave'] }}</span>
+                <span class="text-[11px] text-rose-600 font-medium">Potong Upah</span>
+            </div>
+            <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center font-bold">
+                ⛔
             </div>
         </div>
 
@@ -125,7 +137,7 @@
                 <h3 class="font-bold text-slate-900 text-sm sm:text-base">
                     Daftar Rekap Periode {{ \Carbon\Carbon::parse($month)->translatedFormat('F Y') }}
                 </h3>
-                <p class="text-xs text-slate-400 mt-0.5">Data siap disinkronkan ke Modul Payroll & PPh 21/TER</p>
+                <p class="text-xs text-slate-400 mt-0.5">Data siap disinkronkan ke Modul Payroll & PPh 21/TER (Tercatat Hari Paid vs Unpaid Leave)</p>
             </div>
             <span class="text-xs font-semibold text-slate-500 bg-slate-100 px-3 py-1 rounded-full">
                 {{ $employees->count() }} Pegawai
@@ -136,10 +148,11 @@
             <table class="w-full text-left text-sm text-slate-600">
                 <thead class="bg-slate-50 text-[11px] font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-100">
                     <tr>
-                        <th class="py-3 px-5">Karyawan</th>
+                        <th class="py-3 px-5">Karyawan & Saldo Cuti</th>
                         <th class="py-3 px-5 text-center text-emerald-700">Hadir</th>
                         <th class="py-3 px-5 text-center text-amber-700">Telat</th>
-                        <th class="py-3 px-5 text-center text-blue-700">Cuti/Izin</th>
+                        <th class="py-3 px-5 text-center text-blue-700">Cuti Paid</th>
+                        <th class="py-3 px-5 text-center text-rose-700">Cuti Unpaid (Potong Gaji)</th>
                         <th class="py-3 px-5 text-center text-rose-700">Alpa</th>
                         <th class="py-3 px-5 text-center">Total Telat (Mnt)</th>
                         <th class="py-3 px-5 text-center text-purple-700">Lembur (Jam)</th>
@@ -154,6 +167,9 @@
                                 <div class="text-xs text-slate-400 mt-0.5">
                                     NIK: <span class="font-mono text-slate-600">{{ $emp['nik'] }}</span> &bull; {{ $emp['department'] }} ({{ $emp['position'] }})
                                 </div>
+                                <div class="text-[11px] text-indigo-600 mt-0.5 font-medium">
+                                    Sisa Kuota Cuti Tahunan: <strong class="font-mono">{{ $emp['remaining_annual_leave'] }}</strong> / {{ $emp['annual_leave_quota'] }} hari (Terpakai: {{ $emp['annual_leave_used'] }})
+                                </div>
                             </td>
                             <td class="py-3.5 px-5 text-center font-bold text-emerald-600">
                                 {{ $emp['present_count'] }}
@@ -162,7 +178,16 @@
                                 {{ $emp['late_count'] }}
                             </td>
                             <td class="py-3.5 px-5 text-center font-bold text-blue-600">
-                                {{ $emp['leave_count'] }}
+                                {{ $emp['paid_leave_count'] }}
+                            </td>
+                            <td class="py-3.5 px-5 text-center">
+                                @if ($emp['unpaid_leave_count'] > 0)
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-rose-50 text-rose-700 border border-rose-200">
+                                        {{ $emp['unpaid_leave_count'] }} hari
+                                    </span>
+                                @else
+                                    <span class="text-slate-400 font-mono text-xs">0</span>
+                                @endif
                             </td>
                             <td class="py-3.5 px-5 text-center font-bold {{ $emp['absent_count'] > 0 ? 'text-rose-600' : 'text-slate-400' }}">
                                 {{ $emp['absent_count'] }}
@@ -179,7 +204,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="p-8 text-center text-slate-400 text-sm">
+                            <td colspan="9" class="p-8 text-center text-slate-400 text-sm">
                                 Tidak ada data karyawan atau presensi untuk bulan yang dipilih.
                             </td>
                         </tr>
