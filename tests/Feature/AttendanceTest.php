@@ -158,6 +158,29 @@ class AttendanceTest extends TestCase
         ]);
     }
 
+    public function test_clock_in_late_with_fractional_seconds_persists_as_clean_integer(): void
+    {
+        // Masuk jam 18:00:13 (10 jam + 13 detik = 600.22 menit, harus tersimpan bulat 600)
+        Carbon::setTestNow(Carbon::today()->setTime(18, 0, 13));
+
+        $photo = UploadedFile::fake()->image('selfie_fraction.jpg');
+
+        $response = $this->post(route('attendance.clock-in'), [
+            'employee_id' => $this->employee->id,
+            'latitude' => -6.2087634,
+            'longitude' => 106.8455990,
+            'photo' => $photo,
+        ]);
+
+        $response->assertRedirect(route('attendance.check-in'));
+
+        $this->assertDatabaseHas('attendances', [
+            'employee_id' => $this->employee->id,
+            'status' => 'LATE',
+            'late_minutes' => 600,
+        ]);
+    }
+
     public function test_clock_out_calculates_work_minutes_and_early_leave(): void
     {
         // 1. Clock In tepat waktu jam 08:00

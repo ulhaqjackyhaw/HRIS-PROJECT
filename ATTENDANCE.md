@@ -130,6 +130,18 @@ Struktur data modul Attendance dinormalisasi ke dalam 5 tabel utama di database 
 * `approved_by`: Foreign key ke karyawan/atasan yang menyetujui.
 * `rejection_note`: Catatan alasan penolakan jika ditolak.
 
+#### 6. `leave_requests` (Pengajuan & Persetujuan Cuti / Izin Kerja)
+* `id`: Primary key.
+* `employee_id`: Karyawan yang mengajukan cuti.
+* `type`: Tipe cuti (`ANNUAL` - Cuti Tahunan, `SICK` - Sakit, `SPECIAL` - Khusus, `MATERNITY` - Melahirkan, `UNPAID` - Tanpa Gaji, `OTHER`).
+* `start_date` & `end_date`: Rentang tanggal permohonan.
+* `total_days`: Akumulasi hari kerja efektif (otomatis mengabaikan akhir pekan).
+* `reason`: Alasan / justifikasi cuti.
+* `status`: `PENDING`, `APPROVED`, `REJECTED`.
+* `approved_by`: ID manajer / HR yang memverifikasi.
+* `action_at`: Waktu verifikasi.
+* **Mata Rantai Otomasi:** Saat disetujui (`APPROVED`), sistem melakukan loop tanggal rentang cuti dan otomatis menginput/mengupdate baris kehadiran di tabel `attendances` dengan status `LEAVE` dan menit telat 0. Karyawan tidak akan terhitung alpa / mangkir.
+
 ---
 
 ## 3. Logika Bisnis & Mesin Geofencing (`AttendanceService.php`)
@@ -172,13 +184,15 @@ Seluruh antarmuka dan kontroler modul Attendance dikelompokkan secara terstruktu
 ```text
 app/
 ├── Http/Controllers/
-│   ├── AttendanceController.php       # Controller Check-in mandiri & Monitoring log HR
+│   ├── AttendanceController.php       # Controller Check-in mandiri, Log harian, & Rekapitulasi bulanan
+│   ├── LeaveRequestController.php     # Controller Pengajuan Cuti, Izin, & Auto Kalender Kehadiran
 │   ├── ShiftController.php            # Controller CRUD Master Shift & Grace Period
 │   ├── OfficeLocationController.php   # Controller Master Titik Kantor & Radius Meter
 │   ├── EmployeeScheduleController.php # Controller Roster Penjadwalan Bulanan Pegawai
 │   └── OvertimeRequestController.php  # Controller Pengajuan Lembur & Approval Workflow
 ├── Models/
 │   ├── Attendance.php                 # Model Presensi
+│   ├── LeaveRequest.php               # Model Pengajuan Cuti / Izin
 │   ├── Shift.php                      # Model Shift
 │   ├── OfficeLocation.php             # Model Titik Kantor
 │   ├── EmployeeSchedule.php           # Model Roster
@@ -189,6 +203,9 @@ app/
 resources/views/modules/attendance/
 ├── check-in.blade.php                 # Terminal Presensi Mandiri (Webcam + GPS Realtime)
 ├── index.blade.php                    # Monitoring Presensi Harian HR & Audit Trail
+├── summary.blade.php                  # Rekapitulasi Presensi & Lembur Bulanan (Siap Payroll)
+├── leaves/
+│   └── index.blade.php                # Pengajuan Cuti / Izin & Panel Approval Manajer
 ├── shifts/
 │   └── index.blade.php                # Master Shift Kerja & Toleransi Waktu
 ├── locations/
@@ -204,7 +221,7 @@ resources/views/modules/attendance/
 ## 5. Fitur Unggulan Terminal Presensi (`check-in.blade.php`)
 
 Terminal presensi mandiri karyawan dilengkapi dengan fitur web modern:
-1. **Live Camera Feed:** Stream kamera depan langsung via API browser `navigator.mediaDevices.getUserMedia`.
+1. **Live Camera Feed & Multi-Camera Switching:** Stream kamera langsung via API browser `navigator.mediaDevices.getUserMedia` dengan dukungan cycling multi-kamera (kamera depan selfie ber-mirroring dan kamera belakang).
 2. **Face Oval Guide Canvas:** Panduan bingkai oval transparan di tengah layar untuk memastikan foto selfie biometrik tepat di tengah dan tidak blur.
 3. **Real-time GPS Meter:** Mendeteksi posisi GPS pengguna saat itu juga dan menghitung jarak meter ke kantor secara instan sebelum tombol absen ditekan.
 4. **Adaptive Action Button:** Tombol presensi otomatis berubah secara cerdas:
@@ -220,7 +237,7 @@ Terminal presensi mandiri karyawan dilengkapi dengan fitur web modern:
 ### A. Migrasi Database & Seeder Data Uji Coba
 Jalankan perintah berikut di terminal:
 ```bash
-# 1. Jalankan migrasi tabel presensi
+# 1. Jalankan migrasi tabel presensi & cuti
 php artisan migrate
 
 # 2. Isi data master (Kantor, Shift, Roster, Akun Karyawan Uji Coba)
@@ -232,7 +249,7 @@ php artisan storage:link
 
 ### B. Akun Uji Coba Presensi
 * **Halaman Login:** `http://127.0.0.1:8000/login`
-* **Akun Karyawan (Self-Service Attendance):**
+* **Akun Karyawan (Self-Service Attendance & Cuti):**
   * **Email:** `karyawan@hris.local`
   * **Password:** `password123`
 * **Akun HR Administrator:**
@@ -244,8 +261,12 @@ php artisan storage:link
 | :--- | :--- |
 | **Terminal Presensi Selfie (Karyawan)** | `http://127.0.0.1:8000/attendance/check-in` |
 | **Monitoring Log Presensi (HR Admin)** | `http://127.0.0.1:8000/attendance/logs` |
+| **Rekapitulasi Presensi & Lembur HR (Siap Payroll)** | `http://127.0.0.1:8000/attendance/summary` |
+| **Pengajuan Cuti & Izin (Terhubung Kalender Kehadiran)** | `http://127.0.0.1:8000/attendance/leaves` |
 | **Master Shift Kerja** | `http://127.0.0.1:8000/attendance/shifts` |
 | **Master Titik Kantor & Radius** | `http://127.0.0.1:8000/attendance/locations` |
+| **Roster Jadwal Kerja Pegawai** | `http://127.0.0.1:8000/attendance/schedules` |
+| **Manajemen Lembur (SPL)** | `http://127.0.0.1:8000/attendance/overtimes` |
 | **Roster Jadwal Kerja Pegawai** | `http://127.0.0.1:8000/attendance/schedules` |
 | **Manajemen Lembur (SPL)** | `http://127.0.0.1:8000/attendance/overtimes` |
 

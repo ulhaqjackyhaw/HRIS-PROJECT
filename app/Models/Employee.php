@@ -46,6 +46,8 @@ class Employee extends Model
         'bank_name',
         'bank_account_number',
         'bank_account_holder',
+        'annual_leave_quota',
+        'annual_leave_used',
         'custom_fields',
     ];
 
@@ -59,8 +61,18 @@ class Employee extends Model
             'end_date' => 'date',
             'birth_date' => 'date',
             'is_active' => 'boolean',
+            'annual_leave_quota' => 'integer',
+            'annual_leave_used' => 'integer',
             'custom_fields' => 'array',
         ];
+    }
+
+    /**
+     * Sisa Saldo Cuti Tahunan Berjalan.
+     */
+    public function getRemainingAnnualLeaveAttribute(): int
+    {
+        return max(0, (int) ($this->annual_leave_quota ?? 12) - (int) ($this->annual_leave_used ?? 0));
     }
 
     /**
@@ -171,5 +183,13 @@ class Employee extends Model
     public function overtimeRequests(): HasMany
     {
         return $this->hasMany(OvertimeRequest::class)->orderByDesc('date');
+    }
+
+    /**
+     * Leave and time-off requests.
+     */
+    public function leaveRequests(): HasMany
+    {
+        return $this->hasMany(LeaveRequest::class)->orderByDesc('start_date');
     }
 }

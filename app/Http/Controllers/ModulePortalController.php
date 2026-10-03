@@ -63,12 +63,21 @@ class ModulePortalController extends Controller
                 'gradient' => 'from-amber-600 to-orange-600',
                 'bg_glow' => 'bg-amber-500/10 text-amber-400 border-amber-500/30',
                 'route' => 'attendance.check-in',
+                'sub_menus' => [
+                    ['label' => 'Presensi Selfie & GPS', 'url' => 'attendance.index'],
+                    ['label' => 'Pengajuan Cuti & Lembur', 'url' => 'timeoff.index'],
+                    ['label' => 'Approval Manajer (MSS)', 'url' => 'approvals.index'],
+                    ['label' => 'Rekapitulasi Kehadiran HR', 'url' => 'attendance.summary'],
+                ],
                 'features' => [
                     'Presensi Biometrik Wajah Selfie & Geolocation GPS',
                     'Validasi Geofence Radius Kantor (Anti-Fake GPS)',
                     'Manajemen Shift Kerja Dinamis (Pagi, Reguler, Malam)',
                     'Roster & Penjadwalan Kerja Karyawan Bulanan',
-                    'Pengajuan & Approval Surat Perintah Lembur (SPL)',
+                    'Pengajuan Cuti & Izin Kerja Terintegrasi Kalender Kehadiran',
+                    'Sinkronisasi Otomatis Status LEAVE Saat Disetujui Manajer',
+                    'Diferensiasi Izin Berbayar (Paid) & Potong Gaji (Unpaid)',
+                    'Rekapitulasi Presensi & Lembur Bulanan (Siap Payroll)',
                 ],
             ],
             'payroll' => [
