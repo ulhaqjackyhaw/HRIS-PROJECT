@@ -165,4 +165,23 @@ class RoleAuthenticationTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Dashboard Karyawan');
     }
+
+    public function test_employee_can_access_all_dedicated_employee_portal_views(): void
+    {
+        $employee = User::factory()->employee()->create();
+
+        $routes = [
+            'employee.attendance.check-in',
+            'employee.attendance.history',
+            'employee.leaves.index',
+            'employee.overtimes.index',
+            'employee.schedules.index',
+            'employee.profile',
+        ];
+
+        foreach ($routes as $routeName) {
+            $response = $this->actingAs($employee)->get(route($routeName));
+            $response->assertStatus(200);
+        }
+    }
 }

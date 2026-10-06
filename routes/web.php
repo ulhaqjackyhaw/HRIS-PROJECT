@@ -77,11 +77,34 @@ Route::middleware('auth')->group(function () {
 });
 
 // ============================================================================
+// ============================================================================
 // 4. EMPLOYEE SELF-SERVICE (ESS) WORKSPACE (ROLE: EMPLOYEE & INTERNAL HR)
 // ============================================================================
 Route::middleware(['auth', 'role:employee'])->group(function () {
-    // Dedicated Employee Dashboard
-    Route::get('/employee/dashboard', [EmployeePortalController::class, 'dashboard'])->name('employee.dashboard');
+    // Dedicated Employee Portal (Dedicated views & layout in resources/views/employee/)
+    Route::prefix('employee')->name('employee.')->group(function () {
+        Route::get('/dashboard', [EmployeePortalController::class, 'dashboard'])->name('dashboard');
+
+        // Attendance
+        Route::get('/attendance/check-in', [EmployeePortalController::class, 'attendanceCheckIn'])->name('attendance.check-in');
+        Route::post('/attendance/clock-in', [EmployeePortalController::class, 'clockIn'])->name('attendance.clock-in');
+        Route::post('/attendance/clock-out', [EmployeePortalController::class, 'clockOut'])->name('attendance.clock-out');
+        Route::get('/attendance/history', [EmployeePortalController::class, 'attendanceHistory'])->name('attendance.history');
+
+        // Leaves
+        Route::get('/leaves', [EmployeePortalController::class, 'leaves'])->name('leaves.index');
+        Route::post('/leaves', [EmployeePortalController::class, 'storeLeave'])->name('leaves.store');
+
+        // Overtimes
+        Route::get('/overtimes', [EmployeePortalController::class, 'overtimes'])->name('overtimes.index');
+        Route::post('/overtimes', [EmployeePortalController::class, 'storeOvertime'])->name('overtimes.store');
+
+        // Schedules
+        Route::get('/schedules', [EmployeePortalController::class, 'schedules'])->name('schedules.index');
+
+        // Profile
+        Route::get('/profile', [EmployeePortalController::class, 'profile'])->name('profile');
+    });
 
     // Self-Service Attendance Check-In (Webcam Selfie & Geolocation)
     Route::prefix('attendance')->group(function () {
