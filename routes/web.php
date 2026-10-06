@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CareerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EmployeeCareerHistoryController;
@@ -15,10 +16,38 @@ use App\Http\Controllers\ModulePortalController;
 use App\Http\Controllers\OfficeLocationController;
 use App\Http\Controllers\OvertimeRequestController;
 use App\Http\Controllers\PositionController;
+use App\Http\Controllers\RecruitmentController;
 use App\Http\Controllers\ShiftController;
 use Illuminate\Support\Facades\Route;
 
-// Guest Authentication Routes
+// Public Candidate Portal & Career Routes
+Route::prefix('career')->name('career.')->group(function () {
+    Route::get('/', [CareerController::class, 'index'])->name('landing');
+    Route::get('/jobs', [CareerController::class, 'index'])->name('jobs');
+    Route::get('/jobs/{slug}', [CareerController::class, 'show'])->name('jobs.show');
+
+    // Candidate Auth Routes
+    Route::get('/login', [CareerController::class, 'loginForm'])->name('login');
+    Route::post('/login', [CareerController::class, 'login'])->name('login.submit');
+    Route::get('/register', [CareerController::class, 'registerForm'])->name('register');
+    Route::post('/register', [CareerController::class, 'register'])->name('register.submit');
+
+    // Candidate Authenticated Actions
+    Route::middleware('auth')->group(function () {
+        Route::post('/logout', [CareerController::class, 'logout'])->name('logout');
+        Route::get('/dashboard', [CareerController::class, 'dashboard'])->name('dashboard');
+        Route::get('/profile', [CareerController::class, 'profile'])->name('profile');
+        Route::post('/profile', [CareerController::class, 'updateProfile'])->name('profile.update');
+        Route::post('/jobs/{slug}/apply', [CareerController::class, 'apply'])->name('jobs.apply');
+
+        // Candidate Psychotests
+        Route::get('/applications/{application}/psychotests', [CareerController::class, 'psychotestsIndex'])->name('psychotests.index');
+        Route::get('/applications/{application}/psychotests/{psychotest}', [CareerController::class, 'showPsychotest'])->name('psychotests.show');
+        Route::post('/applications/{application}/psychotests/{psychotest}/submit', [CareerController::class, 'submitPsychotest'])->name('psychotests.submit');
+    });
+});
+
+// Guest Authentication Routes (Internal HR)
 Route::middleware('guest')->group(function () {
     Route::get('login', [AuthController::class, 'create'])->name('login');
     Route::post('login', [AuthController::class, 'store']);
@@ -99,5 +128,30 @@ Route::middleware('auth')->group(function () {
         Route::post('overtimes', [OvertimeRequestController::class, 'store'])->name('overtimes.store');
         Route::post('overtimes/{overtime}/approve', [OvertimeRequestController::class, 'approve'])->name('overtimes.approve');
         Route::post('overtimes/{overtime}/reject', [OvertimeRequestController::class, 'reject'])->name('overtimes.reject');
+    });
+
+    // Recruitment & ATS Workspace (HR Administration Panel)
+    Route::prefix('recruitment')->name('recruitment.')->group(function () {
+        Route::get('/', [RecruitmentController::class, 'dashboard'])->name('dashboard');
+
+        // Job Postings Management
+        Route::get('/jobs', [RecruitmentController::class, 'jobs'])->name('jobs.index');
+        Route::get('/jobs/create', [RecruitmentController::class, 'createJob'])->name('jobs.create');
+        Route::post('/jobs', [RecruitmentController::class, 'storeJob'])->name('jobs.store');
+        Route::get('/jobs/{job}/edit', [RecruitmentController::class, 'editJob'])->name('jobs.edit');
+        Route::put('/jobs/{job}', [RecruitmentController::class, 'updateJob'])->name('jobs.update');
+        Route::patch('/jobs/{job}/toggle-status', [RecruitmentController::class, 'toggleJobStatus'])->name('jobs.toggle-status');
+        Route::delete('/jobs/{job}', [RecruitmentController::class, 'destroyJob'])->name('jobs.destroy');
+
+        // ATS Pipeline & Candidate Applications
+        Route::get('/applications', [RecruitmentController::class, 'applications'])->name('applications.index');
+        Route::get('/applications/{application}', [RecruitmentController::class, 'showApplication'])->name('applications.show');
+        Route::patch('/applications/{application}/stage', [RecruitmentController::class, 'updateStage'])->name('applications.stage');
+        Route::post('/applications/{application}/interview', [RecruitmentController::class, 'scheduleInterview'])->name('applications.interview');
+        Route::post('/applications/{application}/communicate', [RecruitmentController::class, 'sendCommunication'])->name('applications.communicate');
+        Route::post('/applications/{application}/convert-employee', [RecruitmentController::class, 'convertToEmployee'])->name('applications.convert-employee');
+
+        // Psychotest Monitoring
+        Route::get('/psychotests', [RecruitmentController::class, 'psychotests'])->name('psychotests.index');
     });
 });

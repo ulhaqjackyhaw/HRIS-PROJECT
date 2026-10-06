@@ -237,6 +237,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             AttendanceModuleSeeder::class,
             LeaveTypeSeeder::class,
+            RecruitmentSeeder::class,
         ]);
     }
 }
