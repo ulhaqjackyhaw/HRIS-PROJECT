@@ -192,115 +192,565 @@
                 @endif
             </div>
 
-            <!-- II. Data Pribadi & Legalitas -->
+            <!-- II. Data Pribadi, Karakteristik Fisik & Medis -->
             <div class="p-6 sm:p-8 rounded-3xl bg-white border border-slate-200/90 shadow-xs space-y-4">
                 <div class="flex items-center space-x-3 pb-4 border-b border-slate-100">
                     <span class="w-7 h-7 rounded-lg bg-cyan-50 text-cyan-700 border border-cyan-200 font-bold flex items-center justify-center text-xs">II</span>
-                    <h3 class="text-base font-bold text-slate-900">Data Pribadi, Domisili & Identitas Legal</h3>
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900">Data Pribadi, Fisik & Riwayat Medis</h3>
+                        <p class="text-[11px] text-slate-500">Profil personal, ukuran pakaian, postur fisik, dan status kesehatan.</p>
+                    </div>
                 </div>
 
-                <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs">
+                <!-- Personal Info Grid -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs pb-4 border-b border-slate-100">
                     <div>
-                        <span class="text-slate-400 block">Nama Lengkap</span>
+                        <span class="text-slate-500 block mb-0.5">Nama Lengkap</span>
                         <span class="font-bold text-slate-900">{{ $profile->full_name ?? $application->applicant_name }}</span>
                     </div>
                     <div>
-                        <span class="text-slate-400 block">Jenis Kelamin</span>
-                        <span class="font-semibold text-slate-700">{{ $profile->gender ?? '-' }}</span>
+                        <span class="text-slate-500 block mb-0.5">Nama Panggilan</span>
+                        <span class="font-semibold text-slate-800">{{ $profile->nickname ?? '-' }}</span>
                     </div>
                     <div>
-                        <span class="text-slate-400 block">Tempat & Tgl Lahir</span>
-                        <span class="font-semibold text-slate-700">{{ $profile?->birth_place ?? '-' }}, {{ $profile?->birth_date?->format('d M Y') ?? '-' }}</span>
+                        <span class="text-slate-500 block mb-0.5">Jenis Kelamin</span>
+                        <span class="font-semibold text-slate-800">{{ $profile->gender ?? '-' }}</span>
                     </div>
                     <div>
-                        <span class="text-slate-400 block">No KTP (NIK)</span>
-                        <span class="font-semibold text-slate-700">{{ $profile->ktp_number ?? '-' }}</span>
+                        <span class="text-slate-500 block mb-0.5">Tempat & Tgl Lahir</span>
+                        <span class="font-semibold text-slate-800">{{ $profile?->birth_place ?? '-' }}, {{ $profile?->birth_date?->format('d M Y') ?? '-' }}</span>
                     </div>
                     <div>
-                        <span class="text-slate-400 block">No NPWP</span>
-                        <span class="font-semibold text-slate-700">{{ $profile->npwp_number ?? '-' }}</span>
+                        <span class="text-slate-500 block mb-0.5">Agama</span>
+                        <span class="font-semibold text-slate-800">{{ $profile->religion ?? '-' }}</span>
                     </div>
                     <div>
-                        <span class="text-slate-400 block">BPJS TK / KK</span>
-                        <span class="font-semibold text-slate-700">{{ $profile->bpjs_tk_number ?? $profile->family_card_number ?? '-' }}</span>
+                        <span class="text-slate-500 block mb-0.5">Status Pernikahan</span>
+                        <span class="font-semibold text-slate-800">{{ $profile->marital_status ?? '-' }}</span>
                     </div>
-                    <div class="sm:col-span-3">
-                        <span class="text-slate-400 block">Alamat Domisili Sekarang</span>
-                        <span class="font-semibold text-slate-700">{{ $profile->domicile_address ?? '-' }}</span>
+                    <div>
+                        <span class="text-slate-500 block mb-0.5">Kewarganegaraan</span>
+                        <span class="font-semibold text-slate-800">{{ $profile->nationality ?? 'Indonesia' }}</span>
                     </div>
-                    @if($profile && $profile->ktp_address)
-                        <div class="sm:col-span-3">
-                            <span class="text-slate-400 block">Alamat KTP</span>
-                            <span class="font-semibold text-slate-700">{{ $profile->ktp_address }}</span>
+                    <div>
+                        <span class="text-slate-500 block mb-0.5">Suku Bangsa</span>
+                        <span class="font-semibold text-slate-800">{{ $profile->ethnicity ?? '-' }}</span>
+                    </div>
+                </div>
+
+                <!-- Posture, Blood & Uniform Sizes -->
+                <div>
+                    <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Fisik, Golongan Darah & Ukuran Seragam</h4>
+                    <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 text-xs">
+                        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                            <span class="text-slate-500 block text-[11px]">Tinggi Badan</span>
+                            <span class="font-bold text-slate-900">{{ $profile && $profile->height_cm ? $profile->height_cm . ' cm' : '-' }}</span>
                         </div>
+                        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                            <span class="text-slate-500 block text-[11px]">Berat Badan</span>
+                            <span class="font-bold text-slate-900">{{ $profile && $profile->weight_kg ? $profile->weight_kg . ' kg' : '-' }}</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                            <span class="text-slate-500 block text-[11px]">Ukuran Baju</span>
+                            <span class="font-bold text-slate-900">{{ $profile->clothing_size ?? '-' }}</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                            <span class="text-slate-500 block text-[11px]">Ukuran Sepatu</span>
+                            <span class="font-bold text-slate-900">{{ $profile->shoe_size ?? '-' }}</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                            <span class="text-slate-500 block text-[11px]">Gol. Darah</span>
+                            <span class="font-bold text-slate-900">{{ $profile->blood_type ?? '-' }} {{ $profile->blood_rhesus ? '(' . $profile->blood_rhesus . ')' : '' }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hobbies & Medical Notes -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs pt-2">
+                    <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                        <span class="text-slate-500 block text-[11px] mb-1 font-semibold">Hobi & Kegemaran:</span>
+                        <span class="text-slate-800 font-medium">{{ $profile->hobbies ?? '-' }}</span>
+                    </div>
+                    <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                        <span class="text-slate-500 block text-[11px] mb-1 font-semibold">Riwayat Medis / Kesehatan:</span>
+                        <span class="text-slate-800 font-medium">{{ $profile->medical_history ?? 'Tidak ada riwayat penyakit berat' }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- III. Identitas Legalitas, SIM & Kendaraan Pribadi -->
+            <div class="p-6 sm:p-8 rounded-3xl bg-white border border-slate-200/90 shadow-xs space-y-4">
+                <div class="flex items-center space-x-3 pb-4 border-b border-slate-100">
+                    <span class="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold flex items-center justify-center text-xs">III</span>
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900">Identitas Legalitas, SIM & Kendaraan Pribadi</h3>
+                        <p class="text-[11px] text-slate-500">Nomor dokumen kenegaraan, lisensi mengemudi, dan kendaraan operasional.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
+                    <div>
+                        <span class="text-slate-500 block mb-0.5">No KTP (NIK)</span>
+                        <span class="font-bold text-slate-900">{{ $profile->ktp_number ?? '-' }}</span>
+                        <span class="text-[10px] text-slate-500 block">Exp: {{ $profile?->ktp_expiry?->format('d/m/Y') ?? 'Seumur Hidup' }}</span>
+                    </div>
+                    <div>
+                        <span class="text-slate-500 block mb-0.5">No NPWP</span>
+                        <span class="font-bold text-slate-900">{{ $profile->npwp_number ?? '-' }}</span>
+                        <span class="text-[10px] text-slate-500 block">Exp: {{ $profile?->npwp_expiry?->format('d/m/Y') ?? '-' }}</span>
+                    </div>
+                    <div>
+                        <span class="text-slate-500 block mb-0.5">No Paspor</span>
+                        <span class="font-bold text-slate-900">{{ $profile->passport_number ?? '-' }}</span>
+                        <span class="text-[10px] text-slate-500 block">Exp: {{ $profile?->passport_expiry?->format('d/m/Y') ?? '-' }}</span>
+                    </div>
+                    <div>
+                        <span class="text-slate-500 block mb-0.5">BPJS TK / No KK</span>
+                        <span class="font-bold text-slate-900">{{ $profile->bpjs_tk_number ?? '-' }}</span>
+                        <span class="text-[10px] text-slate-500 block">KK: {{ $profile->family_card_number ?? '-' }}</span>
+                    </div>
+
+                    <div>
+                        <span class="text-slate-500 block mb-0.5">SIM A (Mobil)</span>
+                        <span class="font-bold text-slate-900">{{ $profile->sim_a_number ?? '-' }}</span>
+                        <span class="text-[10px] text-slate-500 block">Exp: {{ $profile?->sim_a_expiry?->format('d/m/Y') ?? '-' }}</span>
+                    </div>
+                    <div>
+                        <span class="text-slate-500 block mb-0.5">SIM C (Motor)</span>
+                        <span class="font-bold text-slate-900">{{ $profile->sim_c_number ?? '-' }}</span>
+                        <span class="text-[10px] text-slate-500 block">Exp: {{ $profile?->sim_c_expiry?->format('d/m/Y') ?? '-' }}</span>
+                    </div>
+
+                    <!-- Kendaraan Mobil -->
+                    <div class="sm:col-span-1 p-3 rounded-xl bg-slate-50 border border-slate-200">
+                        <span class="text-[11px] font-bold text-indigo-700 block mb-0.5">Mobil Pribadi</span>
+                        @if(!empty($profile->vehicles_data['car']['brand']))
+                            <div class="font-bold text-slate-900">{{ $profile->vehicles_data['car']['brand'] }} ({{ $profile->vehicles_data['car']['year'] ?? '-' }})</div>
+                            <span class="text-[10px] text-slate-500">Status: {{ $profile->vehicles_data['car']['status'] ?? '-' }}</span>
+                        @else
+                            <span class="text-slate-400">Tidak ada</span>
+                        @endif
+                    </div>
+
+                    <!-- Kendaraan Motor -->
+                    <div class="sm:col-span-1 p-3 rounded-xl bg-slate-50 border border-slate-200">
+                        <span class="text-[11px] font-bold text-indigo-700 block mb-0.5">Sepeda Motor</span>
+                        @if(!empty($profile->vehicles_data['motorcycle']['brand']))
+                            <div class="font-bold text-slate-900">{{ $profile->vehicles_data['motorcycle']['brand'] }} ({{ $profile->vehicles_data['motorcycle']['year'] ?? '-' }})</div>
+                            <span class="text-[10px] text-slate-500">Status: {{ $profile->vehicles_data['motorcycle']['status'] ?? '-' }}</span>
+                        @else
+                            <span class="text-slate-400">Tidak ada</span>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
+            <!-- IV. Kontak & Alamat Lengkap Domisili -->
+            <div class="p-6 sm:p-8 rounded-3xl bg-white border border-slate-200/90 shadow-xs space-y-4">
+                <div class="flex items-center space-x-3 pb-4 border-b border-slate-100">
+                    <span class="w-7 h-7 rounded-lg bg-teal-50 text-teal-700 border border-teal-200 font-bold flex items-center justify-center text-xs">IV</span>
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900">Kontak, Domisili & Kontak Darurat</h3>
+                        <p class="text-[11px] text-slate-500">Alamat domisili saat ini, alamat KTP, dan nomor keluarga darurat.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                    <!-- Alamat Domisili -->
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1.5">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-slate-900">Alamat Domisili Sekarang</span>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200">
+                                {{ $profile->domicile_housing_status ?? 'Tempat Tinggal' }}
+                            </span>
+                        </div>
+                        <p class="text-slate-700 font-medium leading-relaxed">{{ $profile->domicile_address ?? '-' }}</p>
+                        <div class="text-[11px] text-slate-500 pt-1">
+                            Kota/Kab: <strong class="text-slate-800">{{ $profile->domicile_city ?? '-' }}</strong> • Prov: <strong class="text-slate-800">{{ $profile->domicile_province ?? '-' }}</strong>
+                        </div>
+                    </div>
+
+                    <!-- Alamat KTP -->
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1.5">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-slate-900">Alamat Sesuai KTP</span>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200">
+                                {{ $profile->ktp_housing_status ?? 'KTP' }}
+                            </span>
+                        </div>
+                        <p class="text-slate-700 font-medium leading-relaxed">{{ $profile->ktp_address ?? ($profile->domicile_address ?? '-') }}</p>
+                        <div class="text-[11px] text-slate-500 pt-1">
+                            Kota/Kab: <strong class="text-slate-800">{{ $profile->ktp_city ?? ($profile->domicile_city ?? '-') }}</strong> • Prov: <strong class="text-slate-800">{{ $profile->ktp_province ?? ($profile->domicile_province ?? '-') }}</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Emergency Contact -->
+                <div class="p-4 rounded-2xl bg-indigo-50/50 border border-indigo-100 flex flex-wrap items-center justify-between gap-3 text-xs">
+                    <div>
+                        <span class="text-[11px] font-bold text-indigo-700 block">Kontak Darurat (Emergency Contact):</span>
+                        <span class="text-slate-900 font-extrabold text-sm">{{ $profile->emergency_contact['name'] ?? 'Belum diisi' }}</span>
+                        <span class="text-slate-600"> ({{ $profile->emergency_contact['relation'] ?? 'Kerabat' }})</span>
+                    </div>
+                    @if(!empty($profile->emergency_contact['phone']))
+                        <a href="tel:{{ $profile->emergency_contact['phone'] }}" class="px-3 py-1.5 rounded-xl bg-white text-indigo-700 font-bold border border-indigo-200 hover:bg-indigo-50 shadow-xs">
+                            📞 {{ $profile->emergency_contact['phone'] }}
+                        </a>
+                    @else
+                        <span class="text-slate-400">No telepon belum dicantumkan</span>
                     @endif
                 </div>
             </div>
 
-            <!-- III. Riwayat Pengalaman Kerja -->
+            <!-- V. Susunan Anggota Keluarga -->
             <div class="p-6 sm:p-8 rounded-3xl bg-white border border-slate-200/90 shadow-xs space-y-4">
                 <div class="flex items-center space-x-3 pb-4 border-b border-slate-100">
-                    <span class="w-7 h-7 rounded-lg bg-blue-50 text-blue-700 border border-blue-200 font-bold flex items-center justify-center text-xs">III</span>
-                    <h3 class="text-base font-bold text-slate-900">Riwayat Pengalaman Kerja</h3>
+                    <span class="w-7 h-7 rounded-lg bg-purple-50 text-purple-700 border border-purple-200 font-bold flex items-center justify-center text-xs">V</span>
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900">Susunan Anggota Keluarga</h3>
+                        <p class="text-[11px] text-slate-500">Data orang tua, saudara kandung, dan keluarga inti pasangan/anak.</p>
+                    </div>
                 </div>
 
+                <!-- Ayah & Ibu Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                    <!-- Ayah -->
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                        <span class="text-xs font-bold text-indigo-700 block">Data Ayah</span>
+                        <div class="font-bold text-slate-900 text-sm">{{ $profile->family_father['name'] ?? '-' }}</div>
+                        <div class="grid grid-cols-2 gap-1 text-[11px] text-slate-600">
+                            <div>Pekerjaan: <strong class="text-slate-800">{{ $profile->family_father['job'] ?? '-' }}</strong></div>
+                            <div>Instansi: <strong class="text-slate-800">{{ $profile->family_father['company'] ?? '-' }}</strong></div>
+                            <div>Pendidikan: <strong class="text-slate-800">{{ $profile->family_father['education'] ?? '-' }}</strong></div>
+                            <div>Tgl Lahir: <strong class="text-slate-800">{{ $profile->family_father['birth_date'] ?? '-' }}</strong></div>
+                        </div>
+                        @if(!empty($profile->family_father['phone']))
+                            <div class="text-[11px] text-slate-500 pt-1 border-t border-slate-200">No HP: <strong class="text-slate-800">{{ $profile->family_father['phone'] }}</strong></div>
+                        @endif
+                    </div>
+
+                    <!-- Ibu -->
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                        <span class="text-xs font-bold text-indigo-700 block">Data Ibu</span>
+                        <div class="font-bold text-slate-900 text-sm">{{ $profile->family_mother['name'] ?? '-' }}</div>
+                        <div class="grid grid-cols-2 gap-1 text-[11px] text-slate-600">
+                            <div>Pekerjaan: <strong class="text-slate-800">{{ $profile->family_mother['job'] ?? '-' }}</strong></div>
+                            <div>Instansi: <strong class="text-slate-800">{{ $profile->family_mother['company'] ?? '-' }}</strong></div>
+                            <div>Pendidikan: <strong class="text-slate-800">{{ $profile->family_mother['education'] ?? '-' }}</strong></div>
+                            <div>Tgl Lahir: <strong class="text-slate-800">{{ $profile->family_mother['birth_date'] ?? '-' }}</strong></div>
+                        </div>
+                        @if(!empty($profile->family_mother['phone']))
+                            <div class="text-[11px] text-slate-500 pt-1 border-t border-slate-200">No HP: <strong class="text-slate-800">{{ $profile->family_mother['phone'] }}</strong></div>
+                        @endif
+                    </div>
+                </div>
+
+                <!-- Saudara Kandung -->
+                @if(!empty($profile->family_siblings) && count(array_filter($profile->family_siblings, fn($s) => !empty($s['name']))))
+                    <div class="pt-2">
+                        <h4 class="text-xs font-bold text-slate-700 mb-2">Saudara Kandung:</h4>
+                        <div class="overflow-x-auto rounded-xl border border-slate-200">
+                            <table class="w-full text-left text-xs text-slate-700">
+                                <thead class="bg-slate-50 text-slate-900 font-bold border-b border-slate-200 text-[11px]">
+                                    <tr>
+                                        <th class="p-2.5">Nama Saudara</th>
+                                        <th class="p-2.5">L/P</th>
+                                        <th class="p-2.5">Tgl Lahir</th>
+                                        <th class="p-2.5">Pendidikan</th>
+                                        <th class="p-2.5">Pekerjaan</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100">
+                                    @foreach($profile->family_siblings as $sib)
+                                        @if(!empty($sib['name']))
+                                            <tr>
+                                                <td class="p-2.5 font-bold text-slate-900">{{ $sib['name'] }}</td>
+                                                <td class="p-2.5">{{ $sib['gender'] ?? '-' }}</td>
+                                                <td class="p-2.5">{{ $sib['birth_date'] ?? '-' }}</td>
+                                                <td class="p-2.5">{{ $sib['education'] ?? '-' }}</td>
+                                                <td class="p-2.5">{{ $sib['job'] ?? '-' }}</td>
+                                            </tr>
+                                        @endif
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                @endif
+
+                <!-- Keluarga Inti (Pasangan & Anak) -->
+                @if(!empty($profile->family_core) && count(array_filter($profile->family_core, fn($c) => !empty($c['name']))))
+                    <div class="pt-2">
+                        <h4 class="text-xs font-bold text-slate-700 mb-2">Keluarga Inti (Pasangan & Anak):</h4>
+                        <div class="overflow-x-auto rounded-xl border border-slate-200">
+                            <table class="w-full text-left text-xs text-slate-700">
+                                <thead class="bg-slate-50 text-slate-900 font-bold border-b border-slate-200 text-[11px]">
+                                    <tr>
+                                        <th class="p-2.5">Hubungan</th>
+                                        <th class="p-2.5">Nama Anggota</th>
+                                        <th class="p-2.5">L/P</th>
+                                        <th class="p-2.5">Tgl Lahir</th>
+                                        <th class="p-2.5">Pendidikan</th>
+                                        <th class="p-2.5">Pekerjaan</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100">
+                                    @foreach($profile->family_core as $core)
+                                        @if(!empty($core['name']))
+                                            <tr>
+                                                <td class="p-2.5 font-bold text-indigo-700">{{ $core['relation'] ?? '-' }}</td>
+                                                <td class="p-2.5 font-bold text-slate-900">{{ $core['name'] }}</td>
+                                                <td class="p-2.5">{{ $core['gender'] ?? '-' }}</td>
+                                                <td class="p-2.5">{{ $core['birth_date'] ?? '-' }}</td>
+                                                <td class="p-2.5">{{ $core['education'] ?? '-' }}</td>
+                                                <td class="p-2.5">{{ $core['job'] ?? '-' }}</td>
+                                            </tr>
+                                        @endif
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                @endif
+            </div>
+
+            <!-- VI. Riwayat Pendidikan Formal & Kemampuan Bahasa -->
+            <div class="p-6 sm:p-8 rounded-3xl bg-white border border-slate-200/90 shadow-xs space-y-4">
+                <div class="flex items-center space-x-3 pb-4 border-b border-slate-100">
+                    <span class="w-7 h-7 rounded-lg bg-amber-50 text-amber-700 border border-amber-200 font-bold flex items-center justify-center text-xs">VI</span>
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900">Riwayat Pendidikan Formal & Kemampuan Bahasa</h3>
+                        <p class="text-[11px] text-slate-500">Pendidikan formal berjenjang dan kemampuan penguasaan bahasa.</p>
+                    </div>
+                </div>
+
+                <!-- Formal Education Table -->
+                <div>
+                    <h4 class="text-xs font-bold text-slate-700 mb-2">Riwayat Pendidikan Formal:</h4>
+                    @php
+                        $formalLabels = [
+                            'sd' => 'SD',
+                            'smp' => 'SLTP / SMP',
+                            'sma' => 'SLTA / SMA / SMK',
+                            'diploma' => 'Diploma (D1-D3)',
+                            's1' => 'Sarjana (S1)',
+                            's2' => 'Magister (S2)',
+                            's3' => 'Doktor (S3)',
+                        ];
+                        $hasEdu = false;
+                        if (!empty($profile->education_formal)) {
+                            foreach($profile->education_formal as $lvl => $val) {
+                                if (!empty($val['school'])) $hasEdu = true;
+                            }
+                        }
+                    @endphp
+
+                    @if($hasEdu)
+                        <div class="overflow-x-auto rounded-xl border border-slate-200">
+                            <table class="w-full text-left text-xs text-slate-700">
+                                <thead class="bg-slate-50 text-slate-900 font-bold border-b border-slate-200 text-[11px]">
+                                    <tr>
+                                        <th class="p-2.5">Jenjang</th>
+                                        <th class="p-2.5">Nama Institusi / Sekolah</th>
+                                        <th class="p-2.5">Tempat / Kota</th>
+                                        <th class="p-2.5">Jurusan</th>
+                                        <th class="p-2.5">Tahun Lulus</th>
+                                        <th class="p-2.5">IPK / Nilai</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100">
+                                    @foreach($formalLabels as $key => $lbl)
+                                        @if(!empty($profile->education_formal[$key]['school']))
+                                            <tr>
+                                                <td class="p-2.5 font-bold text-indigo-700">{{ $lbl }}</td>
+                                                <td class="p-2.5 font-bold text-slate-900">{{ $profile->education_formal[$key]['school'] }}</td>
+                                                <td class="p-2.5">{{ $profile->education_formal[$key]['place'] ?? '-' }}</td>
+                                                <td class="p-2.5">{{ $profile->education_formal[$key]['major'] ?? '-' }}</td>
+                                                <td class="p-2.5">{{ $profile->education_formal[$key]['graduation_year'] ?? '-' }}</td>
+                                                <td class="p-2.5 font-semibold text-emerald-700">{{ $profile->education_formal[$key]['score'] ?? '-' }}</td>
+                                            </tr>
+                                        @endif
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @else
+                        <div class="text-xs text-slate-400 py-2">Data riwayat pendidikan belum diisi.</div>
+                    @endif
+                </div>
+
+                <!-- Languages Skills -->
+                @if(!empty($profile->languages))
+                    <div class="pt-3 border-t border-slate-100">
+                        <h4 class="text-xs font-bold text-slate-700 mb-2">Kemampuan Penguasaan Bahasa:</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                                <span class="font-bold text-slate-900 block text-xs">Bahasa Indonesia</span>
+                                <div class="text-[11px] text-slate-600">Bicara: <strong class="text-slate-900">{{ $profile->languages['indonesia']['speak'] ?? 'Aktif' }}</strong></div>
+                                <div class="text-[11px] text-slate-600">Baca: <strong class="text-slate-900">{{ $profile->languages['indonesia']['read'] ?? 'Aktif' }}</strong></div>
+                                <div class="text-[11px] text-slate-600">Tulis: <strong class="text-slate-900">{{ $profile->languages['indonesia']['write'] ?? 'Aktif' }}</strong></div>
+                            </div>
+
+                            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                                <span class="font-bold text-slate-900 block text-xs">Bahasa Inggris</span>
+                                <div class="text-[11px] text-slate-600">Bicara: <strong class="text-slate-900">{{ $profile->languages['english']['speak'] ?? '-' }}</strong></div>
+                                <div class="text-[11px] text-slate-600">Baca: <strong class="text-slate-900">{{ $profile->languages['english']['read'] ?? '-' }}</strong></div>
+                                <div class="text-[11px] text-slate-600">Tulis: <strong class="text-slate-900">{{ $profile->languages['english']['write'] ?? '-' }}</strong></div>
+                            </div>
+
+                            @if(!empty($profile->languages['other']['name']))
+                                <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                                    <span class="font-bold text-slate-900 block text-xs">{{ $profile->languages['other']['name'] }}</span>
+                                    <div class="text-[11px] text-slate-600">Bicara: <strong class="text-slate-900">{{ $profile->languages['other']['speak'] ?? '-' }}</strong></div>
+                                    <div class="text-[11px] text-slate-600">Baca: <strong class="text-slate-900">{{ $profile->languages['other']['read'] ?? '-' }}</strong></div>
+                                    <div class="text-[11px] text-slate-600">Tulis: <strong class="text-slate-900">{{ $profile->languages['other']['write'] ?? '-' }}</strong></div>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                @endif
+            </div>
+
+            <!-- VII. Riwayat Pengalaman Kerja & Referensi -->
+            <div class="p-6 sm:p-8 rounded-3xl bg-white border border-slate-200/90 shadow-xs space-y-4">
+                <div class="flex items-center space-x-3 pb-4 border-b border-slate-100">
+                    <span class="w-7 h-7 rounded-lg bg-blue-50 text-blue-700 border border-blue-200 font-bold flex items-center justify-center text-xs">VII</span>
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900">Riwayat Pengalaman Kerja & Referensi</h3>
+                        <p class="text-[11px] text-slate-500">Histori karir profesional dan kontak referensi pemberi kerja sebelumnya.</p>
+                    </div>
+                </div>
+
+                <!-- Experience Cards -->
                 @if($profile && !empty($profile->work_experiences))
                     <div class="space-y-3">
                         @foreach($profile->work_experiences as $exp)
                             @if(!empty($exp['company']) || !empty($exp['position_end']))
-                                <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
-                                    <div class="flex items-center justify-between mb-1">
+                                <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                                    <div class="flex items-center justify-between">
                                         <h4 class="text-sm font-bold text-slate-900">{{ $exp['position_end'] ?? '-' }} di {{ $exp['company'] ?? '-' }}</h4>
-                                        <span class="text-xs text-slate-500">{{ $exp['period_start'] ?? '' }} - {{ $exp['period_end'] ?? 'Sekarang' }}</span>
+                                        <span class="text-xs text-slate-500 font-semibold">{{ $exp['period_start'] ?? '' }} - {{ $exp['period_end'] ?? 'Sekarang' }}</span>
                                     </div>
                                     @if(!empty($exp['salary']))
-                                        <div class="text-[11px] text-cyan-700 font-semibold mb-1">Gaji Terakhir: Rp {{ number_format((float) $exp['salary'], 0, ',', '.') }}</div>
+                                        <div class="text-[11px] text-emerald-700 font-bold">Gaji Akhir: Rp {{ number_format((float) $exp['salary'], 0, ',', '.') }}</div>
                                     @endif
                                     @if(!empty($exp['job_desc']))
-                                        <p class="text-xs text-slate-600 mt-1 whitespace-pre-line">{{ $exp['job_desc'] }}</p>
+                                        <div class="text-xs text-slate-700 bg-white p-3 rounded-xl border border-slate-200 whitespace-pre-line leading-relaxed">
+                                            <span class="text-[10px] text-slate-500 font-bold block mb-1 uppercase tracking-wider">Tugas & Tanggung Jawab:</span>
+                                            {{ $exp['job_desc'] }}
+                                        </div>
+                                    @endif
+                                    @if(!empty($exp['leave_reason']))
+                                        <div class="text-[11px] text-slate-500">
+                                            Alasan Berhenti / Pindah: <strong class="text-slate-800">{{ $exp['leave_reason'] }}</strong>
+                                        </div>
                                     @endif
                                 </div>
                             @endif
                         @endforeach
                     </div>
                 @else
-                    <div class="text-xs text-slate-400 py-3">Tidak ada data riwayat pekerjaan / Fresh Graduate.</div>
+                    <div class="text-xs text-slate-400 py-2">Tidak ada data riwayat pekerjaan / Fresh Graduate.</div>
+                @endif
+
+                <!-- Professional References -->
+                @if(!empty($profile->references_data) && count(array_filter($profile->references_data, fn($r) => !empty($r['name']))))
+                    <div class="pt-3 border-t border-slate-100">
+                        <h4 class="text-xs font-bold text-slate-700 mb-2">Referensi Profesional:</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                            @foreach($profile->references_data as $ref)
+                                @if(!empty($ref['name']))
+                                    <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                                        <span class="font-bold text-slate-900 block text-xs">{{ $ref['name'] }}</span>
+                                        <div class="text-[11px] text-slate-600">{{ $ref['position'] ?? '-' }}</div>
+                                        <div class="text-[10px] text-slate-500">Hubungan: <strong class="text-slate-800">{{ $ref['relation'] ?? '-' }}</strong></div>
+                                        @if(!empty($ref['phone']))
+                                            <div class="text-[11px] text-indigo-700 font-semibold pt-1">Telp: {{ $ref['phone'] }}</div>
+                                        @endif
+                                    </div>
+                                @endif
+                            @endforeach
+                        </div>
+                    </div>
                 @endif
             </div>
 
-            <!-- IV. Esai Diri & Preferensi Rekrutmen -->
+            <!-- VIII. Esai Diri, Preferensi Rekrutmen & Persetujuan -->
             <div class="p-6 sm:p-8 rounded-3xl bg-white border border-slate-200/90 shadow-xs space-y-4">
                 <div class="flex items-center space-x-3 pb-4 border-b border-slate-100">
-                    <span class="w-7 h-7 rounded-lg bg-rose-50 text-rose-700 border border-rose-200 font-bold flex items-center justify-center text-xs">IV</span>
-                    <h3 class="text-base font-bold text-slate-900">Esai Diri & Preferensi Rekrutmen</h3>
+                    <span class="w-7 h-7 rounded-lg bg-rose-50 text-rose-700 border border-rose-200 font-bold flex items-center justify-center text-xs">VIII</span>
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900">Esai Diri, Preferensi Rekrutmen & Pernyataan Sah</h3>
+                        <p class="text-[11px] text-slate-500">Ekspektasi gaji, ketersediaan mulai kerja, lokasi rekrutmen, dan persetujuan integritas.</p>
+                    </div>
                 </div>
 
                 <div class="space-y-4 text-xs">
                     <div>
-                        <span class="text-slate-500 block mb-1">Kelebihan & Kekurangan Diri:</span>
-                        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 whitespace-pre-line">
+                        <span class="text-slate-500 block mb-1 font-semibold">Kelebihan & Kekurangan Diri:</span>
+                        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 whitespace-pre-line leading-relaxed">
                             {{ $profile->strengths_weaknesses ?? 'Belum diisi' }}
                         </div>
                     </div>
 
                     <div>
-                        <span class="text-slate-500 block mb-1">Pencapaian Paling Membanggakan:</span>
-                        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 whitespace-pre-line">
+                        <span class="text-slate-500 block mb-1 font-semibold">Pencapaian Paling Membanggakan:</span>
+                        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 whitespace-pre-line leading-relaxed">
                             {{ $profile->proudest_achievement ?? 'Belum diisi' }}
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-4">
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                         <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
-                            <span class="text-slate-500 block">Ekspektasi Gaji:</span>
-                            <span class="font-bold text-emerald-700">
+                            <span class="text-slate-500 block text-[11px]">Ekspektasi Gaji:</span>
+                            <span class="font-bold text-emerald-700 text-sm">
                                 {{ $profile && $profile->expected_salary ? 'Rp ' . number_format((float) $profile->expected_salary, 0, ',', '.') : 'Tidak disebutkan' }}
                             </span>
                         </div>
                         <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
-                            <span class="text-slate-500 block">Estimasi Mulai Kerja:</span>
+                            <span class="text-slate-500 block text-[11px]">Mulai Bekerja:</span>
                             <span class="font-bold text-slate-900">{{ $profile->estimated_start_date ?? 'Segera' }}</span>
                         </div>
+                        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                            <span class="text-slate-500 block text-[11px]">Pernah Melamar:</span>
+                            <span class="font-bold {{ $profile && $profile->applied_before ? 'text-indigo-700' : 'text-slate-700' }}">
+                                {{ $profile && $profile->applied_before ? '✓ Ya, Pernah' : 'Tidak' }}
+                            </span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                            <span class="text-slate-500 block text-[11px]">Bersedia Relokasi:</span>
+                            <span class="font-bold {{ $profile && $profile->willing_to_relocate ? 'text-emerald-700' : 'text-slate-700' }}">
+                                {{ $profile && $profile->willing_to_relocate ? '✓ Bersedia' : 'Tidak' }}
+                            </span>
+                        </div>
+                    </div>
+
+                    @if(!empty($profile->recruitment_location) || !empty($profile->preparation_notes))
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                            @if(!empty($profile->recruitment_location))
+                                <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                                    <span class="text-slate-500 block text-[11px]">Lokasi Rekrutmen Pilihan:</span>
+                                    <span class="font-bold text-slate-900">{{ $profile->recruitment_location }}</span>
+                                </div>
+                            @endif
+                            @if(!empty($profile->preparation_notes))
+                                <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                                    <span class="text-slate-500 block text-[11px]">Catatan Persiapan Kerja:</span>
+                                    <span class="text-slate-800">{{ $profile->preparation_notes }}</span>
+                                </div>
+                            @endif
+                        </div>
+                    @endif
+
+                    <!-- Agreement Status -->
+                    <div class="p-3.5 rounded-2xl {{ $profile && $profile->agreement_signed ? 'bg-emerald-50/80 border border-emerald-200' : 'bg-slate-50 border border-slate-200' }} flex items-center justify-between">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-base">{{ $profile && $profile->agreement_signed ? '✅' : '⏳' }}</span>
+                            <span class="text-xs font-bold {{ $profile && $profile->agreement_signed ? 'text-emerald-800' : 'text-slate-700' }}">
+                                {{ $profile && $profile->agreement_signed ? 'Pernyataan Kebenaran Data Resmi Ditandatangani Pelamar' : 'Pernyataan kebenaran data belum ditandai' }}
+                            </span>
+                        </div>
+                        <span class="text-[10px] text-slate-500">Legal Agreement</span>
                     </div>
                 </div>
             </div>

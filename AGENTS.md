@@ -123,7 +123,12 @@ Before relying on a package's API, confirm its installed version:
 # UI/UX & Frontend Consistency Guidelines
 
 - Always follow the established Design System documented in `UI_UX_DESIGN_GUIDELINES.md` and `.agents/rules/ui-ux-design-system.md`.
-- Strict Light Theme Policy: All views must strictly use the modern light theme (`bg-slate-50` body, `bg-white` cards with `border-slate-200`, `text-slate-900` headings, `text-slate-700/600` text). Do not revert any page to Dark Mode.
+- Strict Light Theme Policy: All views must strictly use the modern light theme (`bg-slate-50` body, `bg-white` cards with `border-slate-200`, `text-slate-900` headings, `text-slate-700/600` text). Do not revert any page to Dark Mode or leave rogue dark elements (`bg-slate-900`, `bg-slate-950`, `border-slate-700`).
+- Strict Form Styling & Font Contrast:
+  - Form inputs, selects, textareas must strictly be `bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:bg-white focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 rounded-xl text-sm`.
+  - Form labels must strictly be `block text-xs font-semibold text-slate-700 mb-1`.
+  - Sub-labels / hints must be `text-xs text-slate-500` (never washed-out `text-slate-400`).
+  - ZERO INVISIBLE FONT: Never use `text-white` on any input, select, textarea, label, or heading on white/light backgrounds. `text-white` is strictly reserved for solid colored/gradient buttons, badges, and dark pill tags.
 - Interactive Feedback: Selection options (Likert 1-5, Multiple Choice, Kraepelin numpad) must have distinctive visual states when selected (`peer-checked:` active rings, vibrant background, bold status badges).
 - Mobile-First: Non-HR roles (Career portal, Psychotests, ESS Attendance) must be 100% mobile-friendly with touch targets >= 44px, sticky keypads/CTAs, `touch-action: manipulation`, and responsive grids.
 

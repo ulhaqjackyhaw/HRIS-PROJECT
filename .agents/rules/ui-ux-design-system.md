@@ -49,8 +49,41 @@ Setiap pilihan jawaban atau tombol yang bisa dipilih **harus memiliki perbedaan 
 
 ---
 
-## 4. Larangan Regresi (Zero Regressions)
-1. DILARANG kembali ke skema warna gelap (dark mode).
-2. DILARANG membuat teks putih di atas latar terang atau sebaliknya (kontras wajib AA/AAA).
-3. DILARANG menghapus status visual `peer-checked` atau indikator nomor yang sudah dijawab.
-4. Pastikan `vendor/bin/pint --dirty --format agent` dijalankan dan `php artisan test --compact` tetap lulus 100%.
+## 4. Standar Formulir & Input Data (Form Styling Policy)
+Semua formulir pendaftaran, profil, presensi, cuti, atau administrasi wajib menggunakan tata letak terang yang seragam:
+- **Input Text, Date, Email, Tel, Number:**
+  `w-full px-4 py-2.5 bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 rounded-xl text-sm focus:bg-white focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 focus:outline-none transition-colors`
+- **Select Dropdown:**
+  `w-full px-4 py-2.5 bg-slate-50 border border-slate-200 text-slate-900 rounded-xl text-sm focus:bg-white focus:border-indigo-600 focus:outline-none transition-colors`
+- **Textarea:**
+  `w-full px-4 py-2.5 bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 rounded-xl text-sm focus:bg-white focus:border-indigo-600 focus:outline-none transition-colors`
+- **Input Form Dalam Grid/Tabel Compact:**
+  `px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600`
+- **Label Formulir:**
+  `block text-xs font-semibold text-slate-700 mb-1` (atau `mb-1.5`)
+- **Teks Pendukung / Sub-Label / Hint:**
+  `text-xs text-slate-500` (JANGAN gunakan `text-slate-400` yang terlalu tipis/pudar di latar putih).
+- **Sub-Kartu / Grup Form Turunan:**
+  `p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200`
+- **Upload File / Dropzone Card:**
+  `p-4 sm:p-5 rounded-2xl bg-white border-2 border-dashed border-indigo-200 hover:border-indigo-400 flex flex-col justify-between`
+  - Sertakan badge status `✓ Tersimpan` (`bg-emerald-50 text-emerald-700 border-emerald-200`) atau `Wajib` (`bg-rose-50 text-rose-700 border-rose-200`).
+  - Sertakan fungsi live feedback nama file saat dipilih (`updateFilenameDisplay(this, targetId)`).
+  - Tombol file input: `file:mr-2 file:py-2 file:px-3 file:rounded-xl file:border-0 file:bg-indigo-600 file:text-white file:text-xs file:font-bold hover:file:bg-indigo-500 file:cursor-pointer`.
+- **Radio & Checkbox:**
+  `text-indigo-600 focus:ring-indigo-500` dengan label yang jelas `text-xs text-slate-800 font-medium`.
+
+---
+
+## 5. Larangan Regresi & Anti-Invisible Font (Strict Zero Regressions)
+1. **DILARANG membuat teks putih (`text-white`) di atas latar terang (`bg-white` atau `bg-slate-50`):**
+   - Periksa seluruh atribut `class` pada elemen `<input>`, `<select>`, `<textarea>`, `<label>`, `<span>`, dan `<h3>`.
+   - `text-white` HANYA diperbolehkan pada tombol berwarna pekat/gradien (misal `bg-indigo-600 text-white`, `bg-gradient-to-r text-white`) atau badge berlatar gelap.
+2. **DILARANG meninggalkan elemen dark-mode sisa:**
+   - Dilarang menyisipkan `bg-slate-900`, `bg-slate-950`, atau `border-slate-700` di dalam form atau card bertema terang.
+3. **DILARANG menghapus status visual interaktif:**
+   - Status `peer-checked`, indikator nomor jawaban, dan keypad aktif Kraepelin tidak boleh dihilangkan.
+4. **Validasi Kualitas Kode:**
+   - Jalankan `vendor/bin/pint --dirty --format agent` untuk semua file PHP yang disentuh.
+   - Jalankan `php artisan test --compact` untuk memastikan 100% tes tetap lulus.
+   - Jalankan `npm run build` jika ada pembaruan frontend.

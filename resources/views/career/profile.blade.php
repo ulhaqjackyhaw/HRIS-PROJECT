@@ -129,7 +129,7 @@
                     <span class="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-700 border border-indigo-200 font-bold flex items-center justify-center text-sm">I</span>
                     <div>
                         <h2 class="text-xl font-bold text-slate-900">Data Diri & Berkas Dokumen</h2>
-                        <p class="text-xs text-slate-400">Lengkapi data diri inti dan unggah dokumen CV Anda.</p>
+                        <p class="text-xs text-slate-500">Lengkapi data diri inti dan unggah dokumen CV Anda.</p>
                     </div>
                 </div>
 
@@ -424,10 +424,10 @@
                  ========================================== -->
             <section class="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xl form-section">
                 <div class="flex items-center space-x-3 mb-2 pb-4 border-b border-slate-100">
-                    <span class="w-8 h-8 rounded-xl bg-cyan-600/20 text-cyan-400 font-bold flex items-center justify-center text-sm">II</span>
+                    <span class="w-8 h-8 rounded-xl bg-cyan-600/20 text-cyan-600 font-bold flex items-center justify-center text-sm">II</span>
                     <div>
                         <h2 class="text-xl font-bold text-slate-900">Identitas Diri & Kendaraan <span class="text-xs text-slate-500 font-normal">(Opsional)</span></h2>
-                        <span class="text-xs text-slate-400">Semua isian di bagian ini bersifat opsional. Kosongkan kolom yang belum ingin diisi.</span>
+                        <span class="text-xs text-slate-500">Semua isian di bagian ini bersifat opsional. Kosongkan kolom yang belum ingin diisi.</span>
                     </div>
                 </div>
 
@@ -435,91 +435,91 @@
                     <!-- KTP -->
                     <div class="sm:col-span-2">
                         <label class="block text-xs font-semibold text-slate-700 mb-1">No KTP (NIK)</label>
-                        <input type="text" name="ktp_number" value="{{ old('ktp_number', $profile->ktp_number) }}" placeholder="16 digit NIK KTP" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 text-slate-900 focus:bg-white focus:border-indigo-600 rounded-xl text-sm text-white" />
+                        <input type="text" name="ktp_number" value="{{ old('ktp_number', $profile->ktp_number) }}" placeholder="16 digit NIK KTP" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:bg-white focus:border-indigo-600 focus:outline-none rounded-xl text-sm" />
                     </div>
                     <div class="sm:col-span-2">
                         <label class="block text-xs font-semibold text-slate-700 mb-1">Masa Berlaku KTP</label>
-                        <input type="date" name="ktp_expiry" value="{{ old('ktp_expiry', $profile->ktp_expiry?->format('Y-m-d')) }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 text-slate-900 focus:bg-white focus:border-indigo-600 rounded-xl text-sm text-white" />
+                        <input type="date" name="ktp_expiry" value="{{ old('ktp_expiry', $profile->ktp_expiry?->format('Y-m-d')) }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 text-slate-900 focus:bg-white focus:border-indigo-600 focus:outline-none rounded-xl text-sm" />
                     </div>
 
                     <!-- NPWP -->
                     <div class="sm:col-span-2">
                         <label class="block text-xs font-semibold text-slate-700 mb-1">No NPWP</label>
-                        <input type="text" name="npwp_number" value="{{ old('npwp_number', $profile->npwp_number) }}" placeholder="Nomor Pokok Wajib Pajak" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 text-slate-900 focus:bg-white focus:border-indigo-600 rounded-xl text-sm text-white" />
+                        <input type="text" name="npwp_number" value="{{ old('npwp_number', $profile->npwp_number) }}" placeholder="Nomor Pokok Wajib Pajak" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:bg-white focus:border-indigo-600 focus:outline-none rounded-xl text-sm" />
                     </div>
                     <div class="sm:col-span-2">
                         <label class="block text-xs font-semibold text-slate-700 mb-1">Masa Berlaku NPWP</label>
-                        <input type="date" name="npwp_expiry" value="{{ old('npwp_expiry', $profile->npwp_expiry?->format('Y-m-d')) }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 text-slate-900 focus:bg-white focus:border-indigo-600 rounded-xl text-sm text-white" />
+                        <input type="date" name="npwp_expiry" value="{{ old('npwp_expiry', $profile->npwp_expiry?->format('Y-m-d')) }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 text-slate-900 focus:bg-white focus:border-indigo-600 focus:outline-none rounded-xl text-sm" />
                     </div>
 
                     <!-- Passport & BPJS -->
                     <div class="sm:col-span-2">
                         <label class="block text-xs font-semibold text-slate-700 mb-1">No Passport</label>
-                        <input type="text" name="passport_number" value="{{ old('passport_number', $profile->passport_number) }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 text-slate-900 focus:bg-white focus:border-indigo-600 rounded-xl text-sm text-white" />
+                        <input type="text" name="passport_number" value="{{ old('passport_number', $profile->passport_number) }}" placeholder="Nomor Paspor Aktif" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:bg-white focus:border-indigo-600 focus:outline-none rounded-xl text-sm" />
                     </div>
                     <div class="sm:col-span-2">
                         <label class="block text-xs font-semibold text-slate-700 mb-1">Masa Berlaku Passport</label>
-                        <input type="date" name="passport_expiry" value="{{ old('passport_expiry', $profile->passport_expiry?->format('Y-m-d')) }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 text-slate-900 focus:bg-white focus:border-indigo-600 rounded-xl text-sm text-white" />
+                        <input type="date" name="passport_expiry" value="{{ old('passport_expiry', $profile->passport_expiry?->format('Y-m-d')) }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 text-slate-900 focus:bg-white focus:border-indigo-600 focus:outline-none rounded-xl text-sm" />
                     </div>
 
                     <div class="sm:col-span-2">
                         <label class="block text-xs font-semibold text-slate-700 mb-1">No BPJS Ketenagakerjaan</label>
-                        <input type="text" name="bpjs_tk_number" value="{{ old('bpjs_tk_number', $profile->bpjs_tk_number) }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 text-slate-900 focus:bg-white focus:border-indigo-600 rounded-xl text-sm text-white" />
+                        <input type="text" name="bpjs_tk_number" value="{{ old('bpjs_tk_number', $profile->bpjs_tk_number) }}" placeholder="Nomor Peserta BPJS TK" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:bg-white focus:border-indigo-600 focus:outline-none rounded-xl text-sm" />
                     </div>
                     <div class="sm:col-span-2">
                         <label class="block text-xs font-semibold text-slate-700 mb-1">No Kartu Keluarga (KK)</label>
-                        <input type="text" name="family_card_number" value="{{ old('family_card_number', $profile->family_card_number) }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 text-slate-900 focus:bg-white focus:border-indigo-600 rounded-xl text-sm text-white" />
+                        <input type="text" name="family_card_number" value="{{ old('family_card_number', $profile->family_card_number) }}" placeholder="16 digit Nomor KK" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:bg-white focus:border-indigo-600 focus:outline-none rounded-xl text-sm" />
                     </div>
 
                     <!-- SIM A & SIM C -->
                     <div>
                         <label class="block text-xs font-semibold text-slate-700 mb-1">No SIM A</label>
-                        <input type="text" name="sim_a_number" value="{{ old('sim_a_number', $profile->sim_a_number) }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 text-slate-900 focus:bg-white focus:border-indigo-600 rounded-xl text-sm text-white" />
+                        <input type="text" name="sim_a_number" value="{{ old('sim_a_number', $profile->sim_a_number) }}" placeholder="Nomor SIM A" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:bg-white focus:border-indigo-600 focus:outline-none rounded-xl text-sm" />
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-slate-700 mb-1">Masa Berlaku SIM A</label>
-                        <input type="date" name="sim_a_expiry" value="{{ old('sim_a_expiry', $profile->sim_a_expiry?->format('Y-m-d')) }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 text-slate-900 focus:bg-white focus:border-indigo-600 rounded-xl text-sm text-white" />
+                        <input type="date" name="sim_a_expiry" value="{{ old('sim_a_expiry', $profile->sim_a_expiry?->format('Y-m-d')) }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 text-slate-900 focus:bg-white focus:border-indigo-600 focus:outline-none rounded-xl text-sm" />
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-slate-700 mb-1">No SIM C</label>
-                        <input type="text" name="sim_c_number" value="{{ old('sim_c_number', $profile->sim_c_number) }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 text-slate-900 focus:bg-white focus:border-indigo-600 rounded-xl text-sm text-white" />
+                        <input type="text" name="sim_c_number" value="{{ old('sim_c_number', $profile->sim_c_number) }}" placeholder="Nomor SIM C" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:bg-white focus:border-indigo-600 focus:outline-none rounded-xl text-sm" />
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-slate-700 mb-1">Masa Berlaku SIM C</label>
-                        <input type="date" name="sim_c_expiry" value="{{ old('sim_c_expiry', $profile->sim_c_expiry?->format('Y-m-d')) }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 text-slate-900 focus:bg-white focus:border-indigo-600 rounded-xl text-sm text-white" />
+                        <input type="date" name="sim_c_expiry" value="{{ old('sim_c_expiry', $profile->sim_c_expiry?->format('Y-m-d')) }}" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 text-slate-900 focus:bg-white focus:border-indigo-600 focus:outline-none rounded-xl text-sm" />
                     </div>
                 </div>
 
                 <!-- Kendaraan Pribadi -->
                 <div class="pt-6 border-t border-slate-100">
-                    <h3 class="text-sm font-bold text-white mb-4">Kendaraan Pribadi <span class="text-xs text-slate-500 font-normal">(Opsional)</span></h3>
+                    <h3 class="text-sm font-bold text-slate-900 mb-4">Kendaraan Pribadi <span class="text-xs text-slate-500 font-normal">(Opsional)</span></h3>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <!-- Mobil -->
                         <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
-                            <span class="text-xs font-bold text-indigo-400 block">Mobil Pribadi</span>
+                            <span class="text-xs font-bold text-indigo-600 block">Mobil Pribadi</span>
                             <div class="grid grid-cols-3 gap-2">
-                                <input type="text" name="vehicles[car][brand]" value="{{ $profile->vehicles_data['car']['brand'] ?? '' }}" placeholder="Merek" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white" />
-                                <input type="text" name="vehicles[car][year]" value="{{ $profile->vehicles_data['car']['year'] ?? '' }}" placeholder="Tahun" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white" />
-                                <select name="vehicles[car][status]" class="px-2 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white">
+                                <input type="text" name="vehicles[car][brand]" value="{{ $profile->vehicles_data['car']['brand'] ?? '' }}" placeholder="Merek" class="px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
+                                <input type="text" name="vehicles[car][year]" value="{{ $profile->vehicles_data['car']['year'] ?? '' }}" placeholder="Tahun" class="px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
+                                <select name="vehicles[car][status]" class="px-2 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 focus:outline-none focus:border-indigo-600">
                                     <option value="">Status</option>
-                                    <option value="Milik Sendiri">Milik Sendiri</option>
-                                    <option value="Keluarga">Keluarga</option>
-                                    <option value="Kredit">Kredit</option>
+                                    <option value="Milik Sendiri" {{ ($profile->vehicles_data['car']['status'] ?? '') == 'Milik Sendiri' ? 'selected' : '' }}>Milik Sendiri</option>
+                                    <option value="Keluarga" {{ ($profile->vehicles_data['car']['status'] ?? '') == 'Keluarga' ? 'selected' : '' }}>Keluarga</option>
+                                    <option value="Kredit" {{ ($profile->vehicles_data['car']['status'] ?? '') == 'Kredit' ? 'selected' : '' }}>Kredit</option>
                                 </select>
                             </div>
                         </div>
 
                         <!-- Motor -->
                         <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
-                            <span class="text-xs font-bold text-indigo-400 block">Sepeda Motor</span>
+                            <span class="text-xs font-bold text-indigo-600 block">Sepeda Motor</span>
                             <div class="grid grid-cols-3 gap-2">
-                                <input type="text" name="vehicles[motorcycle][brand]" value="{{ $profile->vehicles_data['motorcycle']['brand'] ?? '' }}" placeholder="Merek" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white" />
-                                <input type="text" name="vehicles[motorcycle][year]" value="{{ $profile->vehicles_data['motorcycle']['year'] ?? '' }}" placeholder="Tahun" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white" />
-                                <select name="vehicles[motorcycle][status]" class="px-2 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white">
+                                <input type="text" name="vehicles[motorcycle][brand]" value="{{ $profile->vehicles_data['motorcycle']['brand'] ?? '' }}" placeholder="Merek" class="px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
+                                <input type="text" name="vehicles[motorcycle][year]" value="{{ $profile->vehicles_data['motorcycle']['year'] ?? '' }}" placeholder="Tahun" class="px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
+                                <select name="vehicles[motorcycle][status]" class="px-2 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 focus:outline-none focus:border-indigo-600">
                                     <option value="">Status</option>
-                                    <option value="Milik Sendiri">Milik Sendiri</option>
-                                    <option value="Keluarga">Keluarga</option>
-                                    <option value="Kredit">Kredit</option>
+                                    <option value="Milik Sendiri" {{ ($profile->vehicles_data['motorcycle']['status'] ?? '') == 'Milik Sendiri' ? 'selected' : '' }}>Milik Sendiri</option>
+                                    <option value="Keluarga" {{ ($profile->vehicles_data['motorcycle']['status'] ?? '') == 'Keluarga' ? 'selected' : '' }}>Keluarga</option>
+                                    <option value="Kredit" {{ ($profile->vehicles_data['motorcycle']['status'] ?? '') == 'Kredit' ? 'selected' : '' }}>Kredit</option>
                                 </select>
                             </div>
                         </div>
@@ -532,46 +532,46 @@
                  ========================================== -->
             <section class="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xl form-section">
                 <div class="flex items-center space-x-3 mb-6 pb-4 border-b border-slate-100">
-                    <span class="w-8 h-8 rounded-xl bg-emerald-600/20 text-emerald-400 font-bold flex items-center justify-center text-sm">III</span>
+                    <span class="w-8 h-8 rounded-xl bg-emerald-600/20 text-emerald-600 font-bold flex items-center justify-center text-sm">III</span>
                     <div>
                         <h2 class="text-xl font-bold text-slate-900">Kontak & Alamat Domisili</h2>
-                        <p class="text-xs text-slate-400">Nomor WhatsApp dan Alamat Domisili wajib diisi untuk koordinasi proses seleksi.</p>
+                        <p class="text-xs text-slate-500">Nomor WhatsApp dan Alamat Domisili wajib diisi untuk koordinasi proses seleksi.</p>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8">
                     <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">No Handphone (WhatsApp) <span class="text-rose-400 font-bold">*</span></label>
-                        <input type="tel" name="phone_wa" value="{{ old('phone_wa', $profile->phone_wa ?? $user->phone) }}" required placeholder="08123456789" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 text-slate-900 focus:bg-white focus:border-indigo-600 rounded-xl text-sm text-white" />
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">No Handphone (WhatsApp) <span class="text-rose-500 font-bold">*</span></label>
+                        <input type="tel" name="phone_wa" value="{{ old('phone_wa', $profile->phone_wa ?? $user->phone) }}" required placeholder="08123456789" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:bg-white focus:border-indigo-600 focus:outline-none rounded-xl text-sm" />
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">Email Aktif <span class="text-rose-400 font-bold">*</span></label>
-                        <input type="email" name="email" value="{{ old('email', $profile->email ?? $user->email) }}" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 text-slate-900 focus:bg-white focus:border-indigo-600 rounded-xl text-sm text-white" />
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Email Aktif <span class="text-rose-500 font-bold">*</span></label>
+                        <input type="email" name="email" value="{{ old('email', $profile->email ?? $user->email) }}" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:bg-white focus:border-indigo-600 focus:outline-none rounded-xl text-sm" />
                     </div>
                 </div>
 
                 <!-- Alamat Domisili Sekarang (Wajib) -->
-                <div class="p-5 rounded-2xl bg-slate-950 border border-indigo-500/30 mb-6">
+                <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 mb-6">
                     <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-sm font-bold text-white">Alamat Domisili Sekarang <span class="text-rose-400 font-bold">* (Wajib)</span></h3>
-                        <span class="text-xs text-indigo-400">Alamat tempat tinggal Anda saat ini</span>
+                        <h3 class="text-sm font-bold text-slate-900">Alamat Domisili Sekarang <span class="text-rose-500 font-bold">* (Wajib)</span></h3>
+                        <span class="text-xs text-indigo-600 font-medium">Alamat tempat tinggal Anda saat ini</span>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         <div class="sm:col-span-3">
-                            <label class="block text-xs font-semibold text-slate-400 mb-1">Alamat Domisili Lengkap (Jalan, RT/RW, Kelurahan, Kecamatan, Kota)*</label>
-                            <textarea name="domicile_address" rows="2" required placeholder="Tuliskan alamat lengkap tempat tinggal Anda saat ini..." class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-xl text-sm text-white">{{ old('domicile_address', $profile->domicile_address) }}</textarea>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Alamat Domisili Lengkap (Jalan, RT/RW, Kelurahan, Kecamatan, Kota)*</label>
+                            <textarea name="domicile_address" rows="2" required placeholder="Tuliskan alamat lengkap tempat tinggal Anda saat ini..." class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600">{{ old('domicile_address', $profile->domicile_address) }}</textarea>
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-slate-400 mb-1">Provinsi</label>
-                            <input type="text" name="domicile_province" value="{{ old('domicile_province', $profile->domicile_province) }}" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-xl text-sm text-white" />
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Provinsi</label>
+                            <input type="text" name="domicile_province" value="{{ old('domicile_province', $profile->domicile_province) }}" placeholder="Provinsi" class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-slate-400 mb-1">Kota / Kabupaten</label>
-                            <input type="text" name="domicile_city" value="{{ old('domicile_city', $profile->domicile_city) }}" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-xl text-sm text-white" />
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Kota / Kabupaten</label>
+                            <input type="text" name="domicile_city" value="{{ old('domicile_city', $profile->domicile_city) }}" placeholder="Kota / Kabupaten" class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-slate-400 mb-1">Status Rumah</label>
-                            <select name="domicile_housing_status" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-xl text-sm text-white">
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Status Rumah</label>
+                            <select name="domicile_housing_status" class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-900 focus:outline-none focus:border-indigo-600">
                                 <option value="">-- Pilih --</option>
                                 @foreach(['Milik Sendiri', 'Orang Tua', 'Sewa / Kontrak', 'Kost', 'Dinas'] as $hs)
                                     <option value="{{ $hs }}" {{ old('domicile_housing_status', $profile->domicile_housing_status) == $hs ? 'selected' : '' }}>{{ $hs }}</option>
@@ -584,27 +584,27 @@
                 <!-- Alamat KTP (Opsional) -->
                 <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 mb-6">
                     <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-sm font-bold text-white">Alamat Sesuai KTP <span class="text-xs text-slate-500 font-normal">(Opsional)</span></h3>
-                        <button type="button" onclick="document.querySelector('[name=ktp_address]').value = document.querySelector('[name=domicile_address]').value; document.querySelector('[name=ktp_province]').value = document.querySelector('[name=domicile_province]').value; document.querySelector('[name=ktp_city]').value = document.querySelector('[name=domicile_city]').value;" class="text-xs text-indigo-400 hover:text-indigo-300 font-semibold transition-colors">
+                        <h3 class="text-sm font-bold text-slate-900">Alamat Sesuai KTP <span class="text-xs text-slate-500 font-normal">(Opsional)</span></h3>
+                        <button type="button" onclick="document.querySelector('[name=ktp_address]').value = document.querySelector('[name=domicile_address]').value; document.querySelector('[name=ktp_province]').value = document.querySelector('[name=domicile_province]').value; document.querySelector('[name=ktp_city]').value = document.querySelector('[name=domicile_city]').value;" class="text-xs text-indigo-600 hover:text-indigo-800 font-bold transition-colors cursor-pointer">
                             ⚡ Samakan dengan Alamat Domisili
                         </button>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         <div class="sm:col-span-3">
-                            <label class="block text-xs font-semibold text-slate-400 mb-1">Alamat KTP (Kosongkan bila sama dengan domisili)</label>
-                            <textarea name="ktp_address" rows="2" placeholder="Kosongkan jika sama dengan domisili..." class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-xl text-sm text-white">{{ old('ktp_address', $profile->ktp_address) }}</textarea>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Alamat KTP (Kosongkan bila sama dengan domisili)</label>
+                            <textarea name="ktp_address" rows="2" placeholder="Kosongkan jika sama dengan domisili..." class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600">{{ old('ktp_address', $profile->ktp_address) }}</textarea>
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-slate-400 mb-1">Provinsi</label>
-                            <input type="text" name="ktp_province" value="{{ old('ktp_province', $profile->ktp_province) }}" placeholder="Contoh: Jawa Barat" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-xl text-sm text-white" />
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Provinsi</label>
+                            <input type="text" name="ktp_province" value="{{ old('ktp_province', $profile->ktp_province) }}" placeholder="Contoh: Jawa Barat" class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-slate-400 mb-1">Kota / Kabupaten</label>
-                            <input type="text" name="ktp_city" value="{{ old('ktp_city', $profile->ktp_city) }}" placeholder="Contoh: Kota Bandung" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-xl text-sm text-white" />
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Kota / Kabupaten</label>
+                            <input type="text" name="ktp_city" value="{{ old('ktp_city', $profile->ktp_city) }}" placeholder="Contoh: Kota Bandung" class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-slate-400 mb-1">Status Rumah</label>
-                            <select name="ktp_housing_status" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-xl text-sm text-white">
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Status Rumah</label>
+                            <select name="ktp_housing_status" class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-900 focus:outline-none focus:border-indigo-600">
                                 <option value="">-- Pilih --</option>
                                 @foreach(['Milik Sendiri', 'Orang Tua', 'Sewa / Kontrak', 'Kost', 'Dinas'] as $hs)
                                     <option value="{{ $hs }}" {{ old('ktp_housing_status', $profile->ktp_housing_status) == $hs ? 'selected' : '' }}>{{ $hs }}</option>
@@ -616,19 +616,19 @@
 
                 <!-- Kontak Darurat (Opsional) -->
                 <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200">
-                    <h3 class="text-sm font-bold text-white mb-4">Kontak Darurat (Emergency Contact) <span class="text-xs text-slate-500 font-normal">(Opsional)</span></h3>
+                    <h3 class="text-sm font-bold text-slate-900 mb-4">Kontak Darurat (Emergency Contact) <span class="text-xs text-slate-500 font-normal">(Opsional)</span></h3>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
-                            <label class="block text-xs font-semibold text-slate-400 mb-1">Nama Kontak Darurat</label>
-                            <input type="text" name="emergency_contact[name]" value="{{ $profile->emergency_contact['name'] ?? '' }}" placeholder="Nama keluarga / kerabat" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-xl text-sm text-white" />
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Kontak Darurat</label>
+                            <input type="text" name="emergency_contact[name]" value="{{ $profile->emergency_contact['name'] ?? '' }}" placeholder="Nama keluarga / kerabat" class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-slate-400 mb-1">Hubungan</label>
-                            <input type="text" name="emergency_contact[relation]" value="{{ $profile->emergency_contact['relation'] ?? '' }}" placeholder="Orang tua, Suami/Istri, Saudara" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-xl text-sm text-white" />
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Hubungan</label>
+                            <input type="text" name="emergency_contact[relation]" value="{{ $profile->emergency_contact['relation'] ?? '' }}" placeholder="Orang tua, Suami/Istri, Saudara" class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-slate-400 mb-1">Nomor Telepon / HP</label>
-                            <input type="tel" name="emergency_contact[phone]" value="{{ $profile->emergency_contact['phone'] ?? '' }}" placeholder="0812xxxxxxxx" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-xl text-sm text-white" />
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Nomor Telepon / HP</label>
+                            <input type="tel" name="emergency_contact[phone]" value="{{ $profile->emergency_contact['phone'] ?? '' }}" placeholder="0812xxxxxxxx" class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
                         </div>
                     </div>
                 </div>
@@ -639,10 +639,10 @@
                  ========================================== -->
             <section class="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xl form-section">
                 <div class="flex items-center space-x-3 mb-6 pb-4 border-b border-slate-100">
-                    <span class="w-8 h-8 rounded-xl bg-purple-600/20 text-purple-400 font-bold flex items-center justify-center text-sm">IV</span>
+                    <span class="w-8 h-8 rounded-xl bg-purple-600/20 text-purple-600 font-bold flex items-center justify-center text-sm">IV</span>
                     <div>
                         <h2 class="text-xl font-bold text-slate-900">Data Keluarga <span class="text-xs text-slate-500 font-normal">(Opsional)</span></h2>
-                        <span class="text-xs text-slate-400">Informasi susunan keluarga bersifat opsional dan dapat dilewati.</span>
+                        <span class="text-xs text-slate-500">Informasi susunan keluarga bersifat opsional dan dapat dilewati.</span>
                     </div>
                 </div>
 
@@ -650,53 +650,53 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                     <!-- Ayah -->
                     <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
-                        <span class="text-sm font-bold text-white block">Data Ayah</span>
-                        <input type="text" name="family_father[name]" value="{{ $profile->family_father['name'] ?? '' }}" placeholder="Nama Ayah*" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white" />
+                        <span class="text-sm font-bold text-slate-900 block">Data Ayah</span>
+                        <input type="text" name="family_father[name]" value="{{ $profile->family_father['name'] ?? '' }}" placeholder="Nama Ayah" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
                         <div class="grid grid-cols-2 gap-2">
-                            <input type="date" name="family_father[birth_date]" value="{{ $profile->family_father['birth_date'] ?? '' }}" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white" />
-                            <input type="text" name="family_father[education]" value="{{ $profile->family_father['education'] ?? '' }}" placeholder="Pendidikan" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white" />
+                            <input type="date" name="family_father[birth_date]" value="{{ $profile->family_father['birth_date'] ?? '' }}" class="px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 focus:outline-none focus:border-indigo-600" />
+                            <input type="text" name="family_father[education]" value="{{ $profile->family_father['education'] ?? '' }}" placeholder="Pendidikan" class="px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
                         </div>
                         <div class="grid grid-cols-2 gap-2">
-                            <input type="text" name="family_father[job]" value="{{ $profile->family_father['job'] ?? '' }}" placeholder="Pekerjaan" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white" />
-                            <input type="text" name="family_father[company]" value="{{ $profile->family_father['company'] ?? '' }}" placeholder="Perusahaan" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white" />
+                            <input type="text" name="family_father[job]" value="{{ $profile->family_father['job'] ?? '' }}" placeholder="Pekerjaan" class="px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
+                            <input type="text" name="family_father[company]" value="{{ $profile->family_father['company'] ?? '' }}" placeholder="Perusahaan" class="px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
                         </div>
-                        <input type="tel" name="family_father[phone]" value="{{ $profile->family_father['phone'] ?? '' }}" placeholder="No HP" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white" />
+                        <input type="tel" name="family_father[phone]" value="{{ $profile->family_father['phone'] ?? '' }}" placeholder="No HP" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
                     </div>
 
                     <!-- Ibu -->
                     <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
-                        <span class="text-sm font-bold text-white block">Data Ibu</span>
-                        <input type="text" name="family_mother[name]" value="{{ $profile->family_mother['name'] ?? '' }}" placeholder="Nama Ibu*" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white" />
+                        <span class="text-sm font-bold text-slate-900 block">Data Ibu</span>
+                        <input type="text" name="family_mother[name]" value="{{ $profile->family_mother['name'] ?? '' }}" placeholder="Nama Ibu" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
                         <div class="grid grid-cols-2 gap-2">
-                            <input type="date" name="family_mother[birth_date]" value="{{ $profile->family_mother['birth_date'] ?? '' }}" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white" />
-                            <input type="text" name="family_mother[education]" value="{{ $profile->family_mother['education'] ?? '' }}" placeholder="Pendidikan" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white" />
+                            <input type="date" name="family_mother[birth_date]" value="{{ $profile->family_mother['birth_date'] ?? '' }}" class="px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 focus:outline-none focus:border-indigo-600" />
+                            <input type="text" name="family_mother[education]" value="{{ $profile->family_mother['education'] ?? '' }}" placeholder="Pendidikan" class="px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
                         </div>
                         <div class="grid grid-cols-2 gap-2">
-                            <input type="text" name="family_mother[job]" value="{{ $profile->family_mother['job'] ?? '' }}" placeholder="Pekerjaan" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white" />
-                            <input type="text" name="family_mother[company]" value="{{ $profile->family_mother['company'] ?? '' }}" placeholder="Perusahaan" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white" />
+                            <input type="text" name="family_mother[job]" value="{{ $profile->family_mother['job'] ?? '' }}" placeholder="Pekerjaan" class="px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
+                            <input type="text" name="family_mother[company]" value="{{ $profile->family_mother['company'] ?? '' }}" placeholder="Perusahaan" class="px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
                         </div>
-                        <input type="tel" name="family_mother[phone]" value="{{ $profile->family_mother['phone'] ?? '' }}" placeholder="No HP" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white" />
+                        <input type="tel" name="family_mother[phone]" value="{{ $profile->family_mother['phone'] ?? '' }}" placeholder="No HP" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
                     </div>
                 </div>
 
                 <!-- Saudara Kandung -->
                 <div class="mb-8">
-                    <h3 class="text-sm font-bold text-white mb-3">Saudara Kandung</h3>
+                    <h3 class="text-sm font-bold text-slate-900 mb-3">Saudara Kandung</h3>
                     <div class="space-y-3" id="siblings-container">
                         @php
                             $siblings = $profile->family_siblings ?? [['name' => '', 'gender' => '', 'birth_date' => '', 'education' => '', 'job' => '']];
                         @endphp
                         @foreach($siblings as $idx => $sib)
                             <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 grid grid-cols-1 sm:grid-cols-5 gap-2">
-                                <input type="text" name="family_siblings[{{ $idx }}][name]" value="{{ $sib['name'] ?? '' }}" placeholder="Nama Saudara" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white" />
-                                <select name="family_siblings[{{ $idx }}][gender]" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white">
+                                <input type="text" name="family_siblings[{{ $idx }}][name]" value="{{ $sib['name'] ?? '' }}" placeholder="Nama Saudara" class="px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
+                                <select name="family_siblings[{{ $idx }}][gender]" class="px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 focus:outline-none focus:border-indigo-600">
                                     <option value="">L/P</option>
                                     <option value="Laki-laki" {{ ($sib['gender'] ?? '') == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
                                     <option value="Perempuan" {{ ($sib['gender'] ?? '') == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
                                 </select>
-                                <input type="date" name="family_siblings[{{ $idx }}][birth_date]" value="{{ $sib['birth_date'] ?? '' }}" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white" />
-                                <input type="text" name="family_siblings[{{ $idx }}][education]" value="{{ $sib['education'] ?? '' }}" placeholder="Pendidikan" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white" />
-                                <input type="text" name="family_siblings[{{ $idx }}][job]" value="{{ $sib['job'] ?? '' }}" placeholder="Pekerjaan" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white" />
+                                <input type="date" name="family_siblings[{{ $idx }}][birth_date]" value="{{ $sib['birth_date'] ?? '' }}" class="px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 focus:outline-none focus:border-indigo-600" />
+                                <input type="text" name="family_siblings[{{ $idx }}][education]" value="{{ $sib['education'] ?? '' }}" placeholder="Pendidikan" class="px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
+                                <input type="text" name="family_siblings[{{ $idx }}][job]" value="{{ $sib['job'] ?? '' }}" placeholder="Pekerjaan" class="px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
                             </div>
                         @endforeach
                     </div>
@@ -704,29 +704,29 @@
 
                 <!-- Keluarga Inti (Pasangan & Anak) -->
                 <div>
-                    <h3 class="text-sm font-bold text-white mb-1">Keluarga Inti (Pasangan & Anak)</h3>
-                    <p class="text-[10px] text-slate-400 mb-3">Wajib diisi bila sudah atau pernah menikah.</p>
+                    <h3 class="text-sm font-bold text-slate-900 mb-1">Keluarga Inti (Pasangan & Anak)</h3>
+                    <p class="text-[10px] text-slate-500 mb-3">Wajib diisi bila sudah atau pernah menikah.</p>
                     <div class="space-y-3" id="core-family-container">
                         @php
                             $coreFamily = $profile->family_core ?? [['relation' => '', 'name' => '', 'gender' => '', 'birth_date' => '', 'education' => '', 'job' => '']];
                         @endphp
                         @foreach($coreFamily as $idx => $core)
                             <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 grid grid-cols-1 sm:grid-cols-6 gap-2">
-                                <select name="family_core[{{ $idx }}][relation]" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white">
+                                <select name="family_core[{{ $idx }}][relation]" class="px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 focus:outline-none focus:border-indigo-600">
                                     <option value="">Hubungan</option>
                                     <option value="Suami" {{ ($core['relation'] ?? '') == 'Suami' ? 'selected' : '' }}>Suami</option>
                                     <option value="Istri" {{ ($core['relation'] ?? '') == 'Istri' ? 'selected' : '' }}>Istri</option>
                                     <option value="Anak" {{ ($core['relation'] ?? '') == 'Anak' ? 'selected' : '' }}>Anak</option>
                                 </select>
-                                <input type="text" name="family_core[{{ $idx }}][name]" value="{{ $core['name'] ?? '' }}" placeholder="Nama Anggota" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white" />
-                                <select name="family_core[{{ $idx }}][gender]" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white">
+                                <input type="text" name="family_core[{{ $idx }}][name]" value="{{ $core['name'] ?? '' }}" placeholder="Nama Anggota" class="px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
+                                <select name="family_core[{{ $idx }}][gender]" class="px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 focus:outline-none focus:border-indigo-600">
                                     <option value="">L/P</option>
                                     <option value="Laki-laki" {{ ($core['gender'] ?? '') == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
                                     <option value="Perempuan" {{ ($core['gender'] ?? '') == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
                                 </select>
-                                <input type="date" name="family_core[{{ $idx }}][birth_date]" value="{{ $core['birth_date'] ?? '' }}" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white" />
-                                <input type="text" name="family_core[{{ $idx }}][education]" value="{{ $core['education'] ?? '' }}" placeholder="Pendidikan" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white" />
-                                <input type="text" name="family_core[{{ $idx }}][job]" value="{{ $core['job'] ?? '' }}" placeholder="Pekerjaan" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white" />
+                                <input type="date" name="family_core[{{ $idx }}][birth_date]" value="{{ $core['birth_date'] ?? '' }}" class="px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 focus:outline-none focus:border-indigo-600" />
+                                <input type="text" name="family_core[{{ $idx }}][education]" value="{{ $core['education'] ?? '' }}" placeholder="Pendidikan" class="px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
+                                <input type="text" name="family_core[{{ $idx }}][job]" value="{{ $core['job'] ?? '' }}" placeholder="Pekerjaan" class="px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
                             </div>
                         @endforeach
                     </div>
@@ -738,16 +738,16 @@
                  ========================================== -->
             <section class="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xl form-section">
                 <div class="flex items-center space-x-3 mb-6 pb-4 border-b border-slate-100">
-                    <span class="w-8 h-8 rounded-xl bg-amber-600/20 text-amber-400 font-bold flex items-center justify-center text-sm">V</span>
+                    <span class="w-8 h-8 rounded-xl bg-amber-600/20 text-amber-600 font-bold flex items-center justify-center text-sm">V</span>
                     <div>
                         <h2 class="text-xl font-bold text-slate-900">Pendidikan & Keterampilan <span class="text-xs text-slate-500 font-normal">(Opsional)</span></h2>
-                        <span class="text-xs text-slate-400">Riwayat pendidikan dan kemampuan bahasa bersifat opsional.</span>
+                        <span class="text-xs text-slate-500">Riwayat pendidikan dan kemampuan bahasa bersifat opsional.</span>
                     </div>
                 </div>
 
                 <!-- A. Pendidikan Formal -->
                 <div class="space-y-4 mb-8">
-                    <h3 class="text-sm font-bold text-white mb-2">A. Pendidikan Formal</h3>
+                    <h3 class="text-sm font-bold text-slate-900 mb-2">A. Pendidikan Formal</h3>
 
                     @php
                         $formalLevels = [
@@ -763,13 +763,13 @@
 
                     @foreach($formalLevels as $key => $label)
                         <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
-                            <span class="text-xs font-bold text-indigo-400 block mb-2">{{ $label }}</span>
+                            <span class="text-xs font-bold text-indigo-600 block mb-2">{{ $label }}</span>
                             <div class="grid grid-cols-1 sm:grid-cols-6 gap-2">
-                                <input type="text" name="education_formal[{{ $key }}][school]" value="{{ $profile->education_formal[$key]['school'] ?? '' }}" placeholder="Nama Sekolah / Universitas" class="sm:col-span-2 px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white" />
-                                <input type="text" name="education_formal[{{ $key }}][place]" value="{{ $profile->education_formal[$key]['place'] ?? '' }}" placeholder="Tempat / Kota" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white" />
-                                <input type="text" name="education_formal[{{ $key }}][major]" value="{{ $profile->education_formal[$key]['major'] ?? '' }}" placeholder="Jurusan" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white" />
-                                <input type="text" name="education_formal[{{ $key }}][graduation_year]" value="{{ $profile->education_formal[$key]['graduation_year'] ?? '' }}" placeholder="Tahun Lulus" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white" />
-                                <input type="text" name="education_formal[{{ $key }}][score]" value="{{ $profile->education_formal[$key]['score'] ?? '' }}" placeholder="Nilai / IPK" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white" />
+                                <input type="text" name="education_formal[{{ $key }}][school]" value="{{ $profile->education_formal[$key]['school'] ?? '' }}" placeholder="Nama Sekolah / Universitas" class="sm:col-span-2 px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
+                                <input type="text" name="education_formal[{{ $key }}][place]" value="{{ $profile->education_formal[$key]['place'] ?? '' }}" placeholder="Tempat / Kota" class="px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
+                                <input type="text" name="education_formal[{{ $key }}][major]" value="{{ $profile->education_formal[$key]['major'] ?? '' }}" placeholder="Jurusan" class="px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
+                                <input type="text" name="education_formal[{{ $key }}][graduation_year]" value="{{ $profile->education_formal[$key]['graduation_year'] ?? '' }}" placeholder="Tahun Lulus" class="px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
+                                <input type="text" name="education_formal[{{ $key }}][score]" value="{{ $profile->education_formal[$key]['score'] ?? '' }}" placeholder="Nilai / IPK" class="px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
                             </div>
                         </div>
                     @endforeach
@@ -777,30 +777,30 @@
 
                 <!-- B. Kemampuan Bahasa -->
                 <div class="pt-6 border-t border-slate-100">
-                    <h3 class="text-sm font-bold text-white mb-4">D. Kemampuan Bahasa</h3>
+                    <h3 class="text-sm font-bold text-slate-900 mb-4">D. Kemampuan Bahasa</h3>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <!-- Indonesia -->
                         <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
                             <span class="text-xs font-bold text-slate-900 block">Bahasa Indonesia</span>
                             <div>
-                                <label class="text-[10px] text-slate-400 block">Berbicara</label>
-                                <select name="languages[indonesia][speak]" class="w-full px-2 py-1.5 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white">
+                                <label class="text-[10px] text-slate-600 font-semibold block mb-1">Berbicara</label>
+                                <select name="languages[indonesia][speak]" class="w-full px-2 py-1.5 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 focus:outline-none focus:border-indigo-600">
                                     <option value="Aktif">Aktif</option>
                                     <option value="Pasif">Pasif</option>
                                     <option value="Terbatas">Terbatas</option>
                                 </select>
                             </div>
                             <div>
-                                <label class="text-[10px] text-slate-400 block">Membaca</label>
-                                <select name="languages[indonesia][read]" class="w-full px-2 py-1.5 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white">
+                                <label class="text-[10px] text-slate-600 font-semibold block mb-1">Membaca</label>
+                                <select name="languages[indonesia][read]" class="w-full px-2 py-1.5 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 focus:outline-none focus:border-indigo-600">
                                     <option value="Aktif">Aktif</option>
                                     <option value="Pasif">Pasif</option>
                                     <option value="Terbatas">Terbatas</option>
                                 </select>
                             </div>
                             <div>
-                                <label class="text-[10px] text-slate-400 block">Menulis</label>
-                                <select name="languages[indonesia][write]" class="w-full px-2 py-1.5 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white">
+                                <label class="text-[10px] text-slate-600 font-semibold block mb-1">Menulis</label>
+                                <select name="languages[indonesia][write]" class="w-full px-2 py-1.5 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 focus:outline-none focus:border-indigo-600">
                                     <option value="Aktif">Aktif</option>
                                     <option value="Pasif">Pasif</option>
                                     <option value="Terbatas">Terbatas</option>
@@ -812,24 +812,24 @@
                         <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
                             <span class="text-xs font-bold text-slate-900 block">Bahasa Inggris</span>
                             <div>
-                                <label class="text-[10px] text-slate-400 block">Berbicara</label>
-                                <select name="languages[english][speak]" class="w-full px-2 py-1.5 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white">
+                                <label class="text-[10px] text-slate-600 font-semibold block mb-1">Berbicara</label>
+                                <select name="languages[english][speak]" class="w-full px-2 py-1.5 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 focus:outline-none focus:border-indigo-600">
                                     <option value="Aktif">Aktif</option>
                                     <option value="Pasif">Pasif</option>
                                     <option value="Terbatas">Terbatas</option>
                                 </select>
                             </div>
                             <div>
-                                <label class="text-[10px] text-slate-400 block">Membaca</label>
-                                <select name="languages[english][read]" class="w-full px-2 py-1.5 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white">
+                                <label class="text-[10px] text-slate-600 font-semibold block mb-1">Membaca</label>
+                                <select name="languages[english][read]" class="w-full px-2 py-1.5 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 focus:outline-none focus:border-indigo-600">
                                     <option value="Aktif">Aktif</option>
                                     <option value="Pasif">Pasif</option>
                                     <option value="Terbatas">Terbatas</option>
                                 </select>
                             </div>
                             <div>
-                                <label class="text-[10px] text-slate-400 block">Menulis</label>
-                                <select name="languages[english][write]" class="w-full px-2 py-1.5 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white">
+                                <label class="text-[10px] text-slate-600 font-semibold block mb-1">Menulis</label>
+                                <select name="languages[english][write]" class="w-full px-2 py-1.5 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 focus:outline-none focus:border-indigo-600">
                                     <option value="Aktif">Aktif</option>
                                     <option value="Pasif">Pasif</option>
                                     <option value="Terbatas">Terbatas</option>
@@ -840,26 +840,26 @@
                         <!-- Bahasa Lainnya -->
                         <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
                             <span class="text-xs font-bold text-slate-900 block">Bahasa Lainnya (Mandarin, Jepang, dll.)</span>
-                            <input type="text" name="languages[other][name]" value="{{ $profile->languages['other']['name'] ?? '' }}" placeholder="Nama Bahasa Lain" class="w-full px-2 py-1.5 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white mb-2" />
+                            <input type="text" name="languages[other][name]" value="{{ $profile->languages['other']['name'] ?? '' }}" placeholder="Nama Bahasa Lain" class="w-full px-2 py-1.5 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600 mb-2" />
                             <div>
-                                <label class="text-[10px] text-slate-400 block">Berbicara</label>
-                                <select name="languages[other][speak]" class="w-full px-2 py-1.5 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white">
+                                <label class="text-[10px] text-slate-600 font-semibold block mb-1">Berbicara</label>
+                                <select name="languages[other][speak]" class="w-full px-2 py-1.5 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 focus:outline-none focus:border-indigo-600">
                                     <option value="Aktif">Aktif</option>
                                     <option value="Pasif">Pasif</option>
                                     <option value="Terbatas">Terbatas</option>
                                 </select>
                             </div>
                             <div>
-                                <label class="text-[10px] text-slate-400 block">Membaca</label>
-                                <select name="languages[other][read]" class="w-full px-2 py-1.5 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white">
+                                <label class="text-[10px] text-slate-600 font-semibold block mb-1">Membaca</label>
+                                <select name="languages[other][read]" class="w-full px-2 py-1.5 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 focus:outline-none focus:border-indigo-600">
                                     <option value="Aktif">Aktif</option>
                                     <option value="Pasif">Pasif</option>
                                     <option value="Terbatas">Terbatas</option>
                                 </select>
                             </div>
                             <div>
-                                <label class="text-[10px] text-slate-400 block">Menulis</label>
-                                <select name="languages[other][write]" class="w-full px-2 py-1.5 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white">
+                                <label class="text-[10px] text-slate-600 font-semibold block mb-1">Menulis</label>
+                                <select name="languages[other][write]" class="w-full px-2 py-1.5 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 focus:outline-none focus:border-indigo-600">
                                     <option value="Aktif">Aktif</option>
                                     <option value="Pasif">Pasif</option>
                                     <option value="Terbatas">Terbatas</option>
@@ -875,10 +875,10 @@
                  ========================================== -->
             <section class="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xl form-section">
                 <div class="flex items-center space-x-3 mb-2 pb-4 border-b border-slate-100">
-                    <span class="w-8 h-8 rounded-xl bg-blue-600/20 text-blue-400 font-bold flex items-center justify-center text-sm">VI</span>
+                    <span class="w-8 h-8 rounded-xl bg-blue-600/20 text-blue-600 font-bold flex items-center justify-center text-sm">VI</span>
                     <div>
                         <h2 class="text-xl font-bold text-slate-900">Pengalaman Kerja <span class="text-xs text-slate-500 font-normal">(Opsional)</span></h2>
-                        <span class="text-xs text-slate-400">Boleh dilewati bila Anda adalah lulusan baru (Fresh Graduate) atau belum memiliki riwayat kerja.</span>
+                        <span class="text-xs text-slate-500">Boleh dilewati bila Anda adalah lulusan baru (Fresh Graduate) atau belum memiliki riwayat kerja.</span>
                     </div>
                 </div>
 
@@ -891,18 +891,18 @@
 
                     @foreach($works as $idx => $work)
                         <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
-                            <span class="text-xs font-bold text-indigo-400">Pengalaman {{ $idx + 1 }}</span>
+                            <span class="text-xs font-bold text-indigo-600">Pengalaman {{ $idx + 1 }}</span>
                             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                                <input type="text" name="work_experiences[{{ $idx }}][company]" value="{{ $work['company'] ?? '' }}" placeholder="Nama Perusahaan" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white" />
-                                <input type="text" name="work_experiences[{{ $idx }}][position_end]" value="{{ $work['position_end'] ?? '' }}" placeholder="Jabatan Akhir" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white" />
-                                <input type="text" name="work_experiences[{{ $idx }}][salary]" value="{{ $work['salary'] ?? '' }}" placeholder="Gaji Akhir (Rp)" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white" />
+                                <input type="text" name="work_experiences[{{ $idx }}][company]" value="{{ $work['company'] ?? '' }}" placeholder="Nama Perusahaan" class="px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
+                                <input type="text" name="work_experiences[{{ $idx }}][position_end]" value="{{ $work['position_end'] ?? '' }}" placeholder="Jabatan Akhir" class="px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
+                                <input type="text" name="work_experiences[{{ $idx }}][salary]" value="{{ $work['salary'] ?? '' }}" placeholder="Gaji Akhir (Rp)" class="px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
                             </div>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                <input type="text" name="work_experiences[{{ $idx }}][period_start]" value="{{ $work['period_start'] ?? '' }}" placeholder="Bulan & Tahun Masuk (misal: Jan 2021)" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white" />
-                                <input type="text" name="work_experiences[{{ $idx }}][period_end]" value="{{ $work['period_end'] ?? '' }}" placeholder="Bulan & Tahun Keluar (Kosongkan bila masih aktif)" class="px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white" />
+                                <input type="text" name="work_experiences[{{ $idx }}][period_start]" value="{{ $work['period_start'] ?? '' }}" placeholder="Bulan & Tahun Masuk (misal: Jan 2021)" class="px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
+                                <input type="text" name="work_experiences[{{ $idx }}][period_end]" value="{{ $work['period_end'] ?? '' }}" placeholder="Bulan & Tahun Keluar (Kosongkan bila masih aktif)" class="px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
                             </div>
-                            <textarea name="work_experiences[{{ $idx }}][job_desc]" rows="2" placeholder="Tugas & Tanggung Jawab Utama..." class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white">{{ $work['job_desc'] ?? '' }}</textarea>
-                            <input type="text" name="work_experiences[{{ $idx }}][leave_reason]" value="{{ $work['leave_reason'] ?? '' }}" placeholder="Alasan Berhenti / Pindah" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white" />
+                            <textarea name="work_experiences[{{ $idx }}][job_desc]" rows="2" placeholder="Tugas & Tanggung Jawab Utama..." class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600">{{ $work['job_desc'] ?? '' }}</textarea>
+                            <input type="text" name="work_experiences[{{ $idx }}][leave_reason]" value="{{ $work['leave_reason'] ?? '' }}" placeholder="Alasan Berhenti / Pindah" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
                         </div>
                     @endforeach
                 </div>
@@ -913,10 +913,10 @@
                  ========================================== -->
             <section class="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xl form-section">
                 <div class="flex items-center space-x-3 mb-2 pb-4 border-b border-slate-100">
-                    <span class="w-8 h-8 rounded-xl bg-teal-600/20 text-teal-400 font-bold flex items-center justify-center text-sm">VII</span>
+                    <span class="w-8 h-8 rounded-xl bg-teal-600/20 text-teal-600 font-bold flex items-center justify-center text-sm">VII</span>
                     <div>
                         <h2 class="text-xl font-bold text-slate-900">Referensi Profesional <span class="text-xs text-slate-500 font-normal">(Opsional)</span></h2>
-                        <span class="text-xs text-slate-400">Orang yang dapat dihubungi untuk memberikan referensi — bukan anggota keluarga. Kosongkan jika belum ada.</span>
+                        <span class="text-xs text-slate-500">Orang yang dapat dihubungi untuk memberikan referensi — bukan anggota keluarga. Kosongkan jika belum ada.</span>
                     </div>
                 </div>
 
@@ -924,10 +924,10 @@
                     @for($i = 0; $i < 3; $i++)
                         <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
                             <span class="text-xs font-bold text-slate-900 block">Referensi {{ $i + 1 }}</span>
-                            <input type="text" name="references[{{ $i }}][name]" value="{{ $profile->references_data[$i]['name'] ?? '' }}" placeholder="Nama Lengkap" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white" />
-                            <input type="text" name="references[{{ $i }}][position]" value="{{ $profile->references_data[$i]['position'] ?? '' }}" placeholder="Jabatan / Perusahaan" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white" />
-                            <input type="text" name="references[{{ $i }}][relation]" value="{{ $profile->references_data[$i]['relation'] ?? '' }}" placeholder="Hubungan (Atasan / Rekan)" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white" />
-                            <input type="tel" name="references[{{ $i }}][phone]" value="{{ $profile->references_data[$i]['phone'] ?? '' }}" placeholder="No Telepon / WhatsApp" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white" />
+                            <input type="text" name="references[{{ $i }}][name]" value="{{ $profile->references_data[$i]['name'] ?? '' }}" placeholder="Nama Lengkap" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
+                            <input type="text" name="references[{{ $i }}][position]" value="{{ $profile->references_data[$i]['position'] ?? '' }}" placeholder="Jabatan / Perusahaan" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
+                            <input type="text" name="references[{{ $i }}][relation]" value="{{ $profile->references_data[$i]['relation'] ?? '' }}" placeholder="Hubungan (Atasan / Rekan)" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
+                            <input type="tel" name="references[{{ $i }}][phone]" value="{{ $profile->references_data[$i]['phone'] ?? '' }}" placeholder="No Telepon / WhatsApp" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600" />
                         </div>
                     @endfor
                 </div>
@@ -938,10 +938,10 @@
                  ========================================== -->
             <section class="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xl form-section">
                 <div class="flex items-center space-x-3 mb-6 pb-4 border-b border-slate-100">
-                    <span class="w-8 h-8 rounded-xl bg-rose-600/20 text-rose-400 font-bold flex items-center justify-center text-sm">VIII</span>
+                    <span class="w-8 h-8 rounded-xl bg-rose-600/20 text-rose-600 font-bold flex items-center justify-center text-sm">VIII</span>
                     <div>
                         <h2 class="text-xl font-bold text-slate-900">Esai Diri & Preferensi Rekrutmen <span class="text-xs text-slate-500 font-normal">(Opsional)</span></h2>
-                        <span class="text-xs text-slate-400">Isian esai dan preferensi rekrutmen dapat dilengkapi nanti.</span>
+                        <span class="text-xs text-slate-500">Isian esai dan preferensi rekrutmen dapat dilengkapi nanti.</span>
                     </div>
                 </div>
 

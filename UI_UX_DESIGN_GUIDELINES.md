@@ -94,10 +94,69 @@ Peran non-HR (Pelamar pada Portal Karir, Peserta Tes Online, dan Karyawan pada P
 
 ---
 
-## 5. Larangan Regresi (Do Not Break Rules)
+## 5. Standar Spesifikasi Komponen Formulir (Form Components Specification)
 
-1. **JANGAN** mengganti kelas warna terang kembali ke kelas dark theme (`bg-slate-900`, `bg-slate-950`, `bg-slate-800`).
-2. **JANGAN** membuat teks putih (`text-white`) di atas latar terang (`bg-white` atau `bg-slate-50`). Pastikan rasio kontras selalu terbaca jelas (`text-slate-900` atau `text-slate-700`).
-3. **JANGAN** menghapus status visual `peer-checked` pada formulir jawaban tes.
-4. **JANGAN** menghilangkan tombol `sticky` atau `touch-action: manipulation` pada fitur ujian mobile.
-5. Jalankan `vendor/bin/pint --dirty --format agent` dan pastikan seluruh test suite `php artisan test --compact` tetap lulus 100% setelah setiap perubahan kode.
+Semua form input pada modul yang ada maupun modul baru yang akan dibangun (misal: Payroll, Performance Review, Onboarding, Leave Request, ESS Attendance, Candidate Profile) **wajib mengikuti spesifikasi seragam berikut**:
+
+### A. Elemen Input, Select, & Textarea
+* **Input Text, Date, Email, Telp, Number, Password:**
+  ```html
+  <input type="text" name="..." value="..." placeholder="..." 
+         class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:bg-white focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 focus:outline-none rounded-xl text-sm transition-colors" />
+  ```
+* **Select Dropdown:**
+  ```html
+  <select name="..." class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 text-slate-900 rounded-xl text-sm focus:bg-white focus:border-indigo-600 focus:outline-none transition-colors">
+  ```
+* **Textarea:**
+  ```html
+  <textarea name="..." rows="3" placeholder="..." class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:bg-white focus:border-indigo-600 focus:outline-none rounded-xl text-sm transition-colors"></textarea>
+  ```
+* **Input Compact (di dalam Sub-Card / Tabel / Grid):**
+  ```html
+  <input type="text" class="px-3 py-2 bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-600 rounded-lg text-xs" />
+  ```
+
+### B. Label, Sub-Label, & Bantuan Form (Form Hints)
+* **Label Utama:** `block text-xs font-semibold text-slate-700 mb-1.5`
+* **Label Wajib:** `<span class="text-rose-500 font-bold">*</span>`
+* **Sub-Label / Hint:** `text-xs text-slate-500` *(DILARANG menggunakan `text-slate-400` di latar putih karena terlalu pudar)*.
+* **Judul Bagian Form (Section Title):** `text-xl font-bold text-slate-900`
+* **Sub-Judul Grup (Group Subtitle):** `text-sm font-bold text-slate-900`
+
+### C. Dropzone Unggah Berkas (Digital Documents Upload)
+* Menggunakan kartu berbingkai putus-putus (*dashed*) dengan indikator status jelas:
+  ```html
+  <div class="p-4 sm:p-5 rounded-2xl bg-white border-2 border-dashed border-indigo-200 hover:border-indigo-400 transition-all flex flex-col justify-between shadow-xs">
+      <!-- Badge Tersimpan / Wajib -->
+      <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">✓ Tersimpan</span>
+      <!-- File input dengan preview nama file -->
+      <input type="file" onchange="updateFilenameDisplay(this, 'preview-id')" class="w-full text-xs text-slate-600 file:mr-2 file:py-2 file:px-3 file:rounded-xl file:border-0 file:bg-indigo-600 file:text-white file:text-xs file:font-bold hover:file:bg-indigo-500 file:cursor-pointer" />
+      <div id="preview-id" class="text-[11px] font-bold text-indigo-700 hidden truncate"></div>
+  </div>
+  ```
+
+### D. Tombol Aksi Bawah & Mobile Sticky Action Bar
+* Di desktop: Tombol simpan utama berada di kanan bawah kartu formulir:
+  `w-full sm:w-auto px-8 py-3.5 rounded-2xl font-extrabold text-sm text-white bg-gradient-to-r from-indigo-600 to-cyan-600 shadow-xl shadow-indigo-600/30`
+* Di mobile: Ditambahkan sticky action bar di bawah layar:
+  `md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-xl border-t border-slate-200 shadow-2xl p-3 flex items-center gap-3`
+
+---
+
+## 6. Larangan Regresi & Anti-Invisible Font (Strict Zero Regressions)
+
+1. **ANTI-INVISIBLE FONT:**
+   - **DILARANG KERAS** menyisipkan kelas `text-white` pada elemen `<input>`, `<select>`, `<textarea>`, `<label>`, `<span>`, `<h1>`, `<h2>`, atau `<h3>` di dalam kontainer berlatar terang (`bg-white` atau `bg-slate-50`).
+   - Nilai input dan teks ketikan user **WAJIB** `text-slate-900` agar terbaca dengan kontras sempurna.
+   - Kelas `text-white` **HANYA** diperbolehkan pada tombol warna solid pekat / tombol gradien (`bg-indigo-600 text-white`, `bg-gradient-to-r text-white`) atau badge berlatar gelap.
+2. **ANTI-DARK LEAKS:**
+   - Dilarang meninggalkan elemen dark-mode sisa (`bg-slate-900`, `bg-slate-950`, `border-slate-700`) di dalam layout terang.
+3. **ANTI-REGRESI INTERAKTIF:**
+   - Status visual `peer-checked`, indikator nomor jawaban ujian, dan keypad aktif Kraepelin tidak boleh dihilangkan.
+4. **STANDAR AKSESIBILITAS & MOBILE:**
+   - Minimal ukuran touch target tombol interaktif adalah 44px (`min-height: 44px; touch-action: manipulation;`).
+5. **VERIFIKASI WAJIB:**
+   - Jalankan `vendor/bin/pint --dirty --format agent` untuk semua file PHP yang disentuh.
+   - Jalankan `php artisan test --compact` dan pastikan seluruh test suite tetap lulus 100%.
+   - Jalankan `npm run build` jika ada pembaruan frontend.

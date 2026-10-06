@@ -163,8 +163,22 @@ class RecruitmentAtsTest extends TestCase
             'gender' => 'Perempuan',
             'birth_date' => '1998-05-12',
             'birth_place' => 'Bandung',
+            'height_cm' => 165,
+            'weight_kg' => 52,
+            'clothing_size' => 'M',
+            'shoe_size' => '38',
+            'blood_type' => 'O',
             'phone_wa' => '08987654321',
             'domicile_address' => 'Jl. Merdeka No. 45, Bandung',
+            'domicile_city' => 'Bandung',
+            'domicile_province' => 'Jawa Barat',
+            'family_father' => ['name' => 'Bambang Sudarsono', 'job' => 'Pensiunan'],
+            'vehicles_data' => ['car' => ['brand' => 'Honda Jazz', 'year' => '2021', 'status' => 'Milik Sendiri']],
+            'education_formal' => ['s1' => ['school' => 'Universitas Indonesia', 'place' => 'Depok', 'major' => 'Manajemen SDM', 'graduation_year' => '2020']],
+            'work_experiences' => [['company' => 'PT Nusantara Sejahtera', 'position_end' => 'Junior Recruiter', 'salary' => 6500000]],
+            'expected_salary' => 9000000,
+            'willing_to_relocate' => true,
+            'agreement_signed' => true,
             'cv_path' => 'cv_files/dummy_cv.pdf',
             'is_completed' => true,
         ]);
@@ -189,6 +203,12 @@ class RecruitmentAtsTest extends TestCase
         $response->assertSee('Convert to Employee');
         $response->assertSee('08987654321');
         $response->assertSee('Perempuan');
+        $response->assertSee('165 cm');
+        $response->assertSee('Bambang Sudarsono');
+        $response->assertSee('Honda Jazz');
+        $response->assertSee('Universitas Indonesia');
+        $response->assertSee('PT Nusantara Sejahtera');
+        $response->assertSee('9.000.000');
     }
 
     public function test_hr_can_advance_applicant_stage(): void
