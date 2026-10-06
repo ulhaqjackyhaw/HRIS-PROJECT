@@ -108,16 +108,37 @@
         </div>
 
         <!-- In-Test Container (Hidden before start) -->
-        <div id="test-arena" class="w-full hidden flex flex-col items-center space-y-6">
+        <div id="test-arena" class="w-full hidden flex flex-col items-center space-y-4">
 
             <!-- "PINDAH KOLOM" Alert Banner -->
             <div id="column-switch-alert" class="hidden transition-all duration-300 transform scale-105 bg-amber-400 text-slate-900 border-2 border-amber-500 px-8 py-2 rounded-2xl font-black text-sm uppercase tracking-widest shadow-xl">
                 ⚠️ PINDAH KE KOLOM BERIKUTNYA!
             </div>
 
-            <!-- Columns Display Board -->
-            <div class="w-full max-w-4xl bg-white border border-slate-200 rounded-3xl p-4 sm:p-8 shadow-xl overflow-x-auto" id="columns-board">
-                <div class="flex justify-start sm:justify-center space-x-3 sm:space-x-8 min-w-[500px] px-3 sm:px-0" id="columns-wrapper">
+            <!-- Live Camera Focus HUD: Menampilkan Angka Aktif Yang Sedang Dihitung -->
+            <div id="camera-focus-container" class="flex items-center justify-between w-full max-w-sm px-4 py-2.5 rounded-2xl bg-white border-2 border-blue-200/90 shadow-md">
+                <div class="flex items-center space-x-2">
+                    <span class="relative flex h-2.5 w-2.5">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-600"></span>
+                    </span>
+                    <span class="text-[11px] font-black text-slate-700 tracking-wide uppercase">Layar Fokus</span>
+                </div>
+                <div class="flex items-center space-x-2 text-slate-900 font-black">
+                    <span class="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center text-lg shadow-sm" id="hud-top-digit">-</span>
+                    <span class="text-slate-400 text-sm font-bold">+</span>
+                    <span class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-blue-600 text-white flex items-center justify-center text-lg shadow-sm" id="hud-bottom-digit">-</span>
+                    <span class="text-slate-400 text-sm font-bold">=</span>
+                    <span class="w-9 h-9 rounded-xl bg-slate-100 border border-dashed border-slate-300 text-blue-600 flex items-center justify-center text-sm font-black transition-colors" id="hud-result-preview">?</span>
+                </div>
+                <span class="text-[10px] text-blue-700 font-bold bg-blue-50 px-2 py-0.5 rounded-lg border border-blue-200">
+                    Satuan (0-9)
+                </span>
+            </div>
+
+            <!-- Columns Display Board (Bounded Scroll Camera Viewport) -->
+            <div class="w-full max-w-4xl bg-white border border-slate-200 rounded-3xl p-4 sm:p-6 shadow-xl overflow-x-auto overflow-y-auto max-h-[44vh] sm:max-h-[48vh] relative scroll-smooth" id="columns-board" style="scroll-behavior: smooth;">
+                <div class="flex justify-start sm:justify-center space-x-3 sm:space-x-8 min-w-[500px] px-3 sm:px-0 py-8" id="columns-wrapper">
                     <!-- Columns rendered via JavaScript -->
                 </div>
             </div>
@@ -282,12 +303,6 @@
             }
 
             updateHighlightedPair();
-
-            // Auto-center active column on mobile viewport
-            const activeCol = document.getElementById(`col-${currentColumnIdx}`);
-            if (activeCol) {
-                activeCol.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-            }
         }
 
         function updateHighlightedPair() {
@@ -298,18 +313,44 @@
                 if (!el) continue;
 
                 if (r === currentRowIdx || r === currentRowIdx + 1) {
-                    el.className = 'w-10 h-9 flex items-center justify-center font-black text-xl rounded-lg kraepelin-digit transition-all bg-gradient-to-tr from-blue-600 to-indigo-600 text-white scale-110 shadow-md';
+                    el.className = 'w-11 h-10 flex items-center justify-center font-black text-2xl rounded-xl kraepelin-digit transition-all duration-150 bg-gradient-to-tr from-blue-600 via-indigo-600 to-blue-700 text-white scale-125 shadow-xl ring-4 ring-blue-400/40 z-10';
                 } else if (r < currentRowIdx) {
-                    el.className = 'w-10 h-9 flex items-center justify-center font-semibold text-sm rounded-lg kraepelin-digit text-slate-300';
+                    el.className = 'w-10 h-8 flex items-center justify-center font-semibold text-xs rounded-lg kraepelin-digit text-slate-300 opacity-40';
                 } else {
-                    el.className = 'w-10 h-9 flex items-center justify-center font-bold text-lg rounded-lg kraepelin-digit text-slate-700';
+                    el.className = 'w-10 h-9 flex items-center justify-center font-bold text-base rounded-lg kraepelin-digit text-slate-700';
                 }
             }
 
-            // Scroll active pair into view if needed
+            focusCameraOnActivePair();
+        }
+
+        function focusCameraOnActivePair() {
             const activeEl = document.getElementById(`digit-${currentColumnIdx}-${currentRowIdx}`);
             if (activeEl) {
-                activeEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                // Auto-center camera onto the highlighted numbers vertically & horizontally
+                activeEl.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center',
+                    inline: 'center'
+                });
+            }
+
+            // Sync with Live Camera Focus HUD
+            const colDigits = columnsData[currentColumnIdx] || [];
+            if (colDigits.length > currentRowIdx + 1) {
+                const botDigit = colDigits[currentRowIdx];
+                const topDigit = colDigits[currentRowIdx + 1];
+                const hudTop = document.getElementById('hud-top-digit');
+                const hudBot = document.getElementById('hud-bottom-digit');
+                const hudRes = document.getElementById('hud-result-preview');
+                if (hudTop && hudBot) {
+                    hudTop.textContent = topDigit;
+                    hudBot.textContent = botDigit;
+                }
+                if (hudRes) {
+                    hudRes.textContent = '?';
+                    hudRes.className = 'w-9 h-9 rounded-xl bg-slate-100 border border-dashed border-slate-300 text-blue-600 flex items-center justify-center text-sm font-black transition-colors';
+                }
             }
         }
 
@@ -343,13 +384,22 @@
                 incorrectCount++;
             }
 
-            // Visual feedback
+            // Visual feedback on board and Live HUD
             const pairEl = document.getElementById(`digit-${currentColumnIdx}-${currentRowIdx}`);
+            const hudRes = document.getElementById('hud-result-preview');
             if (pairEl) {
                 if (isCorrect) {
                     pairEl.classList.add('bg-emerald-500', 'text-white');
                 } else {
                     pairEl.classList.add('bg-rose-500', 'text-white');
+                }
+            }
+            if (hudRes) {
+                hudRes.textContent = digit;
+                if (isCorrect) {
+                    hudRes.className = 'w-9 h-9 rounded-xl bg-emerald-500 text-white flex items-center justify-center text-sm font-black transition-colors shadow-sm';
+                } else {
+                    hudRes.className = 'w-9 h-9 rounded-xl bg-rose-500 text-white flex items-center justify-center text-sm font-black transition-colors shadow-sm';
                 }
             }
 
