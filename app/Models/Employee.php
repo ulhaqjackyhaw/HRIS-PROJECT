@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Employee extends Model
@@ -191,5 +192,29 @@ class Employee extends Model
     public function leaveRequests(): HasMany
     {
         return $this->hasMany(LeaveRequest::class)->orderByDesc('start_date');
+    }
+
+    /**
+     * Compensation and salary structure.
+     */
+    public function salaryStructure(): HasOne
+    {
+        return $this->hasOne(SalaryStructure::class);
+    }
+
+    /**
+     * Issued payslips across payroll periods.
+     */
+    public function payslips(): HasMany
+    {
+        return $this->hasMany(Payslip::class)->orderByDesc('created_at');
+    }
+
+    /**
+     * Expense claims and reimbursements.
+     */
+    public function expenseClaims(): HasMany
+    {
+        return $this->hasMany(ExpenseClaim::class)->orderByDesc('claim_date');
     }
 }

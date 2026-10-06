@@ -13,21 +13,62 @@
 
     <!-- Scripts & Styles via Vite -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <style>
+        @media print {
+            header,
+            aside,
+            nav,
+            #sidebar-nav,
+            #mobile-menu-btn,
+            .mobile-nav-bar,
+            .print-hidden,
+            .print\:hidden {
+                display: none !important;
+            }
+            body, html {
+                background: #ffffff !important;
+                color: #000000 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                height: auto !important;
+                min-height: 0 !important;
+            }
+            .min-h-screen {
+                min-height: 0 !important;
+            }
+            main {
+                padding: 0 !important;
+                margin: 0 !important;
+                max-width: 100% !important;
+                width: 100% !important;
+            }
+            @page {
+                size: A4 portrait;
+                margin: 10mm 12mm 12mm 12mm;
+            }
+        }
+    </style>
 </head>
-<body class="h-full font-sans antialiased text-slate-900 bg-slate-100 flex flex-col md:flex-row">
+<body class="h-full font-sans antialiased text-slate-900 bg-slate-100 flex flex-col md:flex-row print:bg-white print:block">
 
 @php
+    $isPayroll = request()->is('payroll*');
     $isAttendance = request()->is('attendance*');
-    $moduleName = $isAttendance ? 'Time & Attendance' : 'Core HR';
-    $moduleSubtitle = $isAttendance ? 'Waktu & Presensi' : 'Kepegawaian & Master Data';
-    $activeThemeColor = $isAttendance ? 'amber' : 'indigo';
+    $moduleName = $isPayroll ? 'Payroll & Kompensasi' : ($isAttendance ? 'Time & Attendance' : 'Core HR');
+    $moduleSubtitle = $isPayroll ? 'Penggajian & PPh 21 TER' : ($isAttendance ? 'Waktu & Presensi' : 'Kepegawaian & Master Data');
+    $activeThemeColor = $isPayroll ? 'emerald' : ($isAttendance ? 'amber' : 'indigo');
+    $badgeCode = $isPayroll ? 'PY' : ($isAttendance ? 'AT' : 'HR');
+    $badgeGradient = $isPayroll ? 'from-emerald-600 to-teal-500 shadow-emerald-500/30' : ($isAttendance ? 'from-amber-600 to-orange-500 shadow-amber-500/30' : 'from-indigo-600 to-violet-500 shadow-indigo-500/30');
+    $badgeColor = $isPayroll ? 'bg-emerald-600' : ($isAttendance ? 'bg-amber-600' : 'bg-indigo-600');
+    $subtitleColor = $isPayroll ? 'text-emerald-400' : ($isAttendance ? 'text-amber-400' : 'text-indigo-400');
 @endphp
 
     <!-- Mobile Navigation Toggle Bar -->
-    <div class="md:hidden bg-slate-900 text-white flex items-center justify-between p-4 border-b border-slate-800">
+    <div class="md:hidden bg-slate-900 text-white flex items-center justify-between p-4 border-b border-slate-800 print:hidden mobile-nav-bar">
         <div class="flex items-center space-x-3">
-            <div class="w-8 h-8 rounded-lg {{ $isAttendance ? 'bg-amber-600' : 'bg-indigo-600' }} flex items-center justify-center font-bold text-white shadow-md">
-                {{ $isAttendance ? 'AT' : 'HR' }}
+            <div class="w-8 h-8 rounded-lg {{ $badgeColor }} flex items-center justify-center font-bold text-white shadow-md">
+                {{ $badgeCode }}
             </div>
             <div>
                 <span class="font-bold tracking-tight text-sm block leading-tight">{{ $moduleName }}</span>
@@ -42,16 +83,16 @@
     </div>
 
     <!-- Sidebar Navigation -->
-    <aside id="sidebar-nav" class="hidden md:flex flex-col w-full md:w-64 bg-slate-900 text-slate-300 min-h-screen shrink-0 border-r border-slate-800 transition-all">
+    <aside id="sidebar-nav" class="hidden md:flex flex-col w-full md:w-64 bg-slate-900 text-slate-300 min-h-screen shrink-0 border-r border-slate-800 transition-all print:hidden">
         <!-- Logo Header -->
         <div class="h-16 flex items-center px-5 border-b border-slate-800/80 bg-slate-950/40">
             <div class="flex items-center space-x-3 min-w-0">
-                <div class="w-9 h-9 rounded-xl {{ $isAttendance ? 'bg-gradient-to-tr from-amber-600 to-orange-500 shadow-amber-500/30' : 'bg-gradient-to-tr from-indigo-600 to-violet-500 shadow-indigo-500/30' }} flex items-center justify-center text-white font-extrabold shadow-lg shrink-0">
-                    {{ $isAttendance ? 'AT' : 'HR' }}
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr {{ $badgeGradient }} flex items-center justify-center text-white font-extrabold shadow-lg shrink-0">
+                    {{ $badgeCode }}
                 </div>
                 <div class="min-w-0">
                     <span class="font-bold text-white text-base tracking-wide block leading-none truncate">{{ $moduleName }}</span>
-                    <span class="text-[10px] {{ $isAttendance ? 'text-amber-400' : 'text-indigo-400' }} font-medium tracking-wider uppercase truncate block mt-0.5">{{ $moduleSubtitle }}</span>
+                    <span class="text-[10px] {{ $subtitleColor }} font-medium tracking-wider uppercase truncate block mt-0.5">{{ $moduleSubtitle }}</span>
                 </div>
             </div>
         </div>
@@ -67,11 +108,44 @@
                         </svg>
                         <span>Pusat Modul Hub</span>
                     </span>
-                    <span class="text-[10px] {{ $isAttendance ? 'bg-amber-500/20 text-amber-300' : 'bg-indigo-500/20 text-indigo-300' }} px-2 py-0.5 rounded-full font-medium">Ganti &rarr;</span>
+                    <span class="text-[10px] {{ $isPayroll ? 'bg-emerald-500/20 text-emerald-300' : ($isAttendance ? 'bg-amber-500/20 text-amber-300' : 'bg-indigo-500/20 text-indigo-300') }} px-2 py-0.5 rounded-full font-medium">Ganti &rarr;</span>
                 </a>
             </div>
 
-            @if ($isAttendance)
+            @if ($isPayroll)
+                {{-- ============================================================== --}}
+                {{-- PAYROLL & EXPENSES MODULE SPECIFIC SIDEBAR --}}
+                {{-- ============================================================== --}}
+                <p class="px-3 text-xs font-semibold text-emerald-400/80 uppercase tracking-wider mb-2">Siklus Penggajian</p>
+
+                <a href="{{ route('payroll.index') }}" 
+                   class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-medium text-sm transition-all {{ request()->routeIs('payroll.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/30' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span>Periode & Batch Payroll</span>
+                </a>
+
+                <!-- Quick Switcher to Core HR & Attendance -->
+                <div class="pt-4 mt-6 border-t border-slate-800/80 space-y-1">
+                    <p class="px-3 text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-2">Pintas Modul Lain</p>
+                    <a href="{{ route('dashboard') }}" class="flex items-center justify-between px-3 py-2 rounded-xl text-xs text-slate-400 hover:text-indigo-300 hover:bg-slate-800/60 transition-colors">
+                        <span class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+                            <span>Core HR & Kepegawaian</span>
+                        </span>
+                        <span class="text-[10px] text-slate-500">&rarr;</span>
+                    </a>
+                    <a href="{{ route('attendance.check-in') }}" class="flex items-center justify-between px-3 py-2 rounded-xl text-xs text-slate-400 hover:text-amber-300 hover:bg-slate-800/60 transition-colors">
+                        <span class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                            <span>Time & Attendance</span>
+                        </span>
+                        <span class="text-[10px] text-slate-500">&rarr;</span>
+                    </a>
+                </div>
+
+            @elseif ($isAttendance)
                 {{-- ============================================================== --}}
                 {{-- ATTENDANCE MODULE SPECIFIC SIDEBAR --}}
                 {{-- ============================================================== --}}
@@ -156,13 +230,20 @@
                     <span>Lembur & Approval</span>
                 </a>
 
-                <!-- Quick Switcher to Core HR -->
-                <div class="pt-4 mt-6 border-t border-slate-800/80">
+                <!-- Quick Switcher to Core HR & Payroll -->
+                <div class="pt-4 mt-6 border-t border-slate-800/80 space-y-1">
                     <p class="px-3 text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-2">Pintas Modul Lain</p>
                     <a href="{{ route('dashboard') }}" class="flex items-center justify-between px-3 py-2 rounded-xl text-xs text-slate-400 hover:text-indigo-300 hover:bg-slate-800/60 transition-colors">
                         <span class="flex items-center gap-2">
                             <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
                             <span>Core HR & Kepegawaian</span>
+                        </span>
+                        <span class="text-[10px] text-slate-500">&rarr;</span>
+                    </a>
+                    <a href="{{ route('payroll.index') }}" class="flex items-center justify-between px-3 py-2 rounded-xl text-xs text-slate-400 hover:text-emerald-300 hover:bg-slate-800/60 transition-colors">
+                        <span class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                            <span>Payroll & Kompensasi</span>
                         </span>
                         <span class="text-[10px] text-slate-500">&rarr;</span>
                     </a>
@@ -210,13 +291,20 @@
                     <span>Jabatan & Posisi</span>
                 </a>
 
-                <!-- Quick Switcher to Attendance -->
-                <div class="pt-4 mt-6 border-t border-slate-800/80">
+                <!-- Quick Switcher to Attendance & Payroll -->
+                <div class="pt-4 mt-6 border-t border-slate-800/80 space-y-1">
                     <p class="px-3 text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-2">Pintas Modul Lain</p>
                     <a href="{{ route('attendance.check-in') }}" class="flex items-center justify-between px-3 py-2 rounded-xl text-xs text-slate-400 hover:text-amber-300 hover:bg-slate-800/60 transition-colors">
                         <span class="flex items-center gap-2">
                             <span class="w-2 h-2 rounded-full bg-amber-500"></span>
                             <span>Time & Attendance</span>
+                        </span>
+                        <span class="text-[10px] text-slate-500">&rarr;</span>
+                    </a>
+                    <a href="{{ route('payroll.index') }}" class="flex items-center justify-between px-3 py-2 rounded-xl text-xs text-slate-400 hover:text-emerald-300 hover:bg-slate-800/60 transition-colors">
+                        <span class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                            <span>Payroll & Kompensasi</span>
                         </span>
                         <span class="text-[10px] text-slate-500">&rarr;</span>
                     </a>
@@ -228,7 +316,7 @@
         <div class="p-4 border-t border-slate-800 bg-slate-950/40">
             <div class="flex items-center justify-between px-2 py-1.5">
                 <div class="flex items-center space-x-3 min-w-0">
-                    <div class="w-9 h-9 rounded-full {{ $isAttendance ? 'bg-amber-600' : 'bg-indigo-600' }} text-white flex items-center justify-center font-bold text-sm shrink-0 shadow-xs">
+                    <div class="w-9 h-9 rounded-full {{ $isPayroll ? 'bg-emerald-600' : ($isAttendance ? 'bg-amber-600' : 'bg-indigo-600') }} text-white flex items-center justify-center font-bold text-sm shrink-0 shadow-xs">
                         {{ strtoupper(substr(auth()->user()->name ?? 'AD', 0, 2)) }}
                     </div>
                     <div class="flex-1 min-w-0">
@@ -250,9 +338,9 @@
     </aside>
 
     <!-- Main Content Area -->
-    <div class="flex-1 flex flex-col min-w-0 overflow-y-auto min-h-screen">
+    <div class="flex-1 flex flex-col min-w-0 overflow-y-auto min-h-screen print:min-h-0 print:overflow-visible print:block">
         <!-- Top Navbar -->
-        <header class="h-16 bg-white border-b border-slate-200/80 px-6 sm:px-8 flex items-center justify-between sticky top-0 z-30 shadow-xs">
+        <header class="h-16 bg-white border-b border-slate-200/80 px-6 sm:px-8 flex items-center justify-between sticky top-0 z-30 shadow-xs print:hidden">
             <div class="flex items-center space-x-3">
                 <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold {{ $isAttendance ? 'bg-amber-50 text-amber-700 border border-amber-200' : 'bg-indigo-50 text-indigo-700 border border-indigo-200' }}">
                     <span class="w-1.5 h-1.5 rounded-full {{ $isAttendance ? 'bg-amber-500' : 'bg-indigo-500' }}"></span>
@@ -265,7 +353,7 @@
             <div class="flex items-center space-x-3">
                 <a href="{{ route('portal') }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 rounded-xl transition-colors border border-indigo-200 cursor-pointer">
                     <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
                     </svg>
                     <span>Portal Modul</span>
                 </a>
@@ -286,7 +374,8 @@
         </header>
 
         <!-- Flash Messages -->
-        <main class="flex-1 p-6 sm:p-8 max-w-7xl w-full mx-auto">
+        <main class="flex-1 p-6 sm:p-8 max-w-7xl w-full mx-auto print:p-0 print:m-0 print:max-w-none print:w-full">
+            <div class="print:hidden">
             @if (session('success'))
                 <div class="mb-6 flex items-start gap-3 p-4 bg-emerald-50 border border-emerald-200/80 text-emerald-800 rounded-2xl shadow-xs">
                     <svg class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -320,6 +409,7 @@
                     </ul>
                 </div>
             @endif
+            </div>
 
             {{ $slot ?? '' }}
             @yield('content')

@@ -14,6 +14,7 @@ use App\Http\Controllers\ManagerApprovalController;
 use App\Http\Controllers\ModulePortalController;
 use App\Http\Controllers\OfficeLocationController;
 use App\Http\Controllers\OvertimeRequestController;
+use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\ShiftController;
 use Illuminate\Support\Facades\Route;
@@ -99,5 +100,14 @@ Route::middleware('auth')->group(function () {
         Route::post('overtimes', [OvertimeRequestController::class, 'store'])->name('overtimes.store');
         Route::post('overtimes/{overtime}/approve', [OvertimeRequestController::class, 'approve'])->name('overtimes.approve');
         Route::post('overtimes/{overtime}/reject', [OvertimeRequestController::class, 'reject'])->name('overtimes.reject');
+    });
+
+    // Payroll & Compensation Domain Workspace
+    Route::prefix('payroll')->group(function () {
+        Route::get('/', [PayrollController::class, 'index'])->name('payroll.index');
+        Route::post('/periods', [PayrollController::class, 'storePeriod'])->name('payroll.periods.store');
+        Route::get('/periods/{period}', [PayrollController::class, 'show'])->name('payroll.periods.show');
+        Route::post('/periods/{period}/generate', [PayrollController::class, 'generate'])->name('payroll.periods.generate');
+        Route::get('/payslips/{payslip}', [PayrollController::class, 'showPayslip'])->name('payroll.payslips.show');
     });
 });

@@ -72,4 +72,18 @@ class ModularSidebarTest extends TestCase
         $response->assertDontSee('Dashboard Core HR');
         $response->assertDontSee('Jabatan & Posisi', false);
     }
+
+    public function test_sidebar_in_payroll_shows_only_payroll_features(): void
+    {
+        $response = $this->actingAs($this->user)->get(route('payroll.index'));
+
+        $response->assertOk();
+
+        // Must contain Payroll items
+        $response->assertSee('Periode & Batch Payroll', false);
+
+        // Must NOT contain Core HR / Attendance main sidebar menus
+        $response->assertDontSee('Data Karyawan');
+        $response->assertDontSee('Presensi Selfie & GPS', false);
+    }
 }
