@@ -22,15 +22,15 @@ class RecruitmentSeeder extends Seeder
             ['title' => 'Tes Kraepelin (Kecepatan, Ketelitian & Ketahanan Kerja)'],
             [
                 'test_type' => Psychotest::TYPE_KRAEPELIN,
-                'description' => 'Tes penjumlahan deret angka berkecepatan tinggi untuk mengukur ritme ketahanan konsentrasi, kecepatan kalkulasi, dan tingkat ketelitian di bawah tekanan waktu per kolom.',
-                'duration_minutes' => 5,
+                'description' => 'Tes penjumlahan deret angka berkecepatan tinggi dengan 40 kolom dan 60 baris angka per kolom untuk mengukur ritme ketahanan konsentrasi, kecepatan kalkulasi, dan tingkat ketelitian di bawah tekanan waktu per kolom.',
+                'duration_minutes' => 15,
                 'passing_score' => 70,
                 'is_active' => true,
                 'questions_data' => [
-                    'columns_count' => 6,
+                    'columns_count' => 40,
                     'seconds_per_column' => 20,
-                    'rows_per_column' => 25,
-                    'instructions' => 'Jumlahkan 2 angka berurutan dari bawah ke atas. Ketik digit terakhir dari hasil penjumlahan (misal: 7 + 8 = 15, ketik 5; 3 + 4 = 7, ketik 7). Kolom akan otomatis berpindah setelah waktu habis.',
+                    'rows_per_column' => 60,
+                    'instructions' => 'Jumlahkan 2 angka berurutan dari bawah ke atas pada 40 kolom tes (60 angka per kolom). Ketik digit terakhir dari hasil penjumlahan (misal: 7 + 8 = 15, ketik 5; 3 + 4 = 7, ketik 7). Kolom akan otomatis berpindah setelah waktu habis.',
                 ],
             ]
         );

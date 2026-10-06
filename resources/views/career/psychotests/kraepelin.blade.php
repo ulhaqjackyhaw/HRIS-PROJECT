@@ -115,30 +115,9 @@
                 ⚠️ PINDAH KE KOLOM BERIKUTNYA!
             </div>
 
-            <!-- Live Camera Focus HUD: Menampilkan Angka Aktif Yang Sedang Dihitung -->
-            <div id="camera-focus-container" class="flex items-center justify-between w-full max-w-sm px-4 py-2.5 rounded-2xl bg-white border-2 border-blue-200/90 shadow-md">
-                <div class="flex items-center space-x-2">
-                    <span class="relative flex h-2.5 w-2.5">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-600"></span>
-                    </span>
-                    <span class="text-[11px] font-black text-slate-700 tracking-wide uppercase">Layar Fokus</span>
-                </div>
-                <div class="flex items-center space-x-2 text-slate-900 font-black">
-                    <span class="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center text-lg shadow-sm" id="hud-top-digit">-</span>
-                    <span class="text-slate-400 text-sm font-bold">+</span>
-                    <span class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-blue-600 text-white flex items-center justify-center text-lg shadow-sm" id="hud-bottom-digit">-</span>
-                    <span class="text-slate-400 text-sm font-bold">=</span>
-                    <span class="w-9 h-9 rounded-xl bg-slate-100 border border-dashed border-slate-300 text-blue-600 flex items-center justify-center text-sm font-black transition-colors" id="hud-result-preview">?</span>
-                </div>
-                <span class="text-[10px] text-blue-700 font-bold bg-blue-50 px-2 py-0.5 rounded-lg border border-blue-200">
-                    Satuan (0-9)
-                </span>
-            </div>
-
             <!-- Columns Display Board (Bounded Scroll Camera Viewport) -->
             <div class="w-full max-w-4xl bg-white border border-slate-200 rounded-3xl p-4 sm:p-6 shadow-xl overflow-x-auto overflow-y-auto max-h-[44vh] sm:max-h-[48vh] relative scroll-smooth" id="columns-board" style="scroll-behavior: smooth;">
-                <div class="flex justify-start sm:justify-center space-x-3 sm:space-x-8 min-w-[500px] px-3 sm:px-0 py-8" id="columns-wrapper">
+                <div class="flex justify-start space-x-3 sm:space-x-4 min-w-max px-4 py-8" id="columns-wrapper">
                     <!-- Columns rendered via JavaScript -->
                 </div>
             </div>
@@ -174,34 +153,36 @@
         </div>
 
         <!-- Completed Result Modal (Hidden until all columns complete) -->
-        <div id="result-modal" class="max-w-lg w-full bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 text-center hidden">
+        <div id="result-modal" class="max-w-3xl w-full bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 text-center hidden">
             <div class="w-16 h-16 rounded-2xl bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center text-3xl mx-auto shadow-inner">
                 🎉
             </div>
             <div>
                 <h2 class="text-2xl font-black text-slate-900 tracking-tight">Tes Kraepelin Selesai!</h2>
-                <p class="text-xs text-slate-500 mt-1">Data kalkulasi dan ritme kerja Anda telah berhasil terekam secara otomatis.</p>
+                <p class="text-xs text-slate-500 mt-1">Data kalkulasi, ritme kerja, dan kurva performa per kolom telah berhasil terekam secara otomatis.</p>
             </div>
 
             <!-- Score Cards -->
-            <div class="grid grid-cols-2 gap-3 text-left">
-                <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-left">
+                <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
                     <span class="text-[10px] text-slate-400 uppercase font-bold">Total Hitungan</span>
-                    <div class="text-2xl font-black text-slate-900 mt-1" id="res-total-attempted">0</div>
-                    <span class="text-[10px] text-slate-500">Kecepatan kalkulasi</span>
+                    <div class="text-xl font-black text-slate-900 mt-0.5" id="res-total-attempted">0</div>
+                    <span class="text-[10px] text-slate-500">Total kalkulasi</span>
                 </div>
-                <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
                     <span class="text-[10px] text-slate-400 uppercase font-bold">Tingkat Akurasi</span>
-                    <div class="text-2xl font-black text-emerald-600 mt-1" id="res-accuracy">0%</div>
+                    <div class="text-xl font-black text-emerald-600 mt-0.5" id="res-accuracy">0%</div>
                     <span class="text-[10px] text-slate-500">Ketelitian kerja</span>
                 </div>
-                <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
                     <span class="text-[10px] text-slate-400 uppercase font-bold">Jawaban Benar</span>
-                    <div class="text-xl font-extrabold text-blue-600 mt-1" id="res-correct">0</div>
+                    <div class="text-xl font-extrabold text-blue-600 mt-0.5" id="res-correct">0</div>
+                    <span class="text-[10px] text-slate-500">Kalkulasi tepat</span>
                 </div>
-                <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
                     <span class="text-[10px] text-slate-400 uppercase font-bold">Jawaban Keliru</span>
-                    <div class="text-xl font-extrabold text-rose-600 mt-1" id="res-incorrect">0</div>
+                    <div class="text-xl font-extrabold text-rose-600 mt-0.5" id="res-incorrect">0</div>
+                    <span class="text-[10px] text-slate-500">Kalkulasi salah</span>
                 </div>
             </div>
 
@@ -212,6 +193,77 @@
                 </div>
                 <div class="text-[11px] text-slate-600 mt-1" id="res-status-badge">
                     Menghitung hasil kelulusan...
+                </div>
+            </div>
+
+            <!-- Kurva Kerja Kraepelin Section -->
+            <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs text-left space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                    <div>
+                        <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-1.5">
+                            <span>📈</span>
+                            <span>Kurva Ritme Kerja Kraepelin (Grafik per Kolom)</span>
+                        </h3>
+                        <p class="text-[11px] text-slate-500">Visualisasi jumlah angka yang berhasil dijumlahkan pada tiap kolom tes.</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200" id="res-panker-badge">
+                            Panker: -
+                        </span>
+                        <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-[10px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200" id="res-trend-badge">
+                            Tren: -
+                        </span>
+                    </div>
+                </div>
+
+                <!-- SVG Chart Container -->
+                <div class="relative w-full bg-slate-50/70 border border-slate-200/80 rounded-xl p-3 overflow-hidden">
+                    <div id="kraepelin-chart-wrapper" class="w-full">
+                        <!-- SVG chart injected via JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Psychological Diagnostic Summary Cards -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-center">
+                    <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
+                        <span class="text-[9px] uppercase font-bold text-slate-400 block">Panker (Kecepatan)</span>
+                        <span class="text-xs font-black text-slate-800 mt-0.5 block" id="res-metric-panker">-</span>
+                    </div>
+                    <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
+                        <span class="text-[9px] uppercase font-bold text-slate-400 block">Tianker (Ketelitian)</span>
+                        <span class="text-xs font-black text-emerald-600 mt-0.5 block" id="res-metric-tianker">-</span>
+                    </div>
+                    <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
+                        <span class="text-[9px] uppercase font-bold text-slate-400 block">Hanker (Ketahanan)</span>
+                        <span class="text-xs font-black text-indigo-600 mt-0.5 block" id="res-metric-hanker">-</span>
+                    </div>
+                    <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
+                        <span class="text-[9px] uppercase font-bold text-slate-400 block">Janker (Stabilitas)</span>
+                        <span class="text-xs font-black text-amber-600 mt-0.5 block" id="res-metric-janker">-</span>
+                    </div>
+                </div>
+
+                <!-- Toggle Breakdown Table Button -->
+                <div class="pt-1">
+                    <button type="button" id="btn-toggle-column-table" class="text-[11px] font-bold text-blue-600 hover:text-blue-800 flex items-center gap-1 cursor-pointer">
+                        <span>▼ Lihat Tabel Rincian Tiap Kolom</span>
+                    </button>
+                    <div id="column-details-table-container" class="hidden mt-3 max-h-48 overflow-y-auto border border-slate-200 rounded-xl">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-slate-100 text-slate-600 text-[10px] uppercase font-bold sticky top-0">
+                                <tr>
+                                    <th class="px-3 py-2">Kolom</th>
+                                    <th class="px-3 py-2 text-center">Hitungan</th>
+                                    <th class="px-3 py-2 text-center text-emerald-700">Benar</th>
+                                    <th class="px-3 py-2 text-center text-rose-700">Keliru</th>
+                                    <th class="px-3 py-2 text-right">Akurasi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="column-details-tbody" class="divide-y divide-slate-100 bg-white text-[11px]">
+                                <!-- Rows injected via JS -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
@@ -273,9 +325,9 @@
             for (let c = 0; c < totalColumns; c++) {
                 const colDiv = document.createElement('div');
                 colDiv.id = `col-${c}`;
-                colDiv.className = `flex flex-col-reverse items-center p-3 rounded-2xl transition-all ${
+                colDiv.className = `flex flex-col-reverse items-center px-2.5 py-3 rounded-2xl transition-all ${
                     c === currentColumnIdx
-                        ? 'bg-blue-50/80 border-2 border-blue-500 shadow-md ring-4 ring-blue-500/10'
+                        ? 'bg-blue-50/80 border-2 border-blue-500 shadow-sm'
                         : (c < currentColumnIdx ? 'opacity-30 border border-slate-200 bg-slate-50' : 'opacity-40 border border-slate-200 bg-slate-50')
                 }`;
 
@@ -284,10 +336,10 @@
                 for (let r = 0; r < digits.length; r++) {
                     const rowDiv = document.createElement('div');
                     rowDiv.id = `digit-${c}-${r}`;
-                    rowDiv.className = `w-10 h-9 flex items-center justify-center font-bold text-lg rounded-lg kraepelin-digit transition-all ${
+                    rowDiv.className = `w-10 h-9 flex items-center justify-center font-bold text-lg rounded-lg kraepelin-digit transition-colors select-none ${
                         c === currentColumnIdx && (r === currentRowIdx || r === currentRowIdx + 1)
-                            ? 'bg-blue-600 text-white font-black scale-110 shadow-md'
-                            : 'text-slate-400'
+                            ? 'bg-blue-600 text-white'
+                            : 'text-slate-400 font-medium'
                     }`;
                     rowDiv.textContent = digits[r];
                     colDiv.appendChild(rowDiv);
@@ -313,11 +365,11 @@
                 if (!el) continue;
 
                 if (r === currentRowIdx || r === currentRowIdx + 1) {
-                    el.className = 'w-11 h-10 flex items-center justify-center font-black text-2xl rounded-xl kraepelin-digit transition-all duration-150 bg-gradient-to-tr from-blue-600 via-indigo-600 to-blue-700 text-white scale-125 shadow-xl ring-4 ring-blue-400/40 z-10';
+                    el.className = 'w-10 h-9 flex items-center justify-center font-bold text-lg rounded-lg kraepelin-digit bg-blue-600 text-white shadow-sm transition-colors select-none';
                 } else if (r < currentRowIdx) {
-                    el.className = 'w-10 h-8 flex items-center justify-center font-semibold text-xs rounded-lg kraepelin-digit text-slate-300 opacity-40';
+                    el.className = 'w-10 h-9 flex items-center justify-center font-normal text-lg rounded-lg kraepelin-digit text-slate-300 opacity-40 transition-colors select-none';
                 } else {
-                    el.className = 'w-10 h-9 flex items-center justify-center font-bold text-base rounded-lg kraepelin-digit text-slate-700';
+                    el.className = 'w-10 h-9 flex items-center justify-center font-bold text-lg rounded-lg kraepelin-digit text-slate-700 transition-colors select-none';
                 }
             }
 
@@ -334,24 +386,6 @@
                     inline: 'center'
                 });
             }
-
-            // Sync with Live Camera Focus HUD
-            const colDigits = columnsData[currentColumnIdx] || [];
-            if (colDigits.length > currentRowIdx + 1) {
-                const botDigit = colDigits[currentRowIdx];
-                const topDigit = colDigits[currentRowIdx + 1];
-                const hudTop = document.getElementById('hud-top-digit');
-                const hudBot = document.getElementById('hud-bottom-digit');
-                const hudRes = document.getElementById('hud-result-preview');
-                if (hudTop && hudBot) {
-                    hudTop.textContent = topDigit;
-                    hudBot.textContent = botDigit;
-                }
-                if (hudRes) {
-                    hudRes.textContent = '?';
-                    hudRes.className = 'w-9 h-9 rounded-xl bg-slate-100 border border-dashed border-slate-300 text-blue-600 flex items-center justify-center text-sm font-black transition-colors';
-                }
-            }
         }
 
         function handleKeyDown(e) {
@@ -361,6 +395,10 @@
                 handleInput(parseInt(e.key, 10));
             }
         }
+
+        let colAttempted = 0;
+        let colCorrect = 0;
+        let colIncorrect = 0;
 
         function handleInput(digit) {
             if (!isRunning) return;
@@ -376,30 +414,24 @@
             const expectedDigit = sum % 10;
 
             totalAttempted++;
+            colAttempted++;
             const isCorrect = (digit === expectedDigit);
 
             if (isCorrect) {
                 correctCount++;
+                colCorrect++;
             } else {
                 incorrectCount++;
+                colIncorrect++;
             }
 
-            // Visual feedback on board and Live HUD
+            // Visual feedback on the answered digit
             const pairEl = document.getElementById(`digit-${currentColumnIdx}-${currentRowIdx}`);
-            const hudRes = document.getElementById('hud-result-preview');
             if (pairEl) {
                 if (isCorrect) {
                     pairEl.classList.add('bg-emerald-500', 'text-white');
                 } else {
                     pairEl.classList.add('bg-rose-500', 'text-white');
-                }
-            }
-            if (hudRes) {
-                hudRes.textContent = digit;
-                if (isCorrect) {
-                    hudRes.className = 'w-9 h-9 rounded-xl bg-emerald-500 text-white flex items-center justify-center text-sm font-black transition-colors shadow-sm';
-                } else {
-                    hudRes.className = 'w-9 h-9 rounded-xl bg-rose-500 text-white flex items-center justify-center text-sm font-black transition-colors shadow-sm';
                 }
             }
 
@@ -439,9 +471,16 @@
         function nextColumn() {
             // Record stats for finished column
             columnDetails.push({
+                column: currentColumnIdx + 1,
                 column_index: currentColumnIdx,
-                rows_attempted: currentRowIdx,
+                attempted: colAttempted,
+                correct: colCorrect,
+                incorrect: colIncorrect,
             });
+
+            colAttempted = 0;
+            colCorrect = 0;
+            colIncorrect = 0;
 
             currentColumnIdx++;
 
@@ -477,8 +516,29 @@
             document.getElementById('test-arena').classList.add('hidden');
             document.getElementById('result-modal').classList.remove('hidden');
 
+            // Complete any remaining columns
+            if (columnDetails.length === currentColumnIdx && currentColumnIdx < totalColumns) {
+                columnDetails.push({
+                    column: currentColumnIdx + 1,
+                    column_index: currentColumnIdx,
+                    attempted: colAttempted,
+                    correct: colCorrect,
+                    incorrect: colIncorrect,
+                });
+            }
+            while (columnDetails.length < totalColumns) {
+                const idx = columnDetails.length;
+                columnDetails.push({
+                    column: idx + 1,
+                    column_index: idx,
+                    attempted: 0,
+                    correct: 0,
+                    incorrect: 0,
+                });
+            }
+
             const accuracy = totalAttempted > 0 ? Math.round((correctCount / totalAttempted) * 100) : 0;
-            const expectedBaseline = totalColumns * 12;
+            const expectedBaseline = totalColumns * 15;
             const speedRate = Math.min(100, Math.round((totalAttempted / Math.max(1, expectedBaseline)) * 100));
             const finalScore = Math.min(100, Math.max(0, Math.round((accuracy * 0.6) + (speedRate * 0.4))));
             const isPassed = finalScore >= passingScore;
@@ -494,6 +554,53 @@
                 statusBadge.innerHTML = `<span class="text-emerald-600 font-bold">✓ LULUS (Passing score: ${passingScore}%)</span>`;
             } else {
                 statusBadge.innerHTML = `<span class="text-rose-600 font-bold">✗ Belum Memenuhi (Passing score: ${passingScore}%)</span>`;
+            }
+
+            // Calculate Kraepelin Curve Psychological Metrics
+            const panker = (totalAttempted / Math.max(1, totalColumns)).toFixed(1);
+            const attemptedList = columnDetails.map(d => d.attempted);
+            const peakVal = Math.max(0, ...attemptedList);
+            const minVal = Math.min(...attemptedList);
+            const janker = Math.max(0, peakVal - minVal);
+
+            const halfCount = Math.floor(columnDetails.length / 2);
+            let hankerTrend = 'Stabil (Konsisten)';
+            if (halfCount > 0) {
+                const firstHalf = attemptedList.slice(0, halfCount);
+                const secondHalf = attemptedList.slice(halfCount);
+                const firstAvg = firstHalf.reduce((a, b) => a + b, 0) / firstHalf.length;
+                const secondAvg = secondHalf.reduce((a, b) => a + b, 0) / secondHalf.length;
+                const diffPct = firstAvg > 0 ? ((secondAvg - firstAvg) / firstAvg) * 100 : 0;
+                if (diffPct > 5) {
+                    hankerTrend = 'Menaik (Daya Tahan Tinggi)';
+                } else if (diffPct < -5) {
+                    hankerTrend = 'Menurun (Kelelahan Kerja)';
+                }
+            }
+
+            document.getElementById('res-panker-badge').textContent = `Panker: ${panker} butir/kolom`;
+            document.getElementById('res-trend-badge').textContent = `Tren: ${hankerTrend}`;
+            document.getElementById('res-metric-panker').textContent = `${panker} butir`;
+            document.getElementById('res-metric-tianker').textContent = `${accuracy}%`;
+            document.getElementById('res-metric-hanker').textContent = hankerTrend;
+            document.getElementById('res-metric-janker').textContent = `±${janker} rentang`;
+
+            // Draw Kraepelin SVG Chart
+            drawKraepelinChart(columnDetails);
+
+            // Populate Breakdown Table
+            const tbody = document.getElementById('column-details-tbody');
+            if (tbody) {
+                tbody.innerHTML = columnDetails.map(d => {
+                    const acc = d.attempted > 0 ? Math.round((d.correct / d.attempted) * 100) : 0;
+                    return `<tr>
+                        <td class="px-3 py-1.5 font-bold text-slate-800">Kolom ${d.column}</td>
+                        <td class="px-3 py-1.5 text-center font-bold text-blue-600">${d.attempted}</td>
+                        <td class="px-3 py-1.5 text-center text-emerald-600 font-semibold">${d.correct}</td>
+                        <td class="px-3 py-1.5 text-center text-rose-600 font-semibold">${d.incorrect}</td>
+                        <td class="px-3 py-1.5 text-right font-bold text-slate-700">${acc}%</td>
+                    </tr>`;
+                }).join('');
             }
 
             // Send payload via Fetch API
@@ -520,6 +627,107 @@
                 document.getElementById('kraepelin-submit-form').submit();
             });
         }
+
+        // Draw Interactive Kraepelin SVG Curve Chart
+        function drawKraepelinChart(details) {
+            const wrapper = document.getElementById('kraepelin-chart-wrapper');
+            if (!wrapper || !details || details.length === 0) return;
+
+            const n = details.length;
+            const maxVal = Math.max(15, ...details.map(d => d.attempted)) + 3;
+            const minVal = 0;
+            const width = 740;
+            const height = 210;
+            const padL = 36;
+            const padR = 24;
+            const padT = 16;
+            const padB = 28;
+            const chartW = width - padL - padR;
+            const chartH = height - padT - padB;
+
+            const points = details.map((d, i) => {
+                const x = padL + (i / Math.max(1, n - 1)) * chartW;
+                const y = padT + chartH - ((d.attempted - minVal) / (maxVal - minVal)) * chartH;
+                return {
+                    x: Math.round(x * 10) / 10,
+                    y: Math.round(y * 10) / 10,
+                    col: d.column,
+                    attempted: d.attempted,
+                    correct: d.correct,
+                    incorrect: d.incorrect
+                };
+            });
+
+            const avg = details.reduce((s, d) => s + d.attempted, 0) / Math.max(1, n);
+            const avgY = Math.round((padT + chartH - ((avg - minVal) / (maxVal - minVal)) * chartH) * 10) / 10;
+
+            const linePath = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
+            const areaPath = `${linePath} L ${points[points.length - 1].x} ${padT + chartH} L ${points[0].x} ${padT + chartH} Z`;
+
+            // Horizontal grid lines
+            const gridSteps = 4;
+            let gridLinesSvg = '';
+            for (let step = 0; step <= gridSteps; step++) {
+                const val = Math.round(minVal + (step / gridSteps) * (maxVal - minVal));
+                const gy = Math.round((padT + chartH - (step / gridSteps) * chartH) * 10) / 10;
+                gridLinesSvg += `
+                    <line x1="${padL}" y1="${gy}" x2="${width - padR}" y2="${gy}" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3,3" />
+                    <text x="${padL - 6}" y="${gy + 3}" fill="#94a3b8" font-size="9" text-anchor="end" font-weight="600">${val}</text>
+                `;
+            }
+
+            // Circles with hover tooltips
+            let pointsSvg = '';
+            points.forEach((p) => {
+                pointsSvg += `
+                    <g class="cursor-pointer">
+                        <circle cx="${p.x}" cy="${p.y}" r="3" fill="#2563eb" stroke="#ffffff" stroke-width="1.5" />
+                        <title>Kolom ${p.col}: ${p.attempted} hitungan (${p.correct} benar, ${p.incorrect} salah)</title>
+                    </g>
+                `;
+            });
+
+            // X-Axis column markers
+            let xLabelsSvg = '';
+            const labelInterval = n <= 10 ? 1 : (n <= 25 ? 2 : 5);
+            for (let i = 0; i < n; i += labelInterval) {
+                const p = points[i];
+                xLabelsSvg += `
+                    <text x="${p.x}" y="${height - 8}" fill="#64748b" font-size="9" text-anchor="middle" font-weight="600">K${p.col}</text>
+                `;
+            }
+            if ((n - 1) % labelInterval !== 0) {
+                const lastP = points[n - 1];
+                xLabelsSvg += `
+                    <text x="${lastP.x}" y="${height - 8}" fill="#64748b" font-size="9" text-anchor="middle" font-weight="600">K${lastP.col}</text>
+                `;
+            }
+
+            wrapper.innerHTML = `
+                <svg viewBox="0 0 ${width} ${height}" class="w-full h-auto select-none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="kraepelinGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.3" />
+                            <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.01" />
+                        </linearGradient>
+                    </defs>
+                    ${gridLinesSvg}
+                    <line x1="${padL}" y1="${avgY}" x2="${width - padR}" y2="${avgY}" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,4" />
+                    <text x="${width - padR}" y="${avgY - 4}" fill="#d97706" font-size="9" font-weight="bold" text-anchor="end">Panker (Rata-rata): ${avg.toFixed(1)}</text>
+                    <path d="${areaPath}" fill="url(#kraepelinGradient)" />
+                    <path d="${linePath}" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                    ${pointsSvg}
+                    ${xLabelsSvg}
+                </svg>
+            `;
+        }
+
+        document.getElementById('btn-toggle-column-table')?.addEventListener('click', function() {
+            const tableContainer = document.getElementById('column-details-table-container');
+            if (tableContainer) {
+                tableContainer.classList.toggle('hidden');
+            }
+        });
     </script>
 </body>
 </html>

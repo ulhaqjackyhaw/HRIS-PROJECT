@@ -478,8 +478,8 @@ class CareerController extends Controller
             ->first();
 
         if ($psychotest->isKraepelin()) {
-            $columnsCount = $psychotest->questions_data['columns_count'] ?? 6;
-            $rowsCount = $psychotest->questions_data['rows_per_column'] ?? 25;
+            $columnsCount = $psychotest->questions_data['columns_count'] ?? 40;
+            $rowsCount = $psychotest->questions_data['rows_per_column'] ?? 60;
             $secondsPerColumn = $psychotest->questions_data['seconds_per_column'] ?? 20;
 
             $kraepelinColumns = [];
@@ -543,14 +543,47 @@ class CareerController extends Controller
             $totalAttempted = $validated['total_attempted'];
             $correctCount = $validated['correct_count'];
             $accuracy = $totalAttempted > 0 ? round(($correctCount / $totalAttempted) * 100, 1) : 0;
+            $columnsCompleted = max(1, $validated['columns_completed']);
+            $columnDetails = $validated['column_details'] ?? [];
 
-            // Speed score based on expected baseline (e.g. 75 calculations across columns)
-            $expectedBaseline = ($psychotest->questions_data['columns_count'] ?? 6) * 12;
+            // Speed score based on expected baseline (15 calculations per column)
+            $expectedBaseline = $columnsCompleted * 15;
             $speedRate = min(100, round(($totalAttempted / max(1, $expectedBaseline)) * 100, 1));
 
             // Kraepelin final score = 60% Akurasi + 40% Kecepatan
             $finalScore = (int) round(($accuracy * 0.6) + ($speedRate * 0.4));
             $finalScore = min(100, max(0, $finalScore));
+
+            // Psychological metrics from curve per column
+            $panker = round($totalAttempted / $columnsCompleted, 1);
+            $attemptedList = array_map(fn ($d) => (int) ($d['attempted'] ?? ($d['rows_attempted'] ?? 0)), $columnDetails);
+            $peakVal = ! empty($attemptedList) ? max($attemptedList) : 0;
+            $minVal = ! empty($attemptedList) ? min($attemptedList) : 0;
+            $janker = max(0, $peakVal - $minVal);
+
+            $halfCount = (int) floor(count($attemptedList) / 2);
+            $hankerTrend = 'Stabil (Konsisten)';
+            if ($halfCount > 0) {
+                $firstHalf = array_slice($attemptedList, 0, $halfCount);
+                $secondHalf = array_slice($attemptedList, $halfCount);
+                $firstAvg = array_sum($firstHalf) / count($firstHalf);
+                $secondAvg = array_sum($secondHalf) / count($secondHalf);
+                $diffPct = $firstAvg > 0 ? (($secondAvg - $firstAvg) / $firstAvg) * 100 : 0;
+                if ($diffPct > 5) {
+                    $hankerTrend = 'Menaik (Daya Tahan Tinggi)';
+                } elseif ($diffPct < -5) {
+                    $hankerTrend = 'Menurun (Kelelahan Kerja)';
+                }
+            }
+
+            $metrics = [
+                'panker' => $panker,
+                'tianker' => $accuracy,
+                'janker' => $janker,
+                'hanker_trend' => $hankerTrend,
+                'peak_value' => $peakVal,
+                'min_value' => $minVal,
+            ];
 
             $isPassed = $finalScore >= $psychotest->passing_score;
 
@@ -567,8 +600,9 @@ class CareerController extends Controller
                         'incorrect_count' => $validated['incorrect_count'],
                         'accuracy_rate' => $accuracy,
                         'speed_rate' => $speedRate,
-                        'columns_completed' => $validated['columns_completed'],
-                        'column_details' => $validated['column_details'] ?? [],
+                        'columns_completed' => $columnsCompleted,
+                        'column_details' => $columnDetails,
+                        'metrics' => $metrics,
                     ],
                     'total_score' => $finalScore,
                     'result_status' => $isPassed ? 'PASSED' : 'FAILED',
