@@ -36,8 +36,8 @@
     </div>
 
     <!-- Navigation Bar -->
-    <header class="sticky top-0 z-40 backdrop-blur-xl bg-white/90 border-b border-slate-200/90 shadow-xs transition-all">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+    <header class="sticky top-0 z-40 backdrop-blur-xl bg-white/95 border-b border-slate-200/90 shadow-xs transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
             <!-- Brand Logo -->
             <a href="{{ route('career.landing') }}" class="flex items-center space-x-2.5 sm:space-x-3.5 group shrink-0">
                 <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-700 to-cyan-500 flex items-center justify-center text-white font-black text-lg sm:text-xl shadow-md group-hover:scale-105 transition-transform">
@@ -70,7 +70,7 @@
                         </a>
                     @endif
 
-                    <a href="{{ route('career.dashboard') }}" class="px-3 sm:px-4 py-2 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/20 transition-all flex items-center space-x-1.5">
+                    <a href="{{ route('career.dashboard') }}" class="px-3 sm:px-4 py-2 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/20 transition-all flex items-center space-x-1.5" style="touch-action: manipulation; min-height: 40px;">
                         <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                         <span class="hidden xs:inline sm:inline">Dashboard Saya</span>
                         <span class="xs:hidden sm:hidden">Dashboard</span>
@@ -78,7 +78,7 @@
 
                     <form action="{{ route('career.logout') }}" method="POST" class="inline">
                         @csrf
-                        <button type="submit" class="p-2 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors" title="Keluar">
+                        <button type="submit" class="p-2 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer" title="Keluar">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
                         </button>
                     </form>
@@ -92,7 +92,7 @@
                 @endauth
 
                 <!-- Mobile Menu Button -->
-                <button type="button" onclick="document.getElementById('mobile-career-menu').classList.toggle('hidden')" class="md:hidden p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors">
+                <button type="button" onclick="document.getElementById('mobile-career-menu').classList.toggle('hidden')" class="md:hidden p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors cursor-pointer" style="min-width: 40px; min-height: 40px; touch-action: manipulation;">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                     </svg>
@@ -101,42 +101,44 @@
         </div>
 
         <!-- Mobile Navigation Dropdown Menu -->
-        <div id="mobile-career-menu" class="hidden md:hidden border-t border-slate-200 bg-white/95 backdrop-blur-xl px-4 py-4 space-y-2">
+        <div id="mobile-career-menu" class="hidden md:hidden border-t border-slate-200 bg-white/98 backdrop-blur-xl px-4 py-4 space-y-2 shadow-lg">
             <a href="#lowongan" onclick="document.getElementById('mobile-career-menu').classList.add('hidden')" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100">Lowongan Tersedia</a>
             <a href="#budaya" onclick="document.getElementById('mobile-career-menu').classList.add('hidden')" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100">Budaya & Benefit</a>
             <a href="#alur" onclick="document.getElementById('mobile-career-menu').classList.add('hidden')" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100">8 Tahapan Seleksi</a>
             <a href="#faq" onclick="document.getElementById('mobile-career-menu').classList.add('hidden')" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100">FAQ</a>
             @auth
+                <a href="{{ route('career.dashboard') }}" class="block px-3 py-2 rounded-xl text-sm font-bold text-indigo-700 bg-indigo-50">Dashboard Lamaran Saya &rarr;</a>
+                <a href="{{ route('career.profile') }}" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100">Kelengkapan Profil & CV</a>
                 @if(auth()->user()->isInternal())
-                    <a href="{{ route('portal') }}" class="block px-3 py-2 rounded-xl text-sm font-semibold text-indigo-700 bg-indigo-50">Portal HR Staf &rarr;</a>
+                    <a href="{{ route('portal') }}" class="block px-3 py-2 rounded-xl text-sm font-semibold text-slate-600 bg-slate-50">Portal HR Staf &rarr;</a>
                 @endif
             @endauth
         </div>
     </header>
 
     <!-- Main Hero Section -->
-    <section class="relative pt-16 pb-16 lg:pt-24 lg:pb-24 overflow-hidden text-center">
+    <section class="relative pt-12 pb-14 lg:pt-20 lg:pb-20 overflow-hidden text-center">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Recruitment Pill Badge -->
-            <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-semibold uppercase tracking-wider mb-8">
+            <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-semibold uppercase tracking-wider mb-6">
                 <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>We're Hiring • Bergabunglah Bersama Tim Unggulan</span>
+                <span>We're Hiring &bull; Bergabunglah Bersama Tim Unggulan</span>
             </div>
 
             <!-- Main Heading -->
-            <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-slate-900 leading-tight mb-6">
+            <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 leading-tight mb-5">
                 Bangun Masa Depan <br class="hidden sm:inline" />
                 <span class="bg-gradient-to-r from-indigo-600 via-sky-600 to-purple-600 bg-clip-text text-transparent">
                     Bersama Tim Berdampak Tinggi
                 </span>
             </h1>
 
-            <p class="text-base sm:text-xl text-slate-600 max-w-3xl mx-auto mb-10 leading-relaxed font-normal">
+            <p class="text-sm sm:text-lg text-slate-600 max-w-2xl mx-auto mb-8 leading-relaxed font-normal">
                 Eksplorasi peluang karir terbaik di platform HRIS Enterprise. Nikmati fleksibilitas kerja, budaya kerja berbasis pertumbuhan, kompensasi transparan, dan kesempatan berkembang tanpa batas.
             </p>
 
             <!-- Search & Filter Card Form -->
-            <div class="max-w-4xl mx-auto bg-white/95 backdrop-blur-2xl p-4 sm:p-5 rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-200/50">
+            <div class="max-w-4xl mx-auto bg-white/95 backdrop-blur-2xl p-4 sm:p-6 rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-200/40">
                 <form action="{{ route('career.landing') }}" method="GET" class="grid grid-cols-1 md:grid-cols-12 gap-3" id="career-search-form">
                     <!-- Keyword Input -->
                     <div class="md:col-span-5 relative">
@@ -180,7 +182,7 @@
                         </select>
                     </div>
 
-                    <!-- Submit / Reset Row -->
+                    <!-- Submit / Reset Row (Selalu ada tombol Reset Filter) -->
                     <div class="md:col-span-12 flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 text-xs">
                         <div class="flex flex-wrap items-center gap-1.5 sm:gap-2 text-slate-500">
                             <span class="font-semibold text-slate-400">Populer:</span>
@@ -189,15 +191,26 @@
                             <a href="{{ route('career.landing', ['search' => 'Recruiter']) }}" class="text-indigo-600 hover:underline font-semibold bg-indigo-50/60 px-2 py-0.5 rounded-md">HR Recruiter</a>
                             <a href="{{ route('career.landing', ['work_model' => 'REMOTE']) }}" class="text-cyan-600 hover:underline font-semibold bg-cyan-50/60 px-2 py-0.5 rounded-md">Remote</a>
                         </div>
-                        <div class="flex items-center justify-between sm:justify-end gap-2 shrink-0">
-                            @if(!empty($search) || !empty($departmentId) || !empty($workModel))
-                                <a href="{{ route('career.landing') }}" class="px-3 py-2 text-slate-500 hover:text-slate-800">Reset Filter</a>
-                            @endif
-                            <button type="submit" class="w-full sm:w-auto px-5 py-2.5 rounded-xl font-semibold text-white bg-indigo-600 hover:bg-indigo-500 transition-colors shadow-xs text-center">
-                                Terapkan Filter
+                        <div class="flex items-center gap-2 shrink-0 w-full sm:w-auto">
+                            <!-- Tombol Reset Filter -->
+                            <a href="{{ route('career.landing') }}" 
+                               class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl border border-slate-300 hover:border-rose-300 text-slate-600 hover:text-rose-600 hover:bg-rose-50/50 transition-colors text-center font-bold flex items-center justify-center gap-1.5 cursor-pointer" 
+                               style="touch-action: manipulation; min-height: 44px;"
+                               title="Reset semua kriteria pencarian">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                                <span>Reset Filter</span>
+                            </a>
+                            <!-- Tombol Submit Cari Lowongan -->
+                            <button type="submit" 
+                                    class="flex-1 sm:flex-none px-6 py-2.5 rounded-xl font-bold text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/20 active:scale-95 transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer" 
+                                    style="touch-action: manipulation; min-height: 44px;">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                                <span>Terapkan Filter</span>
                             </button>
                         </div>
                     </div>
+                </form>
+            </div>
                 </form>
             </div>
 
@@ -226,14 +239,37 @@
     <!-- Vacancy Listing Section -->
     <section id="lowongan" class="py-16 bg-white border-t border-slate-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row md:items-end justify-between mb-10">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-6">
                 <div>
                     <span class="text-xs font-bold text-indigo-600 uppercase tracking-widest">Eksplorasi Karir</span>
                     <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Daftar Lowongan Pekerjaan Aktif</h2>
                 </div>
-                <div class="mt-4 md:mt-0 text-sm text-slate-500">
-                    Menampilkan <span class="font-bold text-slate-900">{{ $jobs->total() }}</span> posisi siap dilamar
+                <div class="mt-4 md:mt-0 flex items-center gap-3 text-sm text-slate-500">
+                    <span>Menampilkan <strong class="text-slate-900">{{ $jobs->total() }}</strong> posisi</span>
+                    @if(!empty($search) || !empty($departmentId) || !empty($workModel) || !empty($employmentType))
+                        <a href="{{ route('career.landing') }}" class="px-3 py-1 rounded-xl text-xs font-bold text-rose-700 bg-rose-50 border border-rose-200 hover:bg-rose-100 transition-colors flex items-center gap-1 cursor-pointer">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                            <span>Reset Filter</span>
+                        </a>
+                    @endif
                 </div>
+            </div>
+
+            <!-- Quick Filter Pills -->
+            <div class="flex flex-wrap items-center gap-2 mb-8 pb-4 border-b border-slate-100 text-xs">
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mr-1">Tipe Kerja:</span>
+                <a href="{{ route('career.landing') }}" class="px-3 py-1.5 rounded-xl font-bold transition-all {{ empty($workModel) && empty($search) && empty($departmentId) ? 'bg-indigo-600 text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200' }}">
+                    Semua
+                </a>
+                <a href="{{ route('career.landing', ['work_model' => 'REMOTE']) }}" class="px-3 py-1.5 rounded-xl font-bold transition-all {{ ($workModel ?? '') === 'REMOTE' ? 'bg-emerald-600 text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200' }}">
+                    Remote (WFH)
+                </a>
+                <a href="{{ route('career.landing', ['work_model' => 'HYBRID']) }}" class="px-3 py-1.5 rounded-xl font-bold transition-all {{ ($workModel ?? '') === 'HYBRID' ? 'bg-cyan-600 text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200' }}">
+                    Hybrid
+                </a>
+                <a href="{{ route('career.landing', ['work_model' => 'ON_SITE']) }}" class="px-3 py-1.5 rounded-xl font-bold transition-all {{ ($workModel ?? '') === 'ON_SITE' ? 'bg-amber-600 text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200' }}">
+                    On-site (WFO)
+                </a>
             </div>
 
             <!-- Job Cards Grid -->

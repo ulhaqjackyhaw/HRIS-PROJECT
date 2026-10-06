@@ -20,25 +20,36 @@
         }
     </style>
 </head>
-<body class="min-h-full font-sans antialiased bg-slate-50 text-slate-800 relative selection:bg-indigo-600 selection:text-white">
+<body class="min-h-full font-sans antialiased bg-slate-50 text-slate-800 relative selection:bg-indigo-600 selection:text-white pb-24 md:pb-12">
 
-    <!-- Header -->
-    <header class="sticky top-0 z-40 backdrop-blur-xl bg-white/90 border-b border-slate-200/90 shadow-xs">
+    <!-- Header (Clean, Responsive, Fast Actions) -->
+    <header class="sticky top-0 z-40 backdrop-blur-xl bg-white/95 border-b border-slate-200/90 shadow-xs">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
-            <a href="{{ route('career.dashboard') }}" class="flex items-center space-x-2.5 sm:space-x-3.5 group">
-                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-cyan-500 flex items-center justify-center text-white font-black text-lg sm:text-xl shadow-md">
+            <a href="{{ route('career.dashboard') }}" class="flex items-center space-x-2.5 sm:space-x-3.5 group shrink-0">
+                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-cyan-500 flex items-center justify-center text-white font-black text-lg sm:text-xl shadow-md group-hover:scale-105 transition-transform">
                     H
                 </div>
                 <div>
-                    <span class="font-extrabold tracking-tight text-base sm:text-lg text-slate-900">HRIS Core</span>
-                    <span class="text-[10px] sm:text-xs text-slate-500 block font-medium">Formulir Data Diri & CV</span>
+                    <div class="flex items-center space-x-1.5 sm:space-x-2">
+                        <span class="font-extrabold tracking-tight text-base sm:text-lg text-slate-900">HRIS Core</span>
+                        <span class="text-[10px] sm:text-[11px] font-bold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 uppercase tracking-wider">Candidate</span>
+                    </div>
+                    <span class="text-[10px] sm:text-xs text-slate-500 block font-medium hidden sm:block">Formulir Data Diri & Dokumen CV</span>
                 </div>
             </a>
 
-            <div class="flex items-center space-x-4">
-                <a href="{{ route('career.dashboard') }}" class="text-xs font-semibold text-slate-600 hover:text-indigo-600 transition-colors">
-                    ← <span class="hidden sm:inline">Kembali ke </span>Dashboard
+            <div class="flex items-center space-x-3">
+                <a href="{{ route('career.dashboard') }}" class="text-xs font-bold text-slate-600 hover:text-indigo-600 transition-colors flex items-center space-x-1 px-3 py-2 rounded-xl hover:bg-slate-100">
+                    <span>&larr;</span>
+                    <span class="hidden sm:inline">Kembali ke </span><span>Dashboard</span>
                 </a>
+
+                <button type="button" 
+                        onclick="document.getElementById('profile-form').requestSubmit ? document.getElementById('profile-form').requestSubmit() : document.getElementById('profile-form').submit()" 
+                        class="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/20 active:scale-95 transition-all cursor-pointer">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    <span>Simpan</span>
+                </button>
             </div>
         </div>
     </header>
@@ -75,29 +86,38 @@
             </div>
         @endif
 
-        <!-- Form Intro Title & Instructions -->
+        <!-- Form Intro Title & Instructions with Quick Submit Button -->
         <div class="mb-8 bg-white border border-slate-200/90 shadow-sm rounded-3xl p-6 sm:p-8">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div>
                     <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2">Formulir Kelengkapan Data Pelamar Kerja</h1>
-                    <p class="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-2xl">
-                        Untuk mempercepat proses lamaran, Anda hanya diwajibkan melengkapi <strong class="text-rose-400">Data Inti bertanda bintang (*)</strong> (Data Pribadi, No. WhatsApp, Alamat Domisili, dan CV). Bagian selebihnya bersifat <strong class="text-slate-700">opsional</strong> dan dapat Anda lengkapi kapan saja.
+                    <p class="text-xs sm:text-sm text-slate-500 leading-relaxed max-w-2xl">
+                        Untuk mempercepat proses lamaran, Anda hanya diwajibkan melengkapi <strong class="text-rose-600 font-bold">Data Inti bertanda bintang (*)</strong> (Data Pribadi, No. WhatsApp, Alamat Domisili, dan CV). Bagian selebihnya bersifat <strong class="text-slate-700">opsional</strong> dan dapat Anda lengkapi kapan saja.
                     </p>
                 </div>
-                <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-1.5 shrink-0">
-                    <div class="flex items-center space-x-2 text-emerald-400 font-semibold">
-                        <span>✓</span>
-                        <span>Data Inti (<span class="text-rose-400">*</span>) : Wajib diisi</span>
+                <div class="flex flex-col sm:flex-row md:flex-col items-stretch sm:items-center md:items-end gap-3 shrink-0">
+                    <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-1.5 w-full">
+                        <div class="flex items-center space-x-2 text-emerald-700 font-semibold">
+                            <span>✓</span>
+                            <span>Data Inti (<span class="text-rose-500 font-bold">*</span>) : Wajib diisi</span>
+                        </div>
+                        <div class="flex items-center space-x-2 text-slate-500">
+                            <span>○</span>
+                            <span>Data Lainnya : Opsional</span>
+                        </div>
                     </div>
-                    <div class="flex items-center space-x-2 text-slate-400">
-                        <span>○</span>
-                        <span>Data Lainnya : Opsional (bisa dilewati)</span>
-                    </div>
+                    <button type="button" 
+                            onclick="document.getElementById('profile-form').requestSubmit ? document.getElementById('profile-form').requestSubmit() : document.getElementById('profile-form').submit()" 
+                            class="w-full px-5 py-3 rounded-2xl bg-gradient-to-r from-indigo-600 to-cyan-600 hover:from-indigo-500 hover:to-cyan-500 text-white font-extrabold text-xs shadow-md shadow-indigo-600/20 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                            style="min-height: 44px; touch-action: manipulation;">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        <span>Simpan Formulir & CV</span>
+                    </button>
                 </div>
             </div>
         </div>
 
-        <form action="{{ route('career.profile.update') }}" method="POST" enctype="multipart/form-data" class="space-y-12">
+        <form action="{{ route('career.profile.update') }}" method="POST" enctype="multipart/form-data" id="profile-form" class="space-y-12">
             @csrf
             <input type="hidden" name="redirect_job" value="{{ request('job', old('redirect_job')) }}">
 
@@ -231,44 +251,169 @@
                     </div>
                 </div>
 
-                <!-- Upload Dokumen Cards -->
+                <!-- Upload Dokumen Cards (Modern Dropzones dengan Preview & Feedback Jelas) -->
                 <div class="pt-6 border-t border-slate-100">
-                    <h3 class="text-sm font-bold text-indigo-400 uppercase tracking-wider mb-4">Berkas Digital Pelamar (Maks 2 MB)</h3>
+                    <div class="mb-4">
+                        <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider">Berkas Digital Pelamar (Maks 2 MB per file)</h3>
+                        <p class="text-xs text-slate-500 mt-0.5">Pastikan dokumen jelas, terbaca, dan dalam format yang didukung (PDF, DOC, DOCX, JPG, PNG).</p>
+                    </div>
+
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
-                            <label class="block text-xs font-bold text-slate-900 mb-1">Upload CV / Resume <span class="text-rose-400 font-bold">*</span></label>
-                            <p class="text-[10px] text-slate-400 mb-3">PDF, DOC, DOCX. Maks 2 MB.</p>
-                            <input type="file" name="cv" accept=".pdf,.doc,.docx" {{ !($profile->cv_path || $user->resume_path) ? 'required' : '' }} class="w-full text-xs text-slate-400 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-indigo-600 file:text-white file:text-xs" />
-                            @if($profile->cv_path || $user->resume_path)
-                                <span class="text-[10px] text-emerald-400 block mt-2">✓ Berkas telah tersimpan</span>
-                            @endif
+                        <!-- CV / Resume Card -->
+                        <div class="p-4 sm:p-5 rounded-2xl bg-white border-2 border-dashed {{ ($profile->cv_path || $user->resume_path) ? 'border-emerald-300 bg-emerald-50/20' : 'border-indigo-200 hover:border-indigo-400' }} transition-all flex flex-col justify-between shadow-xs">
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-2xl">📄</span>
+                                    @if($profile->cv_path || $user->resume_path)
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                            ✓ Tersimpan
+                                        </span>
+                                    @else
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200">
+                                            Wajib
+                                        </span>
+                                    @endif
+                                </div>
+                                <label class="block text-xs font-bold text-slate-900 mb-0.5">
+                                    Upload CV / Resume <span class="text-rose-500 font-bold">*</span>
+                                </label>
+                                <p class="text-[11px] text-slate-500 mb-3">Format PDF, DOC, DOCX. Maks 2 MB.</p>
+                            </div>
+                            <div class="space-y-2">
+                                <input type="file" 
+                                       name="cv" 
+                                       id="file-input-cv"
+                                       accept=".pdf,.doc,.docx" 
+                                       {{ !($profile->cv_path || $user->resume_path) ? 'required' : '' }} 
+                                       onchange="updateFilenameDisplay(this, 'cv-selected-info')"
+                                       class="w-full text-xs text-slate-600 file:mr-2 file:py-2 file:px-3 file:rounded-xl file:border-0 file:bg-indigo-600 file:text-white file:text-xs file:font-bold hover:file:bg-indigo-500 file:cursor-pointer" />
+                                <div id="cv-selected-info" class="text-[11px] font-bold text-indigo-700 hidden truncate"></div>
+                                @if($profile->cv_path || $user->resume_path)
+                                    <div class="pt-1.5 border-t border-slate-100 flex items-center justify-between text-[11px]">
+                                        <span class="text-slate-500 font-medium">CV Terlampir</span>
+                                        <a href="{{ Storage::url($profile->cv_path ?? $user->resume_path) }}" target="_blank" class="text-indigo-600 hover:text-indigo-800 font-bold underline">
+                                            Lihat &nearr;
+                                        </a>
+                                    </div>
+                                @endif
+                            </div>
                         </div>
 
-                        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
-                            <label class="block text-xs font-bold text-slate-900 mb-1">Foto Formal Diri <span class="text-xs text-slate-500 font-normal">(Opsional)</span></label>
-                            <p class="text-[10px] text-slate-400 mb-3">JPG atau PNG, maksimal 2 MB.</p>
-                            <input type="file" name="photo" accept=".jpg,.jpeg,.png" class="w-full text-xs text-slate-400 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-slate-800 file:text-slate-700 file:text-xs" />
-                            @if($profile->photo_path)
-                                <span class="text-[10px] text-emerald-400 block mt-2">✓ Berkas telah tersimpan</span>
-                            @endif
+                        <!-- Foto Formal Card -->
+                        <div class="p-4 sm:p-5 rounded-2xl bg-white border-2 border-dashed {{ $profile->photo_path ? 'border-emerald-300 bg-emerald-50/20' : 'border-slate-200 hover:border-indigo-400' }} transition-all flex flex-col justify-between shadow-xs">
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-2xl">📷</span>
+                                    @if($profile->photo_path)
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                            ✓ Tersimpan
+                                        </span>
+                                    @else
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-100 text-slate-600">
+                                            Opsional
+                                        </span>
+                                    @endif
+                                </div>
+                                <label class="block text-xs font-bold text-slate-900 mb-0.5">
+                                    Foto Formal Diri
+                                </label>
+                                <p class="text-[11px] text-slate-500 mb-3">Format JPG atau PNG. Maks 2 MB.</p>
+                            </div>
+                            <div class="space-y-2">
+                                <input type="file" 
+                                       name="photo" 
+                                       id="file-input-photo"
+                                       accept=".jpg,.jpeg,.png" 
+                                       onchange="updateFilenameDisplay(this, 'photo-selected-info')"
+                                       class="w-full text-xs text-slate-600 file:mr-2 file:py-2 file:px-3 file:rounded-xl file:border-0 file:bg-slate-700 file:text-white file:text-xs file:font-bold hover:file:bg-slate-600 file:cursor-pointer" />
+                                <div id="photo-selected-info" class="text-[11px] font-bold text-indigo-700 hidden truncate"></div>
+                                @if($profile->photo_path)
+                                    <div class="pt-1.5 border-t border-slate-100 flex items-center justify-between text-[11px]">
+                                        <span class="text-slate-500 font-medium">Foto Terunggah</span>
+                                        <a href="{{ Storage::url($profile->photo_path) }}" target="_blank" class="text-indigo-600 hover:text-indigo-800 font-bold underline">
+                                            Lihat &nearr;
+                                        </a>
+                                    </div>
+                                @endif
+                            </div>
                         </div>
 
-                        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
-                            <label class="block text-xs font-bold text-slate-900 mb-1">Ijazah Terakhir <span class="text-xs text-slate-500 font-normal">(Opsional)</span></label>
-                            <p class="text-[10px] text-slate-400 mb-3">PDF, JPG, atau PNG. Maks 2 MB.</p>
-                            <input type="file" name="certificate" accept=".pdf,.jpg,.jpeg,.png" class="w-full text-xs text-slate-400 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-slate-800 file:text-slate-700 file:text-xs" />
-                            @if($profile->certificate_path)
-                                <span class="text-[10px] text-emerald-400 block mt-2">✓ Berkas telah tersimpan</span>
-                            @endif
+                        <!-- Ijazah Terakhir Card -->
+                        <div class="p-4 sm:p-5 rounded-2xl bg-white border-2 border-dashed {{ $profile->certificate_path ? 'border-emerald-300 bg-emerald-50/20' : 'border-slate-200 hover:border-indigo-400' }} transition-all flex flex-col justify-between shadow-xs">
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-2xl">🎓</span>
+                                    @if($profile->certificate_path)
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                            ✓ Tersimpan
+                                        </span>
+                                    @else
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-100 text-slate-600">
+                                            Opsional
+                                        </span>
+                                    @endif
+                                </div>
+                                <label class="block text-xs font-bold text-slate-900 mb-0.5">
+                                    Ijazah Terakhir
+                                </label>
+                                <p class="text-[11px] text-slate-500 mb-3">Format PDF, JPG, PNG. Maks 2 MB.</p>
+                            </div>
+                            <div class="space-y-2">
+                                <input type="file" 
+                                       name="certificate" 
+                                       id="file-input-certificate"
+                                       accept=".pdf,.jpg,.jpeg,.png" 
+                                       onchange="updateFilenameDisplay(this, 'certificate-selected-info')"
+                                       class="w-full text-xs text-slate-600 file:mr-2 file:py-2 file:px-3 file:rounded-xl file:border-0 file:bg-slate-700 file:text-white file:text-xs file:font-bold hover:file:bg-slate-600 file:cursor-pointer" />
+                                <div id="certificate-selected-info" class="text-[11px] font-bold text-indigo-700 hidden truncate"></div>
+                                @if($profile->certificate_path)
+                                    <div class="pt-1.5 border-t border-slate-100 flex items-center justify-between text-[11px]">
+                                        <span class="text-slate-500 font-medium">Ijazah Terunggah</span>
+                                        <a href="{{ Storage::url($profile->certificate_path) }}" target="_blank" class="text-indigo-600 hover:text-indigo-800 font-bold underline">
+                                            Lihat &nearr;
+                                        </a>
+                                    </div>
+                                @endif
+                            </div>
                         </div>
 
-                        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
-                            <label class="block text-xs font-bold text-slate-900 mb-1">Transkrip Nilai <span class="text-xs text-slate-500 font-normal">(Opsional)</span></label>
-                            <p class="text-[10px] text-slate-400 mb-3">PDF, JPG, atau PNG. Maks 2 MB.</p>
-                            <input type="file" name="transcript" accept=".pdf,.jpg,.jpeg,.png" class="w-full text-xs text-slate-400 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-slate-800 file:text-slate-700 file:text-xs" />
-                            @if($profile->transcript_path)
-                                <span class="text-[10px] text-emerald-400 block mt-2">✓ Berkas telah tersimpan</span>
-                            @endif
+                        <!-- Transkrip Nilai Card -->
+                        <div class="p-4 sm:p-5 rounded-2xl bg-white border-2 border-dashed {{ $profile->transcript_path ? 'border-emerald-300 bg-emerald-50/20' : 'border-slate-200 hover:border-indigo-400' }} transition-all flex flex-col justify-between shadow-xs">
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-2xl">📊</span>
+                                    @if($profile->transcript_path)
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                            ✓ Tersimpan
+                                        </span>
+                                    @else
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-100 text-slate-600">
+                                            Opsional
+                                        </span>
+                                    @endif
+                                </div>
+                                <label class="block text-xs font-bold text-slate-900 mb-0.5">
+                                    Transkrip Nilai
+                                </label>
+                                <p class="text-[11px] text-slate-500 mb-3">Format PDF, JPG, PNG. Maks 2 MB.</p>
+                            </div>
+                            <div class="space-y-2">
+                                <input type="file" 
+                                       name="transcript" 
+                                       id="file-input-transcript"
+                                       accept=".pdf,.jpg,.jpeg,.png" 
+                                       onchange="updateFilenameDisplay(this, 'transcript-selected-info')"
+                                       class="w-full text-xs text-slate-600 file:mr-2 file:py-2 file:px-3 file:rounded-xl file:border-0 file:bg-slate-700 file:text-white file:text-xs file:font-bold hover:file:bg-slate-600 file:cursor-pointer" />
+                                <div id="transcript-selected-info" class="text-[11px] font-bold text-indigo-700 hidden truncate"></div>
+                                @if($profile->transcript_path)
+                                    <div class="pt-1.5 border-t border-slate-100 flex items-center justify-between text-[11px]">
+                                        <span class="text-slate-500 font-medium">Transkrip Terunggah</span>
+                                        <a href="{{ Storage::url($profile->transcript_path) }}" target="_blank" class="text-indigo-600 hover:text-indigo-800 font-bold underline">
+                                            Lihat &nearr;
+                                        </a>
+                                    </div>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -883,16 +1028,64 @@
                     </label>
                 </div>
 
-                <div class="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-4 border-t border-slate-100">
-                    <a href="{{ route('career.dashboard') }}" class="w-full sm:w-auto text-center px-5 py-2.5 rounded-xl text-xs font-semibold text-slate-500 hover:text-slate-800">
-                        Batal
+                <div class="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-6 border-t border-slate-100">
+                    <a href="{{ route('career.dashboard') }}" class="w-full sm:w-auto text-center px-6 py-3 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 border border-slate-200 hover:bg-slate-50 transition-colors" style="min-height: 44px; touch-action: manipulation;">
+                        &larr; Batalkan & Kembali ke Dashboard
                     </a>
-                    <button type="submit" class="w-full sm:w-auto px-8 py-3.5 rounded-xl font-bold text-sm text-white bg-gradient-to-r from-indigo-600 via-indigo-500 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 shadow-xl shadow-indigo-600/30 transition-all text-center">
-                        Simpan Formulir Data Diri & CV Lengkap
+                    <button type="submit" 
+                            id="btn-submit-profile-bottom"
+                            class="w-full sm:w-auto px-8 py-3.5 rounded-2xl font-extrabold text-sm text-white bg-gradient-to-r from-indigo-600 via-indigo-500 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 shadow-xl shadow-indigo-600/30 active:scale-[0.98] transition-all text-center flex items-center justify-center gap-2 cursor-pointer"
+                            style="min-height: 48px; touch-action: manipulation;">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        <span>Simpan Formulir Data Diri & CV Lengkap</span>
                     </button>
                 </div>
             </section>
         </form>
     </main>
+
+    <!-- Sticky Bottom Action Bar for Mobile Smartphones (Always Accessible) -->
+    <div class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-xl border-t border-slate-200/90 shadow-2xl p-3 flex items-center justify-between gap-3" style="touch-action: manipulation;">
+        <a href="{{ route('career.dashboard') }}" class="px-3 py-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50 transition-colors shrink-0">
+            &larr; Batal
+        </a>
+        <button type="button" 
+                onclick="submitCandidateProfileForm()" 
+                id="btn-mobile-sticky-save"
+                class="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-600 hover:from-indigo-500 hover:to-cyan-500 text-white font-extrabold text-xs shadow-md shadow-indigo-600/30 flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98] transition-all"
+                style="min-height: 46px; touch-action: manipulation;">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            <span>Simpan Profil & CV</span>
+        </button>
+    </div>
+
+    <!-- Script for Filename Preview & Form Submission -->
+    <script>
+        function updateFilenameDisplay(input, targetId) {
+            const displayEl = document.getElementById(targetId);
+            if (!displayEl) return;
+            if (input.files && input.files[0]) {
+                displayEl.textContent = 'Siap diunggah: ' + input.files[0].name;
+                displayEl.classList.remove('hidden');
+            } else {
+                displayEl.classList.add('hidden');
+            }
+        }
+
+        function submitCandidateProfileForm() {
+            const form = document.getElementById('profile-form');
+            if (form) {
+                if (form.reportValidity && !form.reportValidity()) {
+                    return;
+                }
+                const btn = document.getElementById('btn-mobile-sticky-save');
+                if (btn) {
+                    btn.disabled = true;
+                    btn.innerHTML = '<span>Menyimpan...</span>';
+                }
+                form.submit();
+            }
+        }
+    </script>
 </body>
 </html>

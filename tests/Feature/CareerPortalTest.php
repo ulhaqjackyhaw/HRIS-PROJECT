@@ -260,6 +260,53 @@ class CareerPortalTest extends TestCase
         ]);
     }
 
+    public function test_candidate_can_filter_dashboard_applications_and_reset_filter(): void
+    {
+        $user = User::factory()->create(['user_type' => 'CANDIDATE']);
+        $jobA = JobPosting::factory()->create(['title' => 'Alpha Backend Dev']);
+        $jobB = JobPosting::factory()->create(['title' => 'Beta Sales Manager']);
+
+        JobApplication::create([
+            'job_posting_id' => $jobA->id,
+            'user_id' => $user->id,
+            'applicant_name' => $user->name,
+            'applicant_email' => $user->email,
+            'applicant_phone' => '081234567890',
+            'current_stage' => 'APPLIED',
+            'applied_at' => now(),
+        ]);
+
+        JobApplication::create([
+            'job_posting_id' => $jobB->id,
+            'user_id' => $user->id,
+            'applicant_name' => $user->name,
+            'applicant_email' => $user->email,
+            'applicant_phone' => '081234567890',
+            'current_stage' => 'REJECTED',
+            'applied_at' => now(),
+        ]);
+
+        // All applications
+        $responseAll = $this->actingAs($user)->get(route('career.dashboard'));
+        $responseAll->assertStatus(200);
+        $responseAll->assertSee('Alpha Backend Dev');
+        $responseAll->assertSee('Beta Sales Manager');
+
+        // Filter active applications
+        $responseActive = $this->actingAs($user)->get(route('career.dashboard', ['stage' => 'active']));
+        $responseActive->assertStatus(200);
+        $responseActive->assertSee('Alpha Backend Dev');
+        $responseActive->assertDontSee('Beta Sales Manager');
+        $responseActive->assertSee('Reset Filter');
+
+        // Filter rejected applications
+        $responseRejected = $this->actingAs($user)->get(route('career.dashboard', ['stage' => 'rejected']));
+        $responseRejected->assertStatus(200);
+        $responseRejected->assertSee('Beta Sales Manager');
+        $responseRejected->assertDontSee('Alpha Backend Dev');
+        $responseRejected->assertSee('Reset Filter');
+    }
+
     public function test_candidate_can_fill_out_comprehensive_profile(): void
     {
         Storage::fake('public');

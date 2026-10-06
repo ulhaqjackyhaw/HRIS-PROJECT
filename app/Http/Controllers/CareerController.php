@@ -217,13 +217,22 @@ class CareerController extends Controller
     public function dashboard(Request $request): View
     {
         $user = $request->user();
+        $stage = $request->input('stage');
 
-        $applications = JobApplication::with(['jobPosting.department', 'psychotestResults'])
-            ->where('user_id', $user->id)
-            ->latest()
-            ->get();
+        $query = JobApplication::with(['jobPosting.department', 'psychotestResults'])
+            ->where('user_id', $user->id);
 
-        return view('career.dashboard', compact('user', 'applications'));
+        if ($stage === 'active') {
+            $query->whereNotIn('current_stage', ['HIRED', 'REJECTED']);
+        } elseif ($stage === 'hired') {
+            $query->whereIn('current_stage', ['HIRED', 'OFFERING']);
+        } elseif ($stage === 'rejected') {
+            $query->where('current_stage', 'REJECTED');
+        }
+
+        $applications = $query->latest()->get();
+
+        return view('career.dashboard', compact('user', 'applications', 'stage'));
     }
 
     /**
