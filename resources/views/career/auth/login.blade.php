@@ -28,15 +28,38 @@
         </div>
 
         @if($errors->any())
-            <div class="mb-6 p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs space-y-1">
+            <div class="mb-6 p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs space-y-2">
                 @foreach($errors->all() as $error)
-                    <div class="flex items-center space-x-2">
+                    <div class="flex items-start space-x-2">
                         <span>•</span>
-                        <span>{{ $error }}</span>
+                        <span class="font-medium">{{ $error }}</span>
                     </div>
                 @endforeach
+                @if (session('redirect_portal_url'))
+                    <div class="pt-2 border-t border-rose-200/60">
+                        <a href="{{ session('redirect_portal_url') }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-rose-600 hover:bg-rose-700 text-white shadow-xs transition-all">
+                            {{ session('redirect_portal_label') ?? 'Buka Portal Internal' }} &rarr;
+                        </a>
+                    </div>
+                @endif
             </div>
         @endif
+
+        <!-- Demo Account Quick Autofill for Candidate -->
+        <div class="mb-5 p-3.5 rounded-2xl bg-indigo-50/70 border border-indigo-200/80 shadow-xs">
+            <div class="flex items-center justify-between mb-1.5">
+                <span class="text-[11px] font-bold text-indigo-800 uppercase tracking-wider">Akun Demo Pelamar</span>
+                <button type="button" 
+                        id="btn-autofill-candidate"
+                        class="text-[11px] font-semibold text-indigo-700 hover:text-indigo-900 underline cursor-pointer">
+                    Isi Otomatis
+                </button>
+            </div>
+            <div class="text-xs font-mono text-slate-700 space-y-0.5">
+                <div>Email: <strong class="text-slate-900">ulhaqjackyhaw@gmail.com</strong></div>
+                <div>Password: <strong class="text-slate-900">password</strong></div>
+            </div>
+        </div>
 
         <form action="{{ route('career.login.submit') }}" method="POST" class="space-y-4">
             @csrf
@@ -46,6 +69,7 @@
                 <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Alamat Email</label>
                 <input
                     type="email"
+                    id="candidate_email"
                     name="email"
                     value="{{ old('email') }}"
                     required
@@ -61,6 +85,7 @@
                 </div>
                 <input
                     type="password"
+                    id="candidate_password"
                     name="password"
                     required
                     placeholder="••••••••"
@@ -70,15 +95,28 @@
 
             <button
                 type="submit"
-                class="w-full py-3 rounded-xl font-bold text-sm text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/20 transition-all mt-2"
+                class="w-full py-3 rounded-xl font-bold text-sm text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/20 transition-all mt-2 cursor-pointer"
             >
-                Masuk ke Portal
+                Masuk ke Portal Pelamar &rarr;
             </button>
         </form>
 
-        <div class="mt-6 pt-6 border-t border-slate-100 text-center text-xs text-slate-500">
+        <div class="mt-6 pt-5 border-t border-slate-100 text-center text-xs text-slate-500">
             Belum memiliki akun pelamar?
             <a href="{{ route('career.register') }}" class="font-bold text-indigo-600 hover:underline">Daftar Akun Baru</a>
+        </div>
+
+        <!-- Role Switcher Links -->
+        <div class="mt-5 pt-4 border-t border-slate-100 space-y-2">
+            <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider text-center">Staf Internal Perusahaan?</p>
+            <div class="grid grid-cols-2 gap-2 text-center text-xs">
+                <a href="{{ route('employee.login') }}" class="p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-amber-50 hover:border-amber-200 text-slate-700 hover:text-amber-700 font-semibold transition-all">
+                    Portal Karyawan (ESS) &rarr;
+                </a>
+                <a href="{{ route('login') }}" class="p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-indigo-50 hover:border-indigo-200 text-slate-700 hover:text-indigo-700 font-semibold transition-all">
+                    Administrator HR &rarr;
+                </a>
+            </div>
         </div>
 
         <div class="mt-4 text-center">
@@ -87,5 +125,12 @@
             </a>
         </div>
     </div>
+
+    <script>
+        document.getElementById('btn-autofill-candidate')?.addEventListener('click', function() {
+            document.getElementById('candidate_email').value = 'ulhaqjackyhaw@gmail.com';
+            document.getElementById('candidate_password').value = 'password';
+        });
+    </script>
 </body>
 </html>

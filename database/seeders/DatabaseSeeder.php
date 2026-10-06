@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             ['email' => 'admin@hris.corp'],
             [
                 'name' => 'HR Administrator',
+                'user_type' => User::TYPE_HR,
                 'password' => bcrypt('password'),
             ]
         );

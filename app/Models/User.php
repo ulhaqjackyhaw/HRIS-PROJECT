@@ -37,14 +37,38 @@ class User extends Authenticatable
         return $this->hasOne(Employee::class);
     }
 
+    public const TYPE_HR = 'HR';
+
+    public const TYPE_EMPLOYEE = 'EMPLOYEE';
+
+    public const TYPE_CANDIDATE = 'CANDIDATE';
+
     public function isCandidate(): bool
     {
-        return ($this->user_type ?? 'CANDIDATE') === 'CANDIDATE';
+        return ($this->user_type ?? self::TYPE_CANDIDATE) === self::TYPE_CANDIDATE;
     }
 
     public function isInternal(): bool
     {
-        return ($this->user_type ?? 'CANDIDATE') === 'INTERNAL';
+        return in_array($this->user_type, [self::TYPE_HR, self::TYPE_EMPLOYEE, 'INTERNAL'], true);
+    }
+
+    public function isHr(): bool
+    {
+        if ($this->user_type === self::TYPE_HR || $this->user_type === 'INTERNAL') {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isEmployee(): bool
+    {
+        if ($this->user_type === self::TYPE_EMPLOYEE) {
+            return true;
+        }
+
+        return $this->isInternal();
     }
 
     public function jobApplications(): HasMany

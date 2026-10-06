@@ -24,6 +24,7 @@ class AttendanceModuleSeeder extends Seeder
             ['email' => 'karyawan@hris.local'],
             [
                 'name' => 'Budi Santoso',
+                'user_type' => User::TYPE_EMPLOYEE,
                 'password' => Hash::make('password123'),
                 'email_verified_at' => now(),
             ]

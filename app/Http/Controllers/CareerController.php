@@ -126,6 +126,23 @@ class CareerController extends Controller
         ]);
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
+            $user = Auth::user();
+
+            if (! $user->isCandidate()) {
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                $roleLabel = $user->isHr() ? 'Administrator HR' : 'Karyawan Perusahaan';
+                $portalUrl = $user->isHr() ? route('login') : route('employee.login');
+
+                return back()->withErrors([
+                    'email' => "Akses Ditolak: Akun Anda adalah {$roleLabel}, bukan akun pelamar. Silakan masuk melalui portal internal.",
+                ])->with('redirect_portal_url', $portalUrl)
+                    ->with('redirect_portal_label', 'Buka Portal Internal')
+                    ->onlyInput('email');
+            }
+
             $request->session()->regenerate();
 
             if ($jobSlug = $request->input('redirect_job')) {
