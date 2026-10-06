@@ -1160,7 +1160,7 @@ function applyTemplate(type) {
         <!-- SVG Chart Container -->
         <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
             <div class="flex items-center justify-between text-xs font-bold text-slate-700 px-1">
-                <span>Grafik Kurva Kerja Kolom (1 - 40)</span>
+                <span>Grafik Kurva Kerja Kolom (1 - 30)</span>
                 <span class="text-[11px] text-amber-600 font-semibold" id="hr-modal-avg-label">-</span>
             </div>
             <div id="hr-modal-chart-wrapper" class="w-full bg-white rounded-xl p-3 border border-slate-200/80 overflow-hidden">

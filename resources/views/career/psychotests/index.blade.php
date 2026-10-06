@@ -206,7 +206,7 @@
                 <span>Petunjuk Penting Pengerjaan Psikotes</span>
             </h3>
             <ul class="list-disc list-inside space-y-1.5 leading-relaxed">
-                <li><strong>Tes Kraepelin:</strong> Siapkan konsentrasi penuh. Tes terdiri dari 40 kolom (60 baris angka per kolom) yang berpindah secara otomatis per durasi waktu tertentu. Anda dapat menggunakan tombol angka pada keyboard (0-9 / Numpad) atau virtual keypad di layar.</li>
+                <li><strong>Tes Kraepelin:</strong> Siapkan konsentrasi penuh. Tes terdiri dari 30 kolom (60 baris angka per kolom) dengan durasi 25 detik per kolom yang berpindah secara otomatis. Anda dapat menggunakan tombol angka pada keyboard (0-9 / Numpad) atau virtual keypad di layar.</li>
                 <li><strong>Tes Kepribadian (Skala 1-5):</strong> Bacalah setiap butir pernyataan dan pilih nilai 1 (Sangat Tidak Sesuai) sampai 5 (Sangat Sesuai) yang paling menggambarkan diri Anda yang sebenarnya. Tidak ada jawaban salah; kejujuran dan konsistensi Anda dinilai tinggi.</li>
                 <li>Pastikan koneksi internet Anda stabil sebelum menekan tombol mulai.</li>
             </ul>
@@ -222,7 +222,7 @@
                         <span>⚡ KURVA RITME KERJA KRAEPELIN</span>
                     </div>
                     <h3 class="text-lg font-black text-slate-900">Hasil Kurva Penjumlahan per Kolom</h3>
-                    <p class="text-xs text-slate-500 mt-0.5">Grafik performa kecepatan dan ketahanan kerja Anda sepanjang 40 kolom ujian.</p>
+                    <p class="text-xs text-slate-500 mt-0.5">Grafik performa kecepatan dan ketahanan kerja Anda sepanjang 30 kolom ujian.</p>
                 </div>
                 <button type="button" onclick="closeCandidateKraepelinModal()" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-lg font-bold cursor-pointer transition-colors">
                     ✕
@@ -256,7 +256,7 @@
             <!-- SVG Chart Container -->
             <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
                 <div class="flex items-center justify-between text-xs font-bold text-slate-700 px-1">
-                    <span>Grafik Kurva Kerja Kolom (1 - 40)</span>
+                    <span>Grafik Kurva Kerja Kolom (1 - 30)</span>
                     <span class="text-[11px] text-amber-600 font-semibold" id="cand-modal-avg-label">-</span>
                 </div>
                 <div id="cand-modal-chart-wrapper" class="w-full bg-white rounded-xl p-3 border border-slate-200/80 overflow-hidden">

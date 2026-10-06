@@ -478,9 +478,9 @@ class CareerController extends Controller
             ->first();
 
         if ($psychotest->isKraepelin()) {
-            $columnsCount = $psychotest->questions_data['columns_count'] ?? 40;
+            $columnsCount = $psychotest->questions_data['columns_count'] ?? 30;
             $rowsCount = $psychotest->questions_data['rows_per_column'] ?? 60;
-            $secondsPerColumn = $psychotest->questions_data['seconds_per_column'] ?? 20;
+            $secondsPerColumn = $psychotest->questions_data['seconds_per_column'] ?? 25;
 
             $kraepelinColumns = [];
             for ($c = 0; $c < $columnsCount; $c++) {
