@@ -24,45 +24,45 @@
 
     <!-- Header -->
     <header class="sticky top-0 z-40 backdrop-blur-xl bg-white/90 border-b border-slate-200/90 shadow-xs">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <a href="{{ route('career.dashboard') }}" class="flex items-center space-x-3.5 group">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-cyan-500 flex items-center justify-center text-white font-black text-xl shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
+            <a href="{{ route('career.dashboard') }}" class="flex items-center space-x-2.5 sm:space-x-3.5 group">
+                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-cyan-500 flex items-center justify-center text-white font-black text-lg sm:text-xl shadow-md">
                     H
                 </div>
                 <div>
-                    <span class="font-extrabold tracking-tight text-lg text-white">HRIS Core</span>
-                    <span class="text-xs text-slate-400 block font-medium">Formulir Data Diri & CV Pelamar</span>
+                    <span class="font-extrabold tracking-tight text-base sm:text-lg text-slate-900">HRIS Core</span>
+                    <span class="text-[10px] sm:text-xs text-slate-500 block font-medium">Formulir Data Diri & CV</span>
                 </div>
             </a>
 
             <div class="flex items-center space-x-4">
-                <a href="{{ route('career.dashboard') }}" class="text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors">
-                    ← Kembali ke Dashboard
+                <a href="{{ route('career.dashboard') }}" class="text-xs font-semibold text-slate-600 hover:text-indigo-600 transition-colors">
+                    ← <span class="hidden sm:inline">Kembali ke </span>Dashboard
                 </a>
             </div>
         </div>
     </header>
 
-    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
         <!-- Notification / Alerts -->
         @if(request('job'))
             <div class="mb-6 p-4 rounded-2xl bg-indigo-50 border border-indigo-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div class="flex items-center space-x-3">
-                    <span class="w-9 h-9 rounded-xl bg-indigo-600/30 text-indigo-400 font-bold flex items-center justify-center text-base">🎯</span>
+                    <span class="w-9 h-9 rounded-xl bg-indigo-100 text-indigo-700 font-bold flex items-center justify-center text-base shrink-0">🎯</span>
                     <div>
-                        <div class="text-xs font-bold text-slate-900">Melamar Posisi: <span class="text-indigo-400 font-extrabold">{{ request('job') }}</span></div>
-                        <div class="text-[11px] text-slate-400">Lengkapi data inti wajib bertanda (<span class="text-rose-400 font-bold">*</span>) di bawah ini, lalu simpan untuk langsung mengirim lamaran Anda.</div>
+                        <div class="text-xs font-bold text-slate-900">Melamar Posisi: <span class="text-indigo-600 font-extrabold">{{ request('job') }}</span></div>
+                        <div class="text-[11px] text-slate-500">Lengkapi data inti wajib bertanda (<span class="text-rose-500 font-bold">*</span>) di bawah ini, lalu simpan untuk langsung mengirim lamaran Anda.</div>
                     </div>
                 </div>
-                <a href="{{ route('career.jobs.show', request('job')) }}" class="text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors shrink-0">
+                <a href="{{ route('career.jobs.show', request('job')) }}" class="text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors shrink-0">
                     ← Kembali ke Detail Lowongan
                 </a>
             </div>
         @endif
 
         @if($errors->any())
-            <div class="mb-8 p-5 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs space-y-1">
-                <div class="font-bold text-sm mb-2 text-rose-400">Harap periksa kembali isian formulir:</div>
+            <div class="mb-8 p-5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs space-y-1">
+                <div class="font-bold text-sm mb-2 text-rose-900">Harap periksa kembali isian formulir:</div>
                 @foreach($errors->all() as $error)
                     <div>• {{ $error }}</div>
                 @endforeach
@@ -70,7 +70,7 @@
         @endif
 
         @if(session('success'))
-            <div class="mb-8 p-5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs">
+            <div class="mb-8 p-5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold">
                 {{ session('success') }}
             </div>
         @endif
@@ -878,16 +878,16 @@
                     <label class="flex items-start space-x-3 cursor-pointer">
                         <input type="checkbox" name="agreement_signed" value="1" required {{ old('agreement_signed', $profile->agreement_signed) ? 'checked' : '' }} class="mt-1 w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" />
                         <span class="text-xs text-slate-700 leading-relaxed">
-                            Dengan ini saya menyatakan bahwa seluruh informasi yang tercantum dalam formulir ini adalah <strong class="text-white">benar dan dapat dipertanggungjawabkan</strong>. Saya menyadari bahwa informasi palsu atau yang menyesatkan dapat menjadi dasar penolakan lamaran atau pemutusan hubungan kerja di kemudian hari.
+                            Dengan ini saya menyatakan bahwa seluruh informasi yang tercantum dalam formulir ini adalah <strong class="text-slate-900 font-bold">benar dan dapat dipertanggungjawabkan</strong>. Saya menyadari bahwa informasi palsu atau yang menyesatkan dapat menjadi dasar penolakan lamaran atau pemutusan hubungan kerja di kemudian hari.
                         </span>
                     </label>
                 </div>
 
-                <div class="flex items-center justify-between pt-4 border-t border-slate-100">
-                    <a href="{{ route('career.dashboard') }}" class="px-5 py-2.5 rounded-xl text-xs font-semibold text-slate-500 hover:text-slate-800">
+                <div class="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-4 border-t border-slate-100">
+                    <a href="{{ route('career.dashboard') }}" class="w-full sm:w-auto text-center px-5 py-2.5 rounded-xl text-xs font-semibold text-slate-500 hover:text-slate-800">
                         Batal
                     </a>
-                    <button type="submit" class="px-8 py-3 rounded-xl font-bold text-sm text-white bg-gradient-to-r from-indigo-600 via-indigo-500 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 shadow-xl shadow-indigo-600/30 transition-all">
+                    <button type="submit" class="w-full sm:w-auto px-8 py-3.5 rounded-xl font-bold text-sm text-white bg-gradient-to-r from-indigo-600 via-indigo-500 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 shadow-xl shadow-indigo-600/30 transition-all text-center">
                         Simpan Formulir Data Diri & CV Lengkap
                     </button>
                 </div>

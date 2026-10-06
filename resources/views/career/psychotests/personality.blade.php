@@ -82,30 +82,30 @@
                 @endphp
                 <div
                     id="question-card-{{ $qId }}"
-                    class="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm hover:shadow-md transition-all space-y-4 question-card"
+                    class="p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-white border border-slate-200 shadow-sm hover:shadow-md transition-all space-y-3 sm:space-y-4 question-card"
                     data-question-id="{{ $qId }}"
                 >
-                    <div class="flex items-start justify-between gap-4">
-                        <div class="flex items-start space-x-3.5">
-                            <span class="w-8 h-8 rounded-xl bg-purple-50 text-purple-700 border border-purple-200 font-black text-xs flex items-center justify-center shrink-0 mt-0.5">
+                    <div class="flex items-start justify-between gap-3 sm:gap-4">
+                        <div class="flex items-start space-x-2.5 sm:space-x-3.5">
+                            <span class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-purple-50 text-purple-700 border border-purple-200 font-black text-xs flex items-center justify-center shrink-0 mt-0.5">
                                 {{ $index + 1 }}
                             </span>
                             <div>
-                                <span class="text-[10px] font-bold text-purple-600 uppercase tracking-wider block mb-1">
+                                <span class="text-[9px] sm:text-[10px] font-bold text-purple-600 uppercase tracking-wider block mb-0.5 sm:mb-1">
                                     {{ $q['dimension'] ?? 'Aspek Karakter' }}
                                 </span>
-                                <p class="text-sm sm:text-base font-bold text-slate-900 leading-relaxed">
+                                <p class="text-xs sm:text-base font-bold text-slate-900 leading-snug sm:leading-relaxed">
                                     "{{ $q['statement'] }}"
                                 </p>
                             </div>
                         </div>
-                        <span id="answered-badge-{{ $qId }}" class="shrink-0 px-2.5 py-1 rounded-full text-[10px] font-bold {{ $selectedVal ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-slate-100 text-slate-400 border border-slate-200' }}">
+                        <span id="answered-badge-{{ $qId }}" class="shrink-0 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[9px] sm:text-[10px] font-bold {{ $selectedVal ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-slate-100 text-slate-400 border border-slate-200' }}">
                             {{ $selectedVal ? '✓ Terjawab' : 'Belum' }}
                         </span>
                     </div>
 
-                    <!-- 1-5 Radio Scale Options Grid with Distinct Clicked vs Unclicked States -->
-                    <div class="grid grid-cols-5 gap-2 sm:gap-3 pt-2">
+                    <!-- 1-5 Radio Scale Options Grid with Distinct Clicked vs Unclicked States (Mobile Optimized) -->
+                    <div class="grid grid-cols-5 gap-1.5 sm:gap-3 pt-1 sm:pt-2">
                         @foreach([1, 2, 3, 4, 5] as $val)
                             @php
                                 $activeColorMap = [
@@ -116,11 +116,11 @@
                                     5 => 'peer-checked:bg-emerald-600 peer-checked:border-emerald-700 peer-checked:text-white peer-checked:ring-4 peer-checked:ring-emerald-500/20 peer-checked:shadow-lg',
                                 ];
                                 $labelDesc = [
-                                    1 => 'Sangat Tidak Sesuai',
-                                    2 => 'Tidak Sesuai',
+                                    1 => 'Sangat Tdk Sesuai',
+                                    2 => 'Tdk Sesuai',
                                     3 => 'Netral',
                                     4 => 'Sesuai',
-                                    5 => 'Sangat Sesuai',
+                                    5 => 'Sgt Sesuai',
                                 ];
                             @endphp
                             <label class="cursor-pointer group">
@@ -133,9 +133,9 @@
                                     {{ (string)$selectedVal === (string)$val ? 'checked' : '' }}
                                     required
                                 >
-                                <div class="p-3 sm:p-4 rounded-2xl bg-slate-50 hover:bg-slate-100 border-2 border-slate-200 text-slate-700 text-center transition-all transform active:scale-95 group-hover:border-slate-300 {{ $activeColorMap[$val] }}">
-                                    <div class="text-base sm:text-xl font-black">{{ $val }}</div>
-                                    <div class="text-[9px] sm:text-[10px] truncate mt-0.5 font-medium opacity-90">{{ $labelDesc[$val] }}</div>
+                                <div class="p-2 sm:p-4 rounded-xl sm:rounded-2xl bg-slate-50 hover:bg-slate-100 border-2 border-slate-200 text-slate-700 text-center transition-all transform active:scale-95 group-hover:border-slate-300 {{ $activeColorMap[$val] }}" style="touch-action: manipulation;">
+                                    <div class="text-sm sm:text-xl font-black">{{ $val }}</div>
+                                    <div class="text-[8px] sm:text-[10px] truncate mt-0.5 font-medium opacity-90">{{ $labelDesc[$val] }}</div>
                                 </div>
                             </label>
                         @endforeach
@@ -143,8 +143,8 @@
                 </div>
             @endforeach
 
-            <!-- Sticky Bottom Submit Section -->
-            <div class="sticky bottom-4 z-30 p-4 sm:p-5 rounded-3xl bg-white/95 backdrop-blur-xl border border-slate-200 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4">
+            <!-- Sticky Bottom Submit Section (Mobile Thumb Friendly) -->
+            <div class="sticky bottom-3 z-30 p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl bg-white/95 backdrop-blur-xl border border-slate-200 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
                 <div class="text-xs text-slate-500 text-center sm:text-left">
                     <span id="footer-status-text">Pastikan semua pernyataan telah dijawab sebelum mengirimkan hasil.</span>
                 </div>
@@ -153,7 +153,7 @@
                     <button
                         type="submit"
                         id="submit-btn"
-                        class="w-full sm:w-auto px-8 py-3.5 rounded-2xl text-xs font-extrabold text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 shadow-md shadow-purple-600/30 transition-all flex items-center justify-center space-x-2"
+                        class="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-extrabold text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 shadow-md shadow-purple-600/30 transition-all flex items-center justify-center space-x-2"
                     >
                         <span>✓ Selesaikan & Kirim Hasil Tes Kepribadian</span>
                     </button>

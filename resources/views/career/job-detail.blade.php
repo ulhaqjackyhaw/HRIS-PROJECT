@@ -18,24 +18,26 @@
 
     <!-- Header -->
     <header class="sticky top-0 z-40 backdrop-blur-xl bg-white/90 border-b border-slate-200/90 shadow-xs">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <a href="{{ route('career.landing') }}" class="flex items-center space-x-3.5">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-cyan-500 flex items-center justify-center text-white font-black text-xl shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
+            <a href="{{ route('career.landing') }}" class="flex items-center space-x-2.5 sm:space-x-3.5">
+                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-cyan-500 flex items-center justify-center text-white font-black text-lg sm:text-xl shadow-md">
                     H
                 </div>
                 <div>
-                    <span class="font-extrabold tracking-tight text-lg text-slate-900">HRIS Core</span>
-                    <span class="text-xs text-slate-500 block font-medium">Careers Portal</span>
+                    <span class="font-extrabold tracking-tight text-base sm:text-lg text-slate-900">HRIS Core</span>
+                    <span class="text-[10px] sm:text-xs text-slate-500 block font-medium">Careers Portal</span>
                 </div>
             </a>
 
-            <div class="flex items-center space-x-4">
+            <div class="flex items-center space-x-2 sm:space-x-4">
                 <a href="{{ route('career.landing') }}" class="text-xs font-semibold text-slate-600 hover:text-indigo-600 transition-colors">
-                    ← Kembali ke Lowongan
+                    ← <span class="hidden sm:inline">Kembali ke </span>Lowongan
                 </a>
-                <a href="{{ route('career.register') }}" class="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/20 transition-all">
-                    Daftar & Lamar Posisi
-                </a>
+                @guest
+                    <a href="{{ route('career.register', ['job' => $job->slug]) }}" class="px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/20 transition-all">
+                        Daftar & Lamar
+                    </a>
+                @endguest
             </div>
         </div>
     </header>
@@ -89,20 +91,20 @@
                     @endphp
 
                     @if($alreadyApplied)
-                        <div class="p-6 rounded-2xl bg-indigo-50 border border-indigo-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div class="p-5 sm:p-6 rounded-2xl bg-indigo-50 border border-indigo-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                             <div>
                                 <div class="text-sm font-bold text-indigo-950">Anda telah mengirimkan lamaran untuk posisi ini.</div>
                                 <div class="text-xs text-indigo-700 mt-0.5">Pantau linimasa tahapan seleksi Anda di Candidate Dashboard.</div>
                             </div>
-                            <a href="{{ route('career.dashboard') }}" class="px-6 py-2.5 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/20 transition-all">
+                            <a href="{{ route('career.dashboard') }}" class="w-full sm:w-auto text-center px-6 py-3 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/20 transition-all">
                                 Lihat Status Lamaran →
                             </a>
                         </div>
                     @elseif(! ($profile && $profile->is_completed))
                         <!-- Jika data inti belum lengkap: diarahkan untuk melengkapi data -->
-                        <div class="p-6 sm:p-8 rounded-2xl bg-amber-50 border border-amber-200 flex flex-col sm:flex-row items-center justify-between gap-6">
-                            <div class="flex items-start space-x-4">
-                                <div class="w-12 h-12 rounded-2xl bg-amber-100 border border-amber-300 text-amber-800 flex items-center justify-center font-bold text-xl shrink-0">
+                        <div class="p-5 sm:p-8 rounded-2xl bg-amber-50 border border-amber-200 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                            <div class="flex items-start space-x-3.5 sm:space-x-4">
+                                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-amber-100 border border-amber-300 text-amber-800 flex items-center justify-center font-bold text-lg sm:text-xl shrink-0">
                                     !
                                 </div>
                                 <div>
@@ -112,14 +114,14 @@
                                     </p>
                                 </div>
                             </div>
-                            <a href="{{ route('career.profile', ['job' => $job->slug]) }}" class="shrink-0 px-6 py-3 rounded-xl text-xs font-bold text-white bg-amber-600 hover:bg-amber-500 shadow-md shadow-amber-600/20 transition-all flex items-center space-x-2">
+                            <a href="{{ route('career.profile', ['job' => $job->slug]) }}" class="w-full sm:w-auto shrink-0 px-6 py-3.5 rounded-xl text-xs font-bold text-white bg-amber-600 hover:bg-amber-500 shadow-md shadow-amber-600/20 transition-all flex items-center justify-center space-x-2 text-center">
                                 <span>Lengkapi Data Sekarang</span>
                                 <span>→</span>
                             </a>
                         </div>
                     @else
                         <!-- Data profil inti sudah lengkap: LANGSUNG KIRIM (1-Click Apply) -->
-                        <div class="p-6 sm:p-8 rounded-2xl bg-gradient-to-r from-indigo-50/80 via-sky-50/60 to-white border border-indigo-200 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xs">
+                        <div class="p-5 sm:p-8 rounded-2xl bg-gradient-to-r from-indigo-50/80 via-sky-50/60 to-white border border-indigo-200 flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-xs">
                             <div>
                                 <span class="text-[10px] font-bold text-emerald-700 uppercase tracking-wider block mb-1">✓ Profil Lengkap & Siap Kirim</span>
                                 <h3 class="text-lg font-bold text-slate-900 mb-1">Kirim Lamaran untuk Posisi Ini</h3>
@@ -128,7 +130,7 @@
                                 </p>
                             </div>
 
-                            <form action="{{ route('career.jobs.apply', $job->slug) }}" method="POST" class="shrink-0">
+                            <form action="{{ route('career.jobs.apply', $job->slug) }}" method="POST" class="w-full sm:w-auto shrink-0">
                                 @csrf
                                 <button
                                     type="submit"

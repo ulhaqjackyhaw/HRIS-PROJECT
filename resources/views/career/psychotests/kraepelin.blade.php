@@ -116,25 +116,26 @@
             </div>
 
             <!-- Columns Display Board -->
-            <div class="w-full max-w-4xl bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-xl overflow-x-auto">
-                <div class="flex justify-center space-x-4 sm:space-x-8 min-w-[500px]" id="columns-wrapper">
+            <div class="w-full max-w-4xl bg-white border border-slate-200 rounded-3xl p-4 sm:p-8 shadow-xl overflow-x-auto" id="columns-board">
+                <div class="flex justify-start sm:justify-center space-x-3 sm:space-x-8 min-w-[500px] px-3 sm:px-0" id="columns-wrapper">
                     <!-- Columns rendered via JavaScript -->
                 </div>
             </div>
 
-            <!-- Virtual Numpad & Keyboard Helper -->
-            <div class="w-full max-w-md bg-white border border-slate-200 rounded-3xl p-4 sm:p-6 shadow-xl space-y-3">
+            <!-- Virtual Numpad & Keyboard Helper (Mobile Ergonomic Sticky Bottom) -->
+            <div class="w-full max-w-md bg-white/95 backdrop-blur-md border border-slate-200 rounded-3xl p-3 sm:p-6 shadow-2xl space-y-2 sm:space-y-3 sticky bottom-2 z-30">
                 <div class="flex items-center justify-between text-[11px] text-slate-500 font-bold px-1">
-                    <span>Virtual Keypad (Atau tekan 0-9 di Keyboard)</span>
-                    <span class="text-blue-600">Auto-submit</span>
+                    <span>Virtual Keypad (Tekan 0-9)</span>
+                    <span class="text-blue-600 font-extrabold">Auto-submit</span>
                 </div>
 
-                <div class="grid grid-cols-5 gap-2 sm:gap-2.5">
+                <div class="grid grid-cols-5 gap-1.5 sm:gap-2.5">
                     @for($n = 1; $n <= 9; $n++)
                         <button
                             type="button"
                             onclick="handleInput({{ $n }})"
-                            class="h-14 sm:h-16 rounded-2xl bg-slate-50 hover:bg-blue-600 active:bg-blue-700 text-slate-900 hover:text-white font-black text-xl sm:text-2xl transition-all shadow-sm active:scale-90 border-2 border-slate-200 hover:border-blue-500"
+                            class="h-12 sm:h-16 rounded-xl sm:rounded-2xl bg-slate-50 hover:bg-blue-600 active:bg-blue-700 text-slate-900 hover:text-white font-black text-xl sm:text-2xl transition-all shadow-sm active:scale-90 border-2 border-slate-200 hover:border-blue-500 select-none"
+                            style="touch-action: manipulation; -webkit-tap-highlight-color: transparent;"
                         >
                             {{ $n }}
                         </button>
@@ -142,7 +143,8 @@
                     <button
                         type="button"
                         onclick="handleInput(0)"
-                        class="h-14 sm:h-16 rounded-2xl bg-slate-50 hover:bg-blue-600 active:bg-blue-700 text-slate-900 hover:text-white font-black text-xl sm:text-2xl transition-all shadow-sm active:scale-90 border-2 border-slate-200 hover:border-blue-500 col-span-1"
+                        class="h-12 sm:h-16 rounded-xl sm:rounded-2xl bg-slate-50 hover:bg-blue-600 active:bg-blue-700 text-slate-900 hover:text-white font-black text-xl sm:text-2xl transition-all shadow-sm active:scale-90 border-2 border-slate-200 hover:border-blue-500 col-span-1 select-none"
+                        style="touch-action: manipulation; -webkit-tap-highlight-color: transparent;"
                     >
                         0
                     </button>
@@ -280,6 +282,12 @@
             }
 
             updateHighlightedPair();
+
+            // Auto-center active column on mobile viewport
+            const activeCol = document.getElementById(`col-${currentColumnIdx}`);
+            if (activeCol) {
+                activeCol.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+            }
         }
 
         function updateHighlightedPair() {

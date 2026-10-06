@@ -81,17 +81,17 @@
         @endif
 
         <!-- Welcome & Profile Card -->
-        <div class="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 mb-10 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <div class="flex items-center space-x-4">
-                <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-indigo-600 to-cyan-500 text-white flex items-center justify-center font-extrabold text-2xl shadow-md">
+        <div class="bg-white border border-slate-200/90 rounded-3xl p-5 sm:p-8 mb-8 sm:mb-10 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div class="flex items-center space-x-3.5 sm:space-x-4">
+                <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-tr from-indigo-600 to-cyan-500 text-white flex items-center justify-center font-extrabold text-xl sm:text-2xl shadow-md shrink-0">
                     {{ strtoupper(substr($user->name, 0, 1)) }}
                 </div>
-                <div>
-                    <div class="flex items-center space-x-2">
-                        <h1 class="text-2xl font-bold text-slate-900">{{ $user->name }}</h1>
-                        <span class="text-[10px] font-semibold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">Kandidat Aktif</span>
+                <div class="min-w-0">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <h1 class="text-xl sm:text-2xl font-bold text-slate-900 truncate">{{ $user->name }}</h1>
+                        <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 shrink-0">Kandidat Aktif</span>
                     </div>
-                    <p class="text-xs text-slate-500 mt-1">
+                    <p class="text-xs text-slate-500 mt-1 truncate">
                         {{ $user->email }} • WhatsApp: {{ $user->phone ?? 'Belum diisi' }}
                     </p>
                 </div>
@@ -102,14 +102,14 @@
                 $isCompleted = $profile?->is_completed ?? false;
             @endphp
 
-            <div class="flex items-center space-x-3">
-                <a href="{{ route('career.profile') }}" class="px-5 py-2.5 rounded-xl text-xs font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 shadow-xs transition-all flex items-center space-x-2">
-                    <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 w-full md:w-auto">
+                <a href="{{ route('career.profile') }}" class="w-full sm:w-auto justify-center px-5 py-2.5 rounded-xl text-xs font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 shadow-xs transition-all flex items-center space-x-2 text-center">
+                    <svg class="w-4 h-4 text-indigo-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                     <span>{{ $isCompleted ? 'Edit Data Diri & CV' : 'Lengkapi Data Diri & CV*' }}</span>
                 </a>
 
-                <a href="{{ route('career.landing') }}" class="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/20 transition-all flex items-center space-x-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                <a href="{{ route('career.landing') }}" class="w-full sm:w-auto justify-center px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/20 transition-all flex items-center space-x-2 text-center">
+                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                     <span>Lamar Posisi Lain</span>
                 </a>
             </div>
@@ -135,11 +135,11 @@
                             $currentStageKey = $app->current_stage;
                             $currentOrder = $app->stage_order;
                         @endphp
-                        <div class="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-sm">
+                        <div class="bg-white border border-slate-200/90 rounded-3xl p-5 sm:p-8 shadow-sm">
                             <!-- Header Lamaran -->
                             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
                                 <div>
-                                    <div class="flex items-center space-x-2 mb-1.5">
+                                    <div class="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-1.5">
                                         <span class="text-xs font-semibold px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 border border-indigo-200/80">
                                             {{ $app->jobPosting?->department?->name ?? 'Umum' }}
                                         </span>
@@ -147,7 +147,7 @@
                                             {{ $app->jobPosting?->work_model_label ?? 'Full-time' }}
                                         </span>
                                     </div>
-                                    <h3 class="text-xl font-bold text-slate-900">{{ $app->jobPosting?->title ?? 'Posisi Pekerjaan' }}</h3>
+                                    <h3 class="text-lg sm:text-xl font-bold text-slate-900">{{ $app->jobPosting?->title ?? 'Posisi Pekerjaan' }}</h3>
                                     <p class="text-xs text-slate-500 mt-1">
                                         Dilamar pada: {{ $app->applied_at ? $app->applied_at->format('d M Y, H:i') : $app->created_at->format('d M Y') }}
                                     </p>
@@ -165,10 +165,10 @@
                             </div>
 
                             <!-- 8-Stage Selection Pipeline Tracker (Visual Stepper) -->
-                            <div class="py-8">
-                                <h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-6">Linimasa Tahapan Seleksi (8-Stage Pipeline)</h4>
+                            <div class="py-6 sm:py-8">
+                                <h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4 sm:mb-6">Linimasa Tahapan Seleksi (8-Stage Pipeline)</h4>
 
-                                <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
+                                <div class="flex overflow-x-auto pb-3 gap-2.5 sm:grid sm:grid-cols-4 lg:grid-cols-8 sm:gap-3 sm:overflow-visible">
                                     @php
                                         $pipelineKeys = ['APPLIED', 'SHORTLISTED', 'PSYCHOTEST_PASSED', 'INTERVIEW_HR', 'INTERVIEW_USER', 'INTERVIEW_BOD', 'MCU', 'OFFERING'];
                                     @endphp
@@ -182,7 +182,7 @@
                                             $isPending = ($currentOrder < $stageInfo['order']);
                                         @endphp
 
-                                        <div class="p-3.5 rounded-2xl border transition-all text-center flex flex-col justify-between
+                                        <div class="min-w-[130px] sm:min-w-0 p-3 sm:p-3.5 rounded-2xl border transition-all text-center flex flex-col justify-between shrink-0 sm:shrink
                                             {{ $isCurrent ? 'bg-indigo-50 border-2 border-indigo-600 text-indigo-950 shadow-sm' : '' }}
                                             {{ $isCompleted ? 'bg-emerald-50/80 border-emerald-200 text-emerald-900' : '' }}
                                             {{ $isPending ? 'bg-slate-50/60 border-slate-200 text-slate-400' : '' }}">
@@ -193,7 +193,7 @@
                                                     {{ $isPending ? 'bg-slate-200 text-slate-600' : '' }}">
                                                     {{ $isCompleted ? '✓' : $stepNum }}
                                                 </div>
-                                                <div class="text-xs font-bold leading-tight mb-1 truncate" title="{{ $stageInfo['label'] }}">
+                                                <div class="text-xs font-bold leading-tight mb-1 break-words" title="{{ $stageInfo['label'] }}">
                                                     {{ $stageInfo['label'] }}
                                                 </div>
                                             </div>
@@ -213,15 +213,15 @@
                             </div>
 
                             <!-- Stage Action Card -->
-                            <div class="mt-2 p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                            <div class="mt-2 p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
                                 <div class="text-xs text-slate-600">
                                     <span class="font-bold text-slate-900 block mb-0.5">Keterangan Tahap:</span>
                                     <span>{{ $app->stage_description }}</span>
                                 </div>
 
                                 @if(in_array($currentStageKey, ['SHORTLISTED', 'PSYCHOTEST_PASSED']))
-                                    <div class="shrink-0">
-                                        <a href="{{ route('career.psychotests.index', $app->id) }}" class="px-5 py-2.5 rounded-xl text-xs font-bold text-white {{ $currentStageKey === 'SHORTLISTED' ? 'bg-gradient-to-r from-indigo-600 to-cyan-600 hover:from-indigo-500 hover:to-cyan-500 shadow-md shadow-indigo-600/20' : 'bg-slate-800 hover:bg-slate-700' }} transition-all inline-flex items-center space-x-2">
+                                    <div class="w-full sm:w-auto shrink-0">
+                                        <a href="{{ route('career.psychotests.index', $app->id) }}" class="w-full sm:w-auto text-center justify-center px-5 py-3 rounded-xl text-xs font-bold text-white {{ $currentStageKey === 'SHORTLISTED' ? 'bg-gradient-to-r from-indigo-600 to-cyan-600 hover:from-indigo-500 hover:to-cyan-500 shadow-md shadow-indigo-600/20' : 'bg-slate-800 hover:bg-slate-700' }} transition-all inline-flex items-center space-x-2">
                                             <span>{{ $currentStageKey === 'SHORTLISTED' ? '⚡ Kerjakan Psikotes Online (Kraepelin & Kepribadian)' : '📊 Lihat Skor Psikotes' }}</span>
                                             <span>→</span>
                                         </a>

@@ -14,8 +14,8 @@
     <!-- Styles via Vite -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-full font-sans antialiased bg-slate-50 text-slate-800 flex items-center justify-center p-4 relative overflow-hidden selection:bg-indigo-600 selection:text-white">
-    <div class="w-full max-w-md bg-white border border-slate-200/90 rounded-3xl p-8 shadow-xl relative">
+<body class="min-h-screen font-sans antialiased bg-slate-50 text-slate-800 flex items-center justify-center p-4 sm:p-6 py-8 relative selection:bg-indigo-600 selection:text-white">
+    <div class="w-full max-w-md bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xl relative my-auto">
         <div class="text-center mb-8">
             <a href="{{ route('career.landing') }}" class="inline-flex items-center space-x-2 mb-4 group">
                 <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-cyan-500 flex items-center justify-center text-white font-black text-xl shadow-md">

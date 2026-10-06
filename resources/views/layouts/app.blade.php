@@ -347,17 +347,17 @@
     <!-- Main Content Area -->
     <div class="flex-1 flex flex-col min-w-0 overflow-y-auto min-h-screen">
         <!-- Top Navbar -->
-        <header class="h-16 bg-white border-b border-slate-200/80 px-6 sm:px-8 flex items-center justify-between sticky top-0 z-30 shadow-xs">
-            <div class="flex items-center space-x-3">
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold {{ $isAttendance ? 'bg-amber-50 text-amber-700 border border-amber-200' : 'bg-indigo-50 text-indigo-700 border border-indigo-200' }}">
+        <header class="h-16 bg-white border-b border-slate-200/80 px-4 sm:px-8 flex items-center justify-between sticky top-0 z-30 shadow-xs">
+            <div class="flex items-center space-x-2 sm:space-x-3 min-w-0">
+                <span class="inline-flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-lg text-xs font-semibold shrink-0 {{ $isAttendance ? 'bg-amber-50 text-amber-700 border border-amber-200' : 'bg-indigo-50 text-indigo-700 border border-indigo-200' }}">
                     <span class="w-1.5 h-1.5 rounded-full {{ $isAttendance ? 'bg-amber-500' : 'bg-indigo-500' }}"></span>
                     {{ $moduleName }}
                 </span>
-                <span class="text-slate-300">/</span>
-                <h1 class="text-base sm:text-lg font-bold text-slate-800 tracking-tight">@yield('header', 'Overview')</h1>
+                <span class="text-slate-300 shrink-0">/</span>
+                <h1 class="text-sm sm:text-lg font-bold text-slate-800 tracking-tight truncate">@yield('header', 'Overview')</h1>
             </div>
 
-            <div class="flex items-center space-x-3">
+            <div class="flex items-center space-x-2 sm:space-x-3 shrink-0">
                 <a href="{{ route('portal') }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 rounded-xl transition-colors border border-indigo-200 cursor-pointer">
                     <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
@@ -381,7 +381,7 @@
         </header>
 
         <!-- Flash Messages -->
-        <main class="flex-1 p-6 sm:p-8 max-w-7xl w-full mx-auto">
+        <main class="flex-1 p-4 sm:p-8 max-w-7xl w-full mx-auto">
             @if (session('success'))
                 <div class="mb-6 flex items-start gap-3 p-4 bg-emerald-50 border border-emerald-200/80 text-emerald-800 rounded-2xl shadow-xs">
                     <svg class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

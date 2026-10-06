@@ -18,23 +18,23 @@
 
     <!-- Top Navigation Header -->
     <header class="sticky top-0 z-40 backdrop-blur-xl bg-white/90 border-b border-slate-200/90 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <a href="{{ route('career.landing') }}" class="flex items-center space-x-3.5 group">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-cyan-500 flex items-center justify-center text-white font-black text-xl shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
+            <a href="{{ route('career.landing') }}" class="flex items-center space-x-2.5 sm:space-x-3.5 group">
+                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-cyan-500 flex items-center justify-center text-white font-black text-lg sm:text-xl shadow-md">
                     H
                 </div>
                 <div>
-                    <div class="flex items-center space-x-2">
-                        <span class="font-extrabold tracking-tight text-lg text-slate-900">HRIS Core</span>
-                        <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 uppercase tracking-wider">Candidate Portal</span>
+                    <div class="flex items-center space-x-1.5 sm:space-x-2">
+                        <span class="font-extrabold tracking-tight text-base sm:text-lg text-slate-900">HRIS Core</span>
+                        <span class="text-[10px] sm:text-[11px] font-bold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 uppercase tracking-wider">Candidate</span>
                     </div>
-                    <span class="text-[11px] text-slate-500 font-medium">Asesmen Psikotes & Psikometri Online</span>
+                    <span class="text-[10px] sm:text-[11px] text-slate-500 font-medium hidden sm:block">Asesmen Psikotes & Psikometri Online</span>
                 </div>
             </a>
 
-            <div class="flex items-center space-x-4">
-                <a href="{{ route('career.dashboard') }}" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors flex items-center space-x-1">
-                    <span>← Kembali ke Dashboard</span>
+            <div class="flex items-center space-x-2 sm:space-x-4">
+                <a href="{{ route('career.dashboard') }}" class="px-3 sm:px-4 py-2 rounded-xl text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors flex items-center space-x-1">
+                    <span>← <span class="hidden sm:inline">Kembali ke </span>Dashboard</span>
                 </a>
             </div>
         </div>

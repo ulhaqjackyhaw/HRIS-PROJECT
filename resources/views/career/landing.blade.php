@@ -39,20 +39,20 @@
     <header class="sticky top-0 z-40 backdrop-blur-xl bg-white/90 border-b border-slate-200/90 shadow-xs transition-all">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <!-- Brand Logo -->
-            <a href="{{ route('career.landing') }}" class="flex items-center space-x-3.5 group">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-700 to-cyan-500 flex items-center justify-center text-white font-black text-xl shadow-md group-hover:scale-105 transition-transform">
+            <a href="{{ route('career.landing') }}" class="flex items-center space-x-2.5 sm:space-x-3.5 group shrink-0">
+                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-700 to-cyan-500 flex items-center justify-center text-white font-black text-lg sm:text-xl shadow-md group-hover:scale-105 transition-transform">
                     H
                 </div>
                 <div>
-                    <div class="flex items-center space-x-2">
-                        <span class="font-extrabold tracking-tight text-lg text-slate-900">HRIS Core</span>
-                        <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 uppercase tracking-wider">Careers</span>
+                    <div class="flex items-center space-x-1.5 sm:space-x-2">
+                        <span class="font-extrabold tracking-tight text-base sm:text-lg text-slate-900">HRIS Core</span>
+                        <span class="text-[10px] sm:text-[11px] font-bold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 uppercase tracking-wider">Careers</span>
                     </div>
-                    <span class="text-[11px] text-slate-500 font-medium tracking-wide">Enterprise Talent Acquisition</span>
+                    <span class="text-[10px] sm:text-[11px] text-slate-500 font-medium tracking-wide hidden sm:block">Enterprise Talent Acquisition</span>
                 </div>
             </a>
 
-            <!-- Navigation Links -->
+            <!-- Navigation Links (Desktop) -->
             <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-600">
                 <a href="#lowongan" class="hover:text-indigo-600 transition-colors">Lowongan Tersedia</a>
                 <a href="#budaya" class="hover:text-indigo-600 transition-colors">Budaya & Benefit</a>
@@ -60,19 +60,20 @@
                 <a href="#faq" class="hover:text-indigo-600 transition-colors">FAQ</a>
             </nav>
 
-            <!-- Auth Action Buttons -->
-            <div class="flex items-center space-x-3">
+            <!-- Auth Action Buttons & Mobile Hamburger -->
+            <div class="flex items-center space-x-2 sm:space-x-3">
                 @auth
                     @if(auth()->user()->isInternal())
-                        <a href="{{ route('portal') }}" class="px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-700 bg-white border border-slate-200 hover:text-slate-900 hover:border-slate-300 transition-colors flex items-center space-x-1.5 shadow-xs">
+                        <a href="{{ route('portal') }}" class="hidden sm:inline-flex px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-700 bg-white border border-slate-200 hover:text-slate-900 hover:border-slate-300 transition-colors items-center space-x-1.5 shadow-xs">
                             <span>Portal HR</span>
                             <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
                         </a>
                     @endif
 
-                    <a href="{{ route('career.dashboard') }}" class="px-4 py-2 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/20 transition-all flex items-center space-x-1.5">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                        <span>Dashboard Saya</span>
+                    <a href="{{ route('career.dashboard') }}" class="px-3 sm:px-4 py-2 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/20 transition-all flex items-center space-x-1.5">
+                        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                        <span class="hidden xs:inline sm:inline">Dashboard Saya</span>
+                        <span class="xs:hidden sm:hidden">Dashboard</span>
                     </a>
 
                     <form action="{{ route('career.logout') }}" method="POST" class="inline">
@@ -82,14 +83,34 @@
                         </button>
                     </form>
                 @else
-                    <a href="{{ route('career.login') }}" class="px-4 py-2 text-sm font-semibold text-slate-700 hover:text-indigo-600 transition-colors">
-                        Masuk Pelamar
+                    <a href="{{ route('career.login') }}" class="px-2.5 sm:px-4 py-2 text-xs sm:text-sm font-semibold text-slate-700 hover:text-indigo-600 transition-colors">
+                        Masuk
                     </a>
-                    <a href="{{ route('career.register') }}" class="px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/20 transition-all">
+                    <a href="{{ route('career.register') }}" class="px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/20 transition-all">
                         Daftar Akun
                     </a>
                 @endauth
+
+                <!-- Mobile Menu Button -->
+                <button type="button" onclick="document.getElementById('mobile-career-menu').classList.toggle('hidden')" class="md:hidden p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
             </div>
+        </div>
+
+        <!-- Mobile Navigation Dropdown Menu -->
+        <div id="mobile-career-menu" class="hidden md:hidden border-t border-slate-200 bg-white/95 backdrop-blur-xl px-4 py-4 space-y-2">
+            <a href="#lowongan" onclick="document.getElementById('mobile-career-menu').classList.add('hidden')" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100">Lowongan Tersedia</a>
+            <a href="#budaya" onclick="document.getElementById('mobile-career-menu').classList.add('hidden')" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100">Budaya & Benefit</a>
+            <a href="#alur" onclick="document.getElementById('mobile-career-menu').classList.add('hidden')" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100">8 Tahapan Seleksi</a>
+            <a href="#faq" onclick="document.getElementById('mobile-career-menu').classList.add('hidden')" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-100">FAQ</a>
+            @auth
+                @if(auth()->user()->isInternal())
+                    <a href="{{ route('portal') }}" class="block px-3 py-2 rounded-xl text-sm font-semibold text-indigo-700 bg-indigo-50">Portal HR Staf &rarr;</a>
+                @endif
+            @endauth
         </div>
     </header>
 
@@ -160,22 +181,19 @@
                     </div>
 
                     <!-- Submit / Reset Row -->
-                    <div class="md:col-span-12 flex items-center justify-between pt-2 text-xs">
-                        <div class="flex items-center space-x-2 text-slate-500">
-                            <span>Populer:</span>
-                            <a href="{{ route('career.landing', ['search' => 'Backend']) }}" class="text-indigo-600 hover:underline font-semibold">Backend</a>
-                            <span>•</span>
-                            <a href="{{ route('career.landing', ['search' => 'Frontend']) }}" class="text-indigo-600 hover:underline font-semibold">Frontend</a>
-                            <span>•</span>
-                            <a href="{{ route('career.landing', ['search' => 'Recruiter']) }}" class="text-indigo-600 hover:underline font-semibold">HR Recruiter</a>
-                            <span>•</span>
-                            <a href="{{ route('career.landing', ['work_model' => 'REMOTE']) }}" class="text-cyan-600 hover:underline font-semibold">Remote</a>
+                    <div class="md:col-span-12 flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 text-xs">
+                        <div class="flex flex-wrap items-center gap-1.5 sm:gap-2 text-slate-500">
+                            <span class="font-semibold text-slate-400">Populer:</span>
+                            <a href="{{ route('career.landing', ['search' => 'Backend']) }}" class="text-indigo-600 hover:underline font-semibold bg-indigo-50/60 px-2 py-0.5 rounded-md">Backend</a>
+                            <a href="{{ route('career.landing', ['search' => 'Frontend']) }}" class="text-indigo-600 hover:underline font-semibold bg-indigo-50/60 px-2 py-0.5 rounded-md">Frontend</a>
+                            <a href="{{ route('career.landing', ['search' => 'Recruiter']) }}" class="text-indigo-600 hover:underline font-semibold bg-indigo-50/60 px-2 py-0.5 rounded-md">HR Recruiter</a>
+                            <a href="{{ route('career.landing', ['work_model' => 'REMOTE']) }}" class="text-cyan-600 hover:underline font-semibold bg-cyan-50/60 px-2 py-0.5 rounded-md">Remote</a>
                         </div>
-                        <div class="flex items-center space-x-2">
+                        <div class="flex items-center justify-between sm:justify-end gap-2 shrink-0">
                             @if(!empty($search) || !empty($departmentId) || !empty($workModel))
-                                <a href="{{ route('career.landing') }}" class="px-3 py-1.5 text-slate-500 hover:text-slate-800">Reset Filter</a>
+                                <a href="{{ route('career.landing') }}" class="px-3 py-2 text-slate-500 hover:text-slate-800">Reset Filter</a>
                             @endif
-                            <button type="submit" class="px-5 py-2 rounded-xl font-semibold text-white bg-indigo-600 hover:bg-indigo-500 transition-colors shadow-xs">
+                            <button type="submit" class="w-full sm:w-auto px-5 py-2.5 rounded-xl font-semibold text-white bg-indigo-600 hover:bg-indigo-500 transition-colors shadow-xs text-center">
                                 Terapkan Filter
                             </button>
                         </div>

@@ -17,16 +17,16 @@
 <body class="min-h-full font-sans antialiased bg-slate-50 text-slate-800 relative selection:bg-indigo-500 selection:text-white">
 
     <!-- Header / Status Bar -->
-    <header class="sticky top-0 z-40 backdrop-blur-xl bg-white/90 border-b border-slate-200/90 shadow-sm px-4 sm:px-8 py-3.5 flex items-center justify-between">
-        <div class="flex items-center space-x-3">
-            <a href="{{ route('career.psychotests.index', $application->id) }}" class="px-3 py-1.5 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors text-xs font-bold flex items-center space-x-1">
+    <header class="sticky top-0 z-40 backdrop-blur-xl bg-white/90 border-b border-slate-200/90 shadow-sm px-3.5 sm:px-8 py-2.5 sm:py-3.5 flex items-center justify-between">
+        <div class="flex items-center space-x-2 sm:space-x-3 min-w-0">
+            <a href="{{ route('career.psychotests.index', $application->id) }}" class="px-2.5 sm:px-3 py-1.5 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors text-xs font-bold flex items-center space-x-1 shrink-0">
                 <span>←</span>
-                <span>Kembali</span>
+                <span class="hidden xs:inline sm:inline">Kembali</span>
             </a>
-            <div class="h-4 w-px bg-slate-200"></div>
-            <div>
-                <span class="text-[10px] font-bold text-indigo-600 uppercase tracking-widest block">Asesmen Pilihan Ganda</span>
-                <span class="text-xs sm:text-sm font-extrabold text-slate-900">{{ $psychotest->title }}</span>
+            <div class="h-4 w-px bg-slate-200 shrink-0"></div>
+            <div class="min-w-0">
+                <span class="text-[9px] sm:text-[10px] font-bold text-indigo-600 uppercase tracking-widest block truncate">Asesmen Pilihan Ganda</span>
+                <span class="text-xs sm:text-sm font-extrabold text-slate-900 truncate block">{{ $psychotest->title }}</span>
             </div>
         </div>
 
@@ -36,12 +36,12 @@
         @endphp
 
         <!-- Progress Counter Indicator -->
-        <div class="flex items-center space-x-3">
+        <div class="flex items-center space-x-2.5 sm:space-x-3 shrink-0">
             <div class="text-right">
-                <span class="text-[10px] text-slate-400 uppercase font-bold block">Keterisian</span>
-                <span class="text-xs font-black text-indigo-600" id="progress-text">0 / {{ $qCount }} Soal</span>
+                <span class="text-[9px] sm:text-[10px] text-slate-400 uppercase font-bold block">Keterisian</span>
+                <span class="text-[11px] sm:text-xs font-black text-indigo-600" id="progress-text">0 / {{ $qCount }} Soal</span>
             </div>
-            <div class="w-24 sm:w-36 h-2.5 rounded-full bg-slate-200 overflow-hidden shadow-inner">
+            <div class="w-16 sm:w-36 h-2 sm:h-2.5 rounded-full bg-slate-200 overflow-hidden shadow-inner">
                 <div id="progress-bar" class="h-full bg-gradient-to-r from-indigo-600 to-cyan-600 w-0 transition-all duration-300"></div>
             </div>
         </div>
@@ -84,25 +84,25 @@
                     $options = $q['options'] ?? [];
                     $selectedVal = $existingAnswers[$qId] ?? null;
                 @endphp
-                <div class="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm hover:shadow-md transition-all space-y-4 question-card" data-question-id="{{ $qId }}">
-                    <div class="flex items-start justify-between gap-4">
-                        <div class="flex items-start space-x-3.5">
-                            <span class="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-700 border border-indigo-200 font-black text-xs flex items-center justify-center shrink-0 mt-0.5">
+                <div class="p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-white border border-slate-200 shadow-sm hover:shadow-md transition-all space-y-3 sm:space-y-4 question-card" data-question-id="{{ $qId }}">
+                    <div class="flex items-start justify-between gap-3 sm:gap-4">
+                        <div class="flex items-start space-x-2.5 sm:space-x-3.5">
+                            <span class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-indigo-50 text-indigo-700 border border-indigo-200 font-black text-xs flex items-center justify-center shrink-0 mt-0.5">
                                 {{ $index + 1 }}
                             </span>
                             <div>
-                                <p class="text-sm sm:text-base font-bold text-slate-900 leading-relaxed">
+                                <p class="text-xs sm:text-base font-bold text-slate-900 leading-snug sm:leading-relaxed">
                                     {{ $q['question'] ?? 'Pertanyaan' }}
                                 </p>
                             </div>
                         </div>
-                        <span id="answered-badge-{{ $qId }}" class="shrink-0 px-2.5 py-1 rounded-full text-[10px] font-bold {{ $selectedVal ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-slate-100 text-slate-400 border border-slate-200' }}">
+                        <span id="answered-badge-{{ $qId }}" class="shrink-0 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[9px] sm:text-[10px] font-bold {{ $selectedVal ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-slate-100 text-slate-400 border border-slate-200' }}">
                             {{ $selectedVal ? '✓ Terjawab' : 'Belum' }}
                         </span>
                     </div>
 
                     <!-- Multiple Choice Radio Options with Distinct Selection Colors -->
-                    <div class="space-y-2 pt-2">
+                    <div class="space-y-2 pt-1 sm:pt-2">
                         @foreach($options as $optKey => $optText)
                             <label class="cursor-pointer block group">
                                 <input
@@ -114,8 +114,8 @@
                                     {{ (string)$selectedVal === (string)$optKey ? 'checked' : '' }}
                                     required
                                 >
-                                <div class="p-4 rounded-2xl bg-slate-50 hover:bg-slate-100 border-2 border-slate-200 hover:border-slate-300 transition-all flex items-center space-x-3 peer-checked:border-indigo-600 peer-checked:bg-indigo-50/90 peer-checked:ring-4 peer-checked:ring-indigo-500/20 peer-checked:shadow-sm peer-checked:[&_.opt-key]:bg-indigo-600 peer-checked:[&_.opt-key]:border-indigo-600 peer-checked:[&_.opt-key]:text-white peer-checked:[&_.opt-text]:text-indigo-950 peer-checked:[&_.opt-text]:font-bold">
-                                    <span class="opt-key w-8 h-8 rounded-xl bg-white border-2 border-slate-300 text-slate-700 font-black text-xs flex items-center justify-center shrink-0 transition-colors shadow-xs">
+                                <div class="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-slate-50 hover:bg-slate-100 border-2 border-slate-200 hover:border-slate-300 transition-all flex items-center space-x-3 peer-checked:border-indigo-600 peer-checked:bg-indigo-50/90 peer-checked:ring-4 peer-checked:ring-indigo-500/20 peer-checked:shadow-sm peer-checked:[&_.opt-key]:bg-indigo-600 peer-checked:[&_.opt-key]:border-indigo-600 peer-checked:[&_.opt-key]:text-white peer-checked:[&_.opt-text]:text-indigo-950 peer-checked:[&_.opt-text]:font-bold" style="touch-action: manipulation;">
+                                    <span class="opt-key w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-white border-2 border-slate-300 text-slate-700 font-black text-xs flex items-center justify-center shrink-0 transition-colors shadow-xs">
                                         {{ $optKey }}
                                     </span>
                                     <span class="opt-text text-xs sm:text-sm text-slate-700 font-medium transition-colors">
@@ -128,8 +128,8 @@
                 </div>
             @endforeach
 
-            <!-- Submit Section -->
-            <div class="sticky bottom-4 z-30 p-4 sm:p-5 rounded-3xl bg-white/95 backdrop-blur-xl border border-slate-200 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4">
+            <!-- Submit Section (Mobile Thumb Friendly) -->
+            <div class="sticky bottom-3 z-30 p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl bg-white/95 backdrop-blur-xl border border-slate-200 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
                 <div class="text-xs text-slate-500 text-center sm:text-left">
                     <span id="footer-status-text">Pastikan semua soal telah dijawab sebelum mengirimkan jawaban.</span>
                 </div>
@@ -137,7 +137,7 @@
                 <div class="flex items-center space-x-3 w-full sm:w-auto">
                     <button
                         type="submit"
-                        class="w-full sm:w-auto px-8 py-3.5 rounded-2xl text-xs font-extrabold text-white bg-gradient-to-r from-indigo-600 to-cyan-600 hover:from-indigo-700 hover:to-cyan-700 shadow-md shadow-indigo-600/20 transition-all flex items-center justify-center space-x-2"
+                        class="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-extrabold text-white bg-gradient-to-r from-indigo-600 to-cyan-600 hover:from-indigo-700 hover:to-cyan-700 shadow-md shadow-indigo-600/20 transition-all flex items-center justify-center space-x-2"
                     >
                         <span>✓ Selesaikan & Kirim Jawaban</span>
                     </button>

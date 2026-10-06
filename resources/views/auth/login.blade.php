@@ -14,13 +14,13 @@
     <!-- Scripts & Styles via Vite -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="h-full font-sans antialiased text-slate-800 flex items-center justify-center p-4 sm:p-6 lg:p-8 bg-slate-50 relative overflow-x-hidden selection:bg-indigo-600 selection:text-white">
+<body class="min-h-screen font-sans antialiased text-slate-800 flex items-center justify-center p-4 sm:p-6 lg:p-8 py-8 bg-slate-50 relative overflow-y-auto selection:bg-indigo-600 selection:text-white">
 
     <!-- Ambient background glow effects -->
     <div class="absolute -top-40 -left-40 w-96 h-96 bg-indigo-100/70 rounded-full blur-3xl pointer-events-none"></div>
     <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-violet-100/70 rounded-full blur-3xl pointer-events-none"></div>
 
-    <div class="w-full max-w-5xl bg-white border border-slate-200/90 rounded-3xl shadow-xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 relative z-10">
+    <div class="w-full max-w-5xl bg-white border border-slate-200/90 rounded-3xl shadow-xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 relative z-10 my-auto">
 
         <!-- Left Column: Branding & Feature Highlights (7 cols on lg) -->
         <div class="lg:col-span-7 bg-gradient-to-br from-indigo-50/70 via-slate-50/60 to-white p-8 sm:p-12 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-slate-200/90 relative">
