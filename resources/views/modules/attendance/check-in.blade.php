@@ -93,7 +93,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
         <!-- Kiri: Kamera & Snapshot Live (Col 7) -->
-        <div class="lg:col-span-7 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs space-y-5">
+        <div class="lg:col-span-7 bg-white p-4 sm:p-6 rounded-2xl border border-slate-200/80 shadow-xs space-y-5">
             <div class="flex items-center justify-between pb-3 border-b border-slate-100">
                 <div class="flex items-center gap-2">
                     <span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse"></span>
@@ -156,7 +156,7 @@
         <div class="lg:col-span-5 space-y-6">
 
             <!-- Card Status GPS & Geofence -->
-            <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs space-y-4">
+            <div class="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200/80 shadow-xs space-y-4">
                 <div class="flex items-center justify-between pb-3 border-b border-slate-100">
                     <div class="flex items-center gap-2">
                         <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -220,7 +220,7 @@
             </div>
 
             <!-- Card Tombol Aksi Check-In & Check-Out -->
-            <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs space-y-4">
+            <div class="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200/80 shadow-xs space-y-4">
                 <h3 class="font-bold text-slate-900 text-base">Aksi Kehadiran Hari Ini</h3>
 
                 <!-- Status Kehadiran Hari Ini -->
