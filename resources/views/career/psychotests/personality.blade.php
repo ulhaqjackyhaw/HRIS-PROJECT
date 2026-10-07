@@ -44,30 +44,148 @@
 
     <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
 
-        <!-- Instructions Banner -->
-        <div class="p-6 rounded-3xl bg-white border border-purple-100 shadow-sm flex items-start space-x-4">
-            <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-2xl shrink-0 border border-purple-200">
-                💡
-            </div>
-            <div class="text-xs leading-relaxed">
-                <h1 class="text-base font-bold text-slate-900 mb-1">Panduan Pengisian Skala Penilaian Diri (1 s/d 5)</h1>
-                <p class="text-slate-600">
-                    Pilihlah angka <strong>1 sampai 5</strong> yang paling mencerminkan perilaku dan kebiasaan kerja Anda dalam kehidupan profesional sehari-hari. Warna tombol pilihan akan berubah secara kontras setelah Anda klik.
-                </p>
-                <!-- Scale Legend -->
-                <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 mt-3 pt-3 border-t border-slate-100 text-[11px] font-semibold">
-                    <div class="flex items-center space-x-1.5 text-rose-600"><span class="w-5 h-5 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center font-bold text-[10px] border border-rose-300">1</span><span>Sangat Tidak Sesuai</span></div>
-                    <div class="flex items-center space-x-1.5 text-amber-600"><span class="w-5 h-5 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-[10px] border border-amber-300">2</span><span>Tidak Sesuai</span></div>
-                    <div class="flex items-center space-x-1.5 text-slate-600"><span class="w-5 h-5 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-[10px] border border-slate-300">3</span><span>Netral / Ragu-Ragu</span></div>
-                    <div class="flex items-center space-x-1.5 text-cyan-600"><span class="w-5 h-5 rounded-full bg-cyan-100 text-cyan-700 flex items-center justify-center font-bold text-[10px] border border-cyan-300">4</span><span>Sesuai</span></div>
-                    <div class="flex items-center space-x-1.5 text-emerald-600"><span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-[10px] border border-emerald-300">5</span><span>Sangat Sesuai</span></div>
+        <!-- Stage 1: Panduan & Simulasi Interaktif -->
+        <div id="personality-briefing" class="max-w-3xl mx-auto space-y-6">
+            <div class="p-6 sm:p-8 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-6">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                    <div>
+                        <span class="px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider bg-purple-50 text-purple-700 border border-purple-200 inline-block mb-1">
+                            🧠 TAHAP 1 DARI 2: PANDUAN & SIMULASI
+                        </span>
+                        <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Panduan & Simulasi Tes Kepribadian (Likert 1-5)</h1>
+                        <p class="text-xs text-slate-500 mt-1">Pahami makna skala penilaian dan coba simulasi pengisian sebelum masuk ke lembar ujian asli.</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-2xl shrink-0 border border-purple-200">
+                        💡
+                    </div>
+                </div>
+
+                <!-- Panduan Skala -->
+                <div class="bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-200 text-xs text-slate-700 space-y-3">
+                    <span class="font-bold text-slate-900 block">📌 Arti Skala Pilihan Penilaian Diri:</span>
+                    <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-[11px] font-semibold">
+                        <div class="p-2 rounded-xl bg-white border border-rose-200 text-rose-700 flex flex-col items-center text-center">
+                            <span class="w-6 h-6 rounded-full bg-rose-500 text-white flex items-center justify-center font-black text-xs mb-1">1</span>
+                            <span>Sangat Tidak Sesuai</span>
+                        </div>
+                        <div class="p-2 rounded-xl bg-white border border-amber-200 text-amber-700 flex flex-col items-center text-center">
+                            <span class="w-6 h-6 rounded-full bg-amber-500 text-white flex items-center justify-center font-black text-xs mb-1">2</span>
+                            <span>Tidak Sesuai</span>
+                        </div>
+                        <div class="p-2 rounded-xl bg-white border border-slate-200 text-slate-700 flex flex-col items-center text-center">
+                            <span class="w-6 h-6 rounded-full bg-slate-600 text-white flex items-center justify-center font-black text-xs mb-1">3</span>
+                            <span>Netral / Ragu</span>
+                        </div>
+                        <div class="p-2 rounded-xl bg-white border border-blue-200 text-blue-700 flex flex-col items-center text-center">
+                            <span class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center font-black text-xs mb-1">4</span>
+                            <span>Sesuai</span>
+                        </div>
+                        <div class="p-2 rounded-xl bg-white border border-emerald-200 text-emerald-700 flex flex-col items-center text-center">
+                            <span class="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center font-black text-xs mb-1">5</span>
+                            <span>Sangat Sesuai</span>
+                        </div>
+                    </div>
+                    <p class="text-[11px] text-slate-600 leading-relaxed pt-1">
+                        * Tidak ada jawaban benar atau salah dalam tes ini. Jawablah secara spontan, jujur, dan paling mencerminkan kecenderungan diri Anda saat bekerja.
+                    </p>
+                </div>
+
+                <!-- Arena Simulasi Latihan -->
+                <div class="p-5 sm:p-6 rounded-2xl bg-purple-50/50 border border-purple-200 space-y-4 text-xs">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <span class="text-[10px] font-black uppercase tracking-wider text-purple-700 block">Simulasi Interaktif (Coba 2 Contoh Soal)</span>
+                            <p class="text-[11px] text-slate-600">Klik salah satu skala di bawah ini untuk melihat feedback visual tombol pilihan.</p>
+                        </div>
+                        <span id="sim-likert-badge" class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-white text-purple-700 border border-purple-200 shrink-0">
+                            Simulasi: 0/2
+                        </span>
+                    </div>
+
+                    <!-- Soal Latihan 1 -->
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 space-y-2.5">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-slate-900 text-xs sm:text-sm leading-snug">
+                                Contoh 1: "Saya selalu merencanakan target harian dan menyusun prioritas sebelum memulai jam kerja."
+                            </span>
+                            <span id="badge-sim-q1" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-400 border border-slate-200 shrink-0">
+                                Belum
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-5 gap-1.5 sm:gap-2">
+                            @foreach([1, 2, 3, 4, 5] as $val)
+                                <label class="cursor-pointer block text-center">
+                                    <input type="radio" name="sim_answers[1]" value="{{ $val }}" onchange="handleSimLikert(1, {{ $val }})" class="peer sr-only sim-radio-1">
+                                    <div class="py-2 rounded-xl bg-slate-50 hover:bg-slate-100 border-2 border-slate-200 text-slate-700 font-black text-xs sm:text-sm peer-checked:bg-purple-600 peer-checked:border-purple-700 peer-checked:text-white peer-checked:ring-2 peer-checked:ring-purple-400 transition-all">
+                                        {{ $val }}
+                                    </div>
+                                </label>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <!-- Soal Latihan 2 -->
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 space-y-2.5">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-slate-900 text-xs sm:text-sm leading-snug">
+                                Contoh 2: "Saya merasa tertantang dan tetap tenang saat harus menyelesaikan masalah darurat."
+                            </span>
+                            <span id="badge-sim-q2" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-400 border border-slate-200 shrink-0">
+                                Belum
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-5 gap-1.5 sm:gap-2">
+                            @foreach([1, 2, 3, 4, 5] as $val)
+                                <label class="cursor-pointer block text-center">
+                                    <input type="radio" name="sim_answers[2]" value="{{ $val }}" onchange="handleSimLikert(2, {{ $val }})" class="peer sr-only sim-radio-2">
+                                    <div class="py-2 rounded-xl bg-slate-50 hover:bg-slate-100 border-2 border-slate-200 text-slate-700 font-black text-xs sm:text-sm peer-checked:bg-purple-600 peer-checked:border-purple-700 peer-checked:text-white peer-checked:ring-2 peer-checked:ring-purple-400 transition-all">
+                                        {{ $val }}
+                                    </div>
+                                </label>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <div id="sim-likert-feedback" class="p-3 rounded-xl bg-white border border-slate-200 text-[11px] text-slate-600 text-center">
+                        Pilih skala di atas untuk mencoba mekanisme pemilihan jawaban.
+                    </div>
+                </div>
+
+                <!-- CTA Next Button -->
+                <div class="space-y-2 pt-2">
+                    <button
+                        type="button"
+                        onclick="startPersonalityExam()"
+                        class="w-full py-4 rounded-2xl text-sm font-extrabold text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 shadow-xl shadow-purple-600/20 transition-all transform active:scale-95 flex items-center justify-center space-x-2"
+                    >
+                        <span>Lanjut ke Lembar Ujian Sesungguhnya ({{ count($questions) }} Pernyataan)</span>
+                        <span>→</span>
+                    </button>
+                    <p class="text-[10px] text-slate-400 text-center">
+                        ⚠️ Setelah diselesaikan, hasil ujian ini bersifat permanen dan tidak dapat diulang kecuali diizinkan oleh HRD.
+                    </p>
                 </div>
             </div>
         </div>
 
-        <!-- Questions Form -->
-        <form id="personality-form" action="{{ route('career.psychotests.submit', [$application->id, $psychotest->id]) }}" method="POST" class="space-y-4">
-            @csrf
+        <!-- Stage 2: Lembar Ujian Sesungguhnya (Hidden pada awal sebelum simulasi/lanjut) -->
+        <div id="personality-exam-container" class="space-y-6 hidden">
+            <!-- Instructions Banner Ringkas -->
+            <div class="p-5 rounded-3xl bg-white border border-purple-100 shadow-sm flex items-start space-x-4">
+                <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl shrink-0 border border-purple-200">
+                    🧠
+                </div>
+                <div class="text-xs leading-relaxed">
+                    <h2 class="text-sm font-bold text-slate-900 mb-0.5">Ujian Kepribadian & Penilaian Diri (50 Pernyataan)</h2>
+                    <p class="text-slate-600">
+                        Pilihlah angka <strong>1 sampai 5</strong> yang paling mencerminkan diri Anda. Skala: 1 (Sangat Tidak Sesuai) s/d 5 (Sangat Sesuai).
+                    </p>
+                </div>
+            </div>
+
+            <!-- Questions Form -->
+            <form id="personality-form" action="{{ route('career.psychotests.submit', [$application->id, $psychotest->id]) }}" method="POST" class="space-y-4">
+                @csrf
 
             @php
                 $existingAnswers = $existingResult && is_array($existingResult->answers_submitted)
@@ -157,12 +275,43 @@
                     >
                         <span>✓ Selesaikan & Kirim Hasil Tes Kepribadian</span>
                     </button>
-                </div>
             </div>
         </form>
+    </div>
     </main>
 
     <script>
+        const simAnswers = {};
+        function handleSimLikert(qNum, val) {
+            simAnswers[qNum] = val;
+            const badge = document.getElementById(`badge-sim-q${qNum}`);
+            if (badge) {
+                badge.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-200 shrink-0';
+                badge.textContent = `✓ Skala ${val}`;
+            }
+            const count = Object.keys(simAnswers).length;
+            const progressBadge = document.getElementById('sim-likert-badge');
+            if (progressBadge) {
+                progressBadge.textContent = `Simulasi: ${count}/2`;
+                if (count === 2) {
+                    progressBadge.className = 'px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-300 shrink-0';
+                    progressBadge.textContent = '✓ Simulasi Lengkap (2/2)';
+                }
+            }
+            const feedback = document.getElementById('sim-likert-feedback');
+            if (feedback) {
+                feedback.className = 'p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-[11px] text-emerald-800 text-center font-medium';
+                feedback.innerHTML = `✓ Skala <strong>${val}</strong> berhasil dipilih pada latihan ${qNum}. Klik "Lanjut ke Lembar Ujian Sesungguhnya" untuk memulai tes asli.`;
+            }
+        }
+
+        function startPersonalityExam() {
+            const briefing = document.getElementById('personality-briefing');
+            const exam = document.getElementById('personality-exam-container');
+            if (briefing) briefing.classList.add('hidden');
+            if (exam) exam.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
         const totalQuestions = {{ count($questions) }};
         const radios = document.querySelectorAll('.answer-radio');
         const progressBar = document.getElementById('progress-bar');

@@ -432,15 +432,90 @@ class RecruitmentController extends Controller
     }
 
     /**
-     * Display Psychotest Banks and Candidate Results.
+     * Display Psychotest Banks and Candidate Results (Grouped by Candidate).
      */
-    public function psychotests(): View
+    public function psychotests(Request $request): View
     {
         $psychotests = Psychotest::withCount('results')->latest()->get();
-        $testResults = CandidatePsychotestResult::with(['jobApplication.jobPosting', 'psychotest'])
-            ->latest('completed_at')
-            ->paginate(15);
 
-        return view('modules.recruitment.psychotests.index', compact('psychotests', 'testResults'));
+        $query = JobApplication::whereHas('psychotestResults')
+            ->with([
+                'jobPosting.department',
+                'psychotestResults.psychotest',
+                'psychotestResults.retakeGrantedBy',
+            ]);
+
+        if ($search = $request->input('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('applicant_name', 'like', "%{$search}%")
+                    ->orWhere('applicant_email', 'like', "%{$search}%")
+                    ->orWhereHas('jobPosting', function ($jq) use ($search) {
+                        $jq->where('title', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        $candidateApplications = $query->withMax('psychotestResults', 'completed_at')
+            ->orderByDesc('psychotest_results_max_completed_at')
+            ->paginate(15)
+            ->withQueryString();
+
+        $testResults = $candidateApplications;
+
+        return view('modules.recruitment.psychotests.index', compact('psychotests', 'candidateApplications', 'testResults'));
+    }
+
+    /**
+     * Grant permission for a candidate to retake a specific psychotest.
+     */
+    public function allowPsychotestRetake(Request $request, JobApplication $application, Psychotest $psychotest): RedirectResponse
+    {
+        $validated = $request->validate([
+            'reason' => ['nullable', 'string', 'max:500'],
+        ]);
+
+        $result = CandidatePsychotestResult::where('job_application_id', $application->id)
+            ->where('psychotest_id', $psychotest->id)
+            ->first();
+
+        if (! $result) {
+            return back()->with('error', 'Hasil psikotes untuk kandidat ini tidak ditemukan.');
+        }
+
+        $reason = $validated['reason'] ?: 'Izin uji ulang diberikan oleh HR Administrator';
+
+        $result->update([
+            'can_retake' => true,
+            'retake_reason' => $reason,
+            'retake_granted_at' => now(),
+            'retake_granted_by' => $request->user()->id,
+        ]);
+
+        if (in_array($application->current_stage, ['PSYCHOTEST_PASSED', 'REJECTED'])) {
+            $application->update([
+                'current_stage' => 'SHORTLISTED',
+                'stage_notes' => "HR membuka kembali tahap psikotes untuk uji ulang modul: {$psychotest->title}. Catatan: {$reason}",
+            ]);
+        }
+
+        return back()->with('success', "Izin uji ulang untuk modul '{$psychotest->title}' berhasil diaktifkan. Kandidat {$application->applicant_name} sekarang dapat mengerjakan tes kembali dari portal karir.");
+    }
+
+    /**
+     * Cancel retake permission for a psychotest.
+     */
+    public function cancelPsychotestRetake(Request $request, JobApplication $application, Psychotest $psychotest): RedirectResponse
+    {
+        $result = CandidatePsychotestResult::where('job_application_id', $application->id)
+            ->where('psychotest_id', $psychotest->id)
+            ->first();
+
+        if ($result) {
+            $result->update([
+                'can_retake' => false,
+            ]);
+        }
+
+        return back()->with('success', "Izin uji ulang untuk modul '{$psychotest->title}' telah dibatalkan. Hasil ujian sebelumnya tetap berlaku permanen.");
     }
 }

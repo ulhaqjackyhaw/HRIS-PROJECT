@@ -48,29 +48,160 @@
     </header>
 
     <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-        <!-- Instructions Banner -->
-        <div class="p-6 rounded-3xl bg-white border border-indigo-100 shadow-sm flex items-start space-x-4">
-            <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-2xl shrink-0 border border-indigo-200">
-                📝
-            </div>
-            <div class="text-xs leading-relaxed">
-                <h1 class="text-base font-bold text-slate-900 mb-1">{{ $psychotest->title }}</h1>
-                <p class="text-slate-600">
-                    {{ $psychotest->description ?? 'Pilihlah satu jawaban yang paling tepat untuk setiap butir pertanyaan logika penalaran di bawah ini.' }}
-                </p>
-                <div class="flex items-center space-x-4 mt-2 text-[11px] font-semibold text-slate-700">
-                    <span>Durasi: <strong class="text-slate-900">{{ $psychotest->duration_minutes }} Menit</strong></span>
-                    <span>•</span>
-                    <span>Passing Score: <strong class="text-indigo-600">{{ $psychotest->passing_score }}%</strong></span>
-                    <span>•</span>
-                    <span>Jumlah: <strong class="text-cyan-700">{{ $qCount }} Butir</strong></span>
+
+        <!-- Stage 1: Panduan & Simulasi Interaktif -->
+        <div id="general-briefing" class="max-w-3xl mx-auto space-y-6">
+            <div class="p-6 sm:p-8 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-6">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                    <div>
+                        <span class="px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider bg-indigo-50 text-indigo-700 border border-indigo-200 inline-block mb-1">
+                            📝 TAHAP 1 DARI 2: PANDUAN & SIMULASI
+                        </span>
+                        <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Panduan & Simulasi Tes Logika Penalaran</h1>
+                        <p class="text-xs text-slate-500 mt-1">Pahami format pilihan ganda dan coba simulasi latihan soal sebelum memasuki ujian asli.</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-2xl shrink-0 border border-indigo-200">
+                        📝
+                    </div>
+                </div>
+
+                <!-- Informasi & Ketentuan Tes -->
+                <div class="bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-200 text-xs text-slate-700 space-y-3">
+                    <span class="font-bold text-slate-900 block">📌 Ketentuan Pelaksanaan Ujian:</span>
+                    <div class="grid grid-cols-3 gap-3 text-center">
+                        <div class="p-3 rounded-xl bg-white border border-slate-200">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase block">Jumlah Soal</span>
+                            <span class="text-sm font-black text-slate-900 mt-0.5 block">{{ $qCount }} Butir</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-white border border-slate-200">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase block">Estimasi Waktu</span>
+                            <span class="text-sm font-black text-cyan-700 mt-0.5 block">{{ $psychotest->duration_minutes }} Menit</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-white border border-slate-200">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase block">Passing Grade</span>
+                            <span class="text-sm font-black text-indigo-600 mt-0.5 block">{{ $psychotest->passing_score }}%</span>
+                        </div>
+                    </div>
+                    <ul class="list-disc list-inside space-y-1 text-[11px] text-slate-600 pt-1 leading-relaxed">
+                        <li>Pilihlah <strong>satu jawaban yang paling tepat</strong> untuk setiap butir soal.</li>
+                        <li>Pastikan seluruh butir terjawab sebelum mengirimkan formulir ujian.</li>
+                        <li>Hasil ujian akan langsung dihitung secara otomatis dan terekam ke sistem seleksi ATS.</li>
+                    </ul>
+                </div>
+
+                <!-- Arena Simulasi Latihan -->
+                <div class="p-5 sm:p-6 rounded-2xl bg-indigo-50/50 border border-indigo-200 space-y-4 text-xs">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <span class="text-[10px] font-black uppercase tracking-wider text-indigo-700 block">Simulasi Interaktif (Coba 2 Contoh Soal)</span>
+                            <p class="text-[11px] text-slate-600">Pilih salah satu opsi jawaban untuk melihat feedback interaktif tombol.</p>
+                        </div>
+                        <span id="sim-general-badge" class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-white text-indigo-700 border border-indigo-200 shrink-0">
+                            Simulasi: 0/2
+                        </span>
+                    </div>
+
+                    <!-- Latihan 1: Silogisme Logika -->
+                    <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <span class="font-bold text-slate-900 text-xs sm:text-sm leading-snug">
+                                Contoh 1: "Semua staf IT menguasai pemecahan masalah teknis. Bagas adalah seorang staf IT. Kesimpulannya adalah..."
+                            </span>
+                            <span id="badge-sim-gen-1" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-400 border border-slate-200 shrink-0">
+                                Belum
+                            </span>
+                        </div>
+                        <div class="space-y-2">
+                            @php
+                                $simOpts1 = [
+                                    'A' => 'Bagas tidak menguasai masalah teknis',
+                                    'B' => 'Bagas menguasai pemecahan masalah teknis',
+                                    'C' => 'Semua orang selain Bagas tidak menguasai masalah teknis',
+                                    'D' => 'Tidak dapat disimpulkan',
+                                ];
+                            @endphp
+                            @foreach($simOpts1 as $key => $val)
+                                <label class="cursor-pointer block">
+                                    <input type="radio" name="sim_gen[1]" value="{{ $key }}" onchange="handleSimGeneral(1, '{{ $key }}', 'B')" class="peer sr-only">
+                                    <div class="p-2.5 sm:p-3 rounded-xl bg-slate-50 hover:bg-slate-100 border-2 border-slate-200 transition-all flex items-center space-x-2.5 peer-checked:border-indigo-600 peer-checked:bg-indigo-50/90 peer-checked:ring-2 peer-checked:ring-indigo-500/20 peer-checked:[&_.opt-key]:bg-indigo-600 peer-checked:[&_.opt-key]:text-white peer-checked:[&_.opt-text]:text-indigo-950 peer-checked:[&_.opt-text]:font-bold" style="touch-action: manipulation;">
+                                        <span class="opt-key w-6 h-6 rounded-lg bg-white border border-slate-300 text-slate-700 font-black text-xs flex items-center justify-center shrink-0">
+                                            {{ $key }}
+                                        </span>
+                                        <span class="opt-text text-xs text-slate-700 font-medium">
+                                            {{ $val }}
+                                        </span>
+                                    </div>
+                                </label>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <!-- Latihan 2: Deret Angka Numerik -->
+                    <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <span class="font-bold text-slate-900 text-xs sm:text-sm leading-snug">
+                                Contoh 2: "Perhatikan pola deret: 3, 6, 12, 24, [ ... ]. Angka selanjutnya adalah:"
+                            </span>
+                            <span id="badge-sim-gen-2" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-400 border border-slate-200 shrink-0">
+                                Belum
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                            @php
+                                $simOpts2 = ['A' => '36', 'B' => '42', 'C' => '48', 'D' => '52'];
+                            @endphp
+                            @foreach($simOpts2 as $key => $val)
+                                <label class="cursor-pointer block">
+                                    <input type="radio" name="sim_gen[2]" value="{{ $key }}" onchange="handleSimGeneral(2, '{{ $key }}', 'C')" class="peer sr-only">
+                                    <div class="p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 border-2 border-slate-200 text-center transition-all peer-checked:border-indigo-600 peer-checked:bg-indigo-50/90 peer-checked:ring-2 peer-checked:ring-indigo-500/20 peer-checked:[&_.opt-val]:text-indigo-950 peer-checked:[&_.opt-val]:font-bold" style="touch-action: manipulation;">
+                                        <span class="text-[10px] text-slate-400 font-bold block">{{ $key }}</span>
+                                        <span class="opt-val text-sm font-black text-slate-800">{{ $val }}</span>
+                                    </div>
+                                </label>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <div id="sim-gen-feedback" class="p-3 rounded-xl bg-white border border-slate-200 text-[11px] text-slate-600 text-center">
+                        Pilih jawaban pada latihan di atas untuk mencoba mekanisme ujian.
+                    </div>
+                </div>
+
+                <!-- CTA Next Button -->
+                <div class="space-y-2 pt-2">
+                    <button
+                        type="button"
+                        onclick="startGeneralExam()"
+                        class="w-full py-4 rounded-2xl text-sm font-extrabold text-white bg-gradient-to-r from-indigo-600 to-cyan-600 hover:from-indigo-700 hover:to-cyan-700 shadow-xl shadow-indigo-600/20 transition-all transform active:scale-95 flex items-center justify-center space-x-2"
+                    >
+                        <span>Lanjut ke Lembar Ujian Sesungguhnya ({{ $qCount }} Butir Soal)</span>
+                        <span>→</span>
+                    </button>
+                    <p class="text-[10px] text-slate-400 text-center">
+                        ⚠️ Setelah diselesaikan, hasil ujian ini bersifat permanen dan tidak dapat diulang kecuali diizinkan oleh HRD.
+                    </p>
                 </div>
             </div>
         </div>
 
-        <!-- Form Questions -->
-        <form id="general-form" action="{{ route('career.psychotests.submit', [$application->id, $psychotest->id]) }}" method="POST" class="space-y-4">
-            @csrf
+        <!-- Stage 2: Lembar Ujian Sesungguhnya (Hidden pada awal sebelum simulasi/lanjut) -->
+        <div id="general-exam-container" class="space-y-6 hidden">
+            <!-- Instructions Banner Ringkas -->
+            <div class="p-5 rounded-3xl bg-white border border-indigo-100 shadow-sm flex items-start space-x-4">
+                <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl shrink-0 border border-indigo-200">
+                    📝
+                </div>
+                <div class="text-xs leading-relaxed">
+                    <h2 class="text-sm font-bold text-slate-900 mb-0.5">{{ $psychotest->title }} ({{ $qCount }} Soal)</h2>
+                    <p class="text-slate-600">
+                        Pilihlah satu jawaban yang paling tepat. Nilai kelulusan: <strong>{{ $psychotest->passing_score }}%</strong>.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Form Questions -->
+            <form id="general-form" action="{{ route('career.psychotests.submit', [$application->id, $psychotest->id]) }}" method="POST" class="space-y-4">
+                @csrf
 
             @php
                 $existingAnswers = $existingResult && is_array($existingResult->answers_submitted)
@@ -141,12 +272,50 @@
                     >
                         <span>✓ Selesaikan & Kirim Jawaban</span>
                     </button>
-                </div>
             </div>
         </form>
+    </div>
     </main>
 
     <script>
+        const simGenAnswers = {};
+        function handleSimGeneral(qNum, selectedKey, correctKey) {
+            simGenAnswers[qNum] = selectedKey;
+            const badge = document.getElementById(`badge-sim-gen-${qNum}`);
+            if (badge) {
+                badge.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 shrink-0';
+                badge.textContent = `✓ Opsi ${selectedKey}`;
+            }
+
+            const count = Object.keys(simGenAnswers).length;
+            const progressBadge = document.getElementById('sim-general-badge');
+            if (progressBadge) {
+                progressBadge.textContent = `Simulasi: ${count}/2`;
+                if (count === 2) {
+                    progressBadge.className = 'px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-300 shrink-0';
+                    progressBadge.textContent = '✓ Simulasi Lengkap (2/2)';
+                }
+            }
+
+            const feedback = document.getElementById('sim-gen-feedback');
+            if (feedback) {
+                if (selectedKey === correctKey) {
+                    feedback.className = 'p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-[11px] text-emerald-800 text-center font-medium';
+                    feedback.innerHTML = `✓ Tepat Sekali! Pilihan <strong>${selectedKey}</strong> adalah kunci jawaban yang benar untuk contoh ${qNum}.`;
+                } else {
+                    feedback.className = 'p-3 rounded-xl bg-amber-50 border border-amber-200 text-[11px] text-amber-800 text-center font-medium';
+                    feedback.innerHTML = `Opsi <strong>${selectedKey}</strong> dipilih pada latihan ${qNum}. Kunci yang paling tepat adalah <strong>${correctKey}</strong>. Anda dapat mencoba mengubah opsi.`;
+                }
+            }
+        }
+
+        function startGeneralExam() {
+            const briefing = document.getElementById('general-briefing');
+            const exam = document.getElementById('general-exam-container');
+            if (briefing) briefing.classList.add('hidden');
+            if (exam) exam.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
         const totalQuestions = {{ $qCount }};
         const radios = document.querySelectorAll('.answer-radio');
         const progressBar = document.getElementById('progress-bar');

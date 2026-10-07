@@ -213,7 +213,9 @@ Route::middleware(['auth', 'role:hr'])->group(function () {
         Route::post('/applications/{application}/communicate', [RecruitmentController::class, 'sendCommunication'])->name('applications.communicate');
         Route::post('/applications/{application}/convert-employee', [RecruitmentController::class, 'convertToEmployee'])->name('applications.convert-employee');
 
-        // Psychotest Monitoring
+        // Psychotest Monitoring & Retake Management
         Route::get('/psychotests', [RecruitmentController::class, 'psychotests'])->name('psychotests.index');
+        Route::post('/applications/{application}/psychotests/{psychotest}/allow-retake', [RecruitmentController::class, 'allowPsychotestRetake'])->name('applications.psychotests.allow-retake');
+        Route::post('/applications/{application}/psychotests/{psychotest}/cancel-retake', [RecruitmentController::class, 'cancelPsychotestRetake'])->name('applications.psychotests.cancel-retake');
     });
 });

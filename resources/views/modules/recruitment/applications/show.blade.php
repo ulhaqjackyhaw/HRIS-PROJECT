@@ -828,9 +828,38 @@
                             </div>
                         @endif
 
-                        <div class="text-[10px] text-slate-400 pt-1">
-                            Diselesaikan pada: {{ $res->completed_at ? $res->completed_at->format('d M Y, H:i') : '-' }}
-                        </div>
+                        @if($res->can_retake)
+                            <div class="mt-2.5 p-3 rounded-2xl bg-amber-50 border border-amber-200 text-xs text-amber-900 space-y-1.5">
+                                <div class="flex items-center justify-between font-bold text-amber-800">
+                                    <span class="flex items-center space-x-1">
+                                        <span>⚠️</span>
+                                        <span>Izin Uji Ulang Aktif</span>
+                                    </span>
+                                    <span class="text-[10px] bg-amber-200/60 px-2 py-0.5 rounded-full">Menunggu Tes Ulang</span>
+                                </div>
+                                <p class="text-[11px] text-amber-800 leading-relaxed">
+                                    <strong>Catatan:</strong> {{ $res->retake_reason ?? 'Diberikan izin uji ulang oleh HR.' }}
+                                </p>
+                                <form action="{{ route('recruitment.applications.psychotests.cancel-retake', [$application->id, $res->psychotest_id]) }}" method="POST" class="pt-1">
+                                    @csrf
+                                    <button type="submit" class="text-[11px] text-rose-600 hover:text-rose-800 font-bold underline cursor-pointer">
+                                        ✕ Batalkan Izin Uji Ulang
+                                    </button>
+                                </form>
+                            </div>
+                        @else
+                            <div class="pt-2 border-t border-slate-200/80 flex items-center justify-between">
+                                <span class="text-[10px] text-slate-400">
+                                    Diselesaikan: {{ $res->completed_at ? $res->completed_at->format('d M Y, H:i') : '-' }} (Ujian ke-{{ $res->attempt_number ?? 1 }})
+                                </span>
+                                <button type="button"
+                                        onclick='openRetakeModal("{{ $res->psychotest_id }}", "{{ addslashes($res->psychotest?->title ?? 'Modul Psikotes') }}")'
+                                        class="px-2.5 py-1 rounded-xl text-[11px] font-bold text-amber-800 bg-amber-50 hover:bg-amber-100 border border-amber-200 transition-all flex items-center space-x-1 cursor-pointer shadow-2xs">
+                                    <span>🔄</span>
+                                    <span>Atur Uji Ulang</span>
+                                </button>
+                            </div>
+                        @endif
                     </div>
                 @empty
                     <div class="p-6 text-center border border-dashed border-slate-200 rounded-2xl text-xs text-slate-400">
@@ -1348,5 +1377,60 @@ function applyTemplate(type) {
             </svg>
         `;
     }
+
+    function openRetakeModal(testId, testTitle) {
+        document.getElementById('retake-modal-test-title').textContent = testTitle;
+        document.getElementById('retake-form').action = `{{ url('recruitment/applications/' . $application->id . '/psychotests') }}/${testId}/allow-retake`;
+        document.getElementById('retake-modal').classList.remove('hidden');
+    }
+
+    function closeRetakeModal() {
+        document.getElementById('retake-modal').classList.add('hidden');
+    }
 </script>
+
+<!-- Modal Atur Uji Ulang Psikotes (HR) -->
+<div id="retake-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white border border-slate-200 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl space-y-4 my-auto">
+        <div class="flex items-start justify-between border-b border-slate-100 pb-3">
+            <div>
+                <span class="px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-wider bg-amber-50 text-amber-800 border border-amber-200 inline-block mb-1">
+                    🔄 Manajemen Uji Ulang
+                </span>
+                <h3 class="text-base font-bold text-slate-900">Atur Izin Uji Ulang Psikotes</h3>
+            </div>
+            <button type="button" onclick="closeRetakeModal()" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-sm font-bold cursor-pointer">
+                ✕
+            </button>
+        </div>
+
+        <p class="text-xs text-slate-600 leading-relaxed">
+            Apakah Anda yakin ingin mengizinkan kandidat <strong>{{ $application->applicant_name }}</strong> mengerjakan ulang tes <strong id="retake-modal-test-title" class="text-slate-900">-</strong>?
+        </p>
+
+        <form id="retake-form" method="POST" action="" class="space-y-4">
+            @csrf
+            <div>
+                <label for="retake_reason" class="block text-xs font-semibold text-slate-700 mb-1">Alasan / Catatan HR untuk Uji Ulang</label>
+                <textarea
+                    id="retake_reason"
+                    name="reason"
+                    rows="3"
+                    class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 rounded-xl text-xs focus:bg-white focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 focus:outline-none transition-colors"
+                    placeholder="Contoh: Kendala jaringan koneksi saat ujian / Permintaan kesempatan kedua..."
+                ></textarea>
+                <span class="text-[10px] text-slate-500">Catatan ini akan ditampilkan kepada kandidat di portal karir saat tes dibuka kembali.</span>
+            </div>
+
+            <div class="flex items-center justify-end space-x-2 pt-2 border-t border-slate-100">
+                <button type="button" onclick="closeRetakeModal()" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors">
+                    Batal
+                </button>
+                <button type="submit" class="px-5 py-2 rounded-xl text-xs font-bold text-white bg-amber-600 hover:bg-amber-700 shadow-md shadow-amber-600/20 transition-colors">
+                    ✓ Konfirmasi Izinkan Uji Ulang
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 @endsection

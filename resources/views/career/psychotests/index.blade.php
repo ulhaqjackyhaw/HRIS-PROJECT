@@ -66,8 +66,23 @@
         </div>
 
         @if(session('success'))
-            <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold">
-                ✓ {{ session('success') }}
+            <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center space-x-2">
+                <span>✓</span>
+                <span>{{ session('success') }}</span>
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-bold flex items-center space-x-2">
+                <span>✗</span>
+                <span>{{ session('error') }}</span>
+            </div>
+        @endif
+
+        @if(session('warning'))
+            <div class="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-800 text-xs font-bold flex items-center space-x-2">
+                <span>⚠️</span>
+                <span>{{ session('warning') }}</span>
             </div>
         @endif
 
@@ -76,14 +91,16 @@
             @forelse($psychotests as $test)
                 @php
                     $result = $results->get($test->id);
-                    $isCompleted = !empty($result);
+                    $isCompleted = !empty($result) && $result->completed_at !== null;
+                    $canRetake = $result?->can_retake ?? false;
+                    $isLocked = $isCompleted && ! $canRetake;
                     $score = $result?->total_score ?? null;
                     $isPassed = $result && ($result->result_status === 'PASSED' || $score >= $test->passing_score);
                     $isKraepelin = $test->isKraepelin();
                     $isLikert = $test->isLikertPersonality();
                 @endphp
 
-                <div class="p-6 sm:p-8 rounded-3xl bg-white border border-slate-200 hover:border-slate-300 shadow-sm hover:shadow-lg transition-all flex flex-col justify-between relative group">
+                <div class="p-6 sm:p-8 rounded-3xl bg-white border {{ $canRetake ? 'border-amber-300 ring-2 ring-amber-400/20' : ($isLocked ? 'border-slate-200' : 'border-slate-200 hover:border-slate-300') }} shadow-sm hover:shadow-lg transition-all flex flex-col justify-between relative group">
                     <div>
                         <!-- Top Badge & Type -->
                         <div class="flex items-center justify-between gap-3 mb-4">
@@ -92,7 +109,11 @@
                                 {{ $isKraepelin ? '⚡ TES KRAEPELIN NUMERIK' : ($isLikert ? '🧠 TES KEPRIBADIAN (LIKERT 1-5)' : '📝 PILIHAN GANDA') }}
                             </span>
 
-                            @if($isCompleted)
+                            @if($canRetake)
+                                <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-50 text-amber-800 border border-amber-300 animate-pulse">
+                                    ⚠️ Uji Ulang Diizinkan HR
+                                </span>
+                            @elseif($isCompleted)
                                 <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider
                                     {{ $isPassed ? 'bg-emerald-50 text-emerald-700 border border-emerald-300' : 'bg-rose-50 text-rose-700 border border-rose-300' }}">
                                     {{ $isPassed ? '✓ Lulus Asesmen' : '✗ Belum Memenuhi' }} ({{ $score }}/100)
@@ -134,7 +155,10 @@
                         <!-- Result Insight if Completed -->
                         @if($isCompleted && is_array($result->answers_submitted))
                             <div class="mb-6 p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-2">
-                                <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">Ringkasan Hasil Anda:</span>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">Hasil Terakhir:</span>
+                                    <span class="text-[10px] text-slate-400 font-medium">Ujian ke-{{ $result->attempt_number ?? 1 }}</span>
+                                </div>
                                 @if($isKraepelin)
                                     <div class="grid grid-cols-2 gap-2 text-slate-700 text-[11px]">
                                         <div>Total Hitungan: <strong class="text-slate-900">{{ $result->answers_submitted['total_attempted'] ?? '-' }} butir</strong></div>
@@ -172,24 +196,58 @@
                                 @endif
                             </div>
                         @endif
+
+                        @if($canRetake)
+                            <div class="mb-6 p-4 rounded-2xl bg-amber-50 border border-amber-200 text-xs text-amber-900 space-y-1">
+                                <div class="font-bold flex items-center space-x-1.5 text-amber-800">
+                                    <span>🔔</span>
+                                    <span>Pemberitahuan Uji Ulang HR:</span>
+                                </div>
+                                <p class="text-[11px] leading-relaxed text-amber-900">
+                                    {{ $result->retake_reason ?: 'Anda telah diizinkan untuk mengerjakan kembali tes ini oleh Administrator HR.' }}
+                                </p>
+                            </div>
+                        @endif
                     </div>
 
                     <!-- Action Button -->
                     <div>
-                        <a
-                            href="{{ route('career.psychotests.show', [$application->id, $test->id]) }}"
-                            class="w-full py-3.5 rounded-2xl text-xs font-extrabold flex items-center justify-center space-x-2 transition-all shadow-md
-                            {{ $isCompleted
-                                ? 'bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300'
-                                : ($isKraepelin
-                                    ? 'bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white shadow-blue-600/20'
-                                    : ($isLikert
-                                        ? 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white shadow-purple-600/20'
-                                        : 'bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white shadow-indigo-600/20')) }}"
-                        >
-                            <span>{{ $isCompleted ? '🔄 Buka / Uji Kembali Instrumen' : '🚀 Mulai Pengerjaan Tes Ini Sekarang' }}</span>
-                            <span>→</span>
-                        </a>
+                        @if($isLocked)
+                            <div class="space-y-2">
+                                <div class="w-full py-3.5 px-4 rounded-2xl text-xs font-bold bg-slate-100 text-slate-500 border border-slate-200 text-center flex items-center justify-center space-x-2 select-none shadow-2xs">
+                                    <span>🔒</span>
+                                    <span>Ujian Selesai (Hasil Fix / Terkunci)</span>
+                                </div>
+                                <p class="text-[10px] text-slate-400 text-center leading-normal">
+                                    Hasil akhir telah terekam secara permanen ke sistem. Anda tidak dapat mengulang tes ini kecuali Tim HR mengatur jadwal uji ulang.
+                                </p>
+                            </div>
+                        @elseif($canRetake)
+                            <div>
+                                <a
+                                    href="{{ route('career.psychotests.show', [$application->id, $test->id]) }}"
+                                    class="w-full py-3.5 rounded-2xl text-xs font-extrabold flex items-center justify-center space-x-2 transition-all shadow-md bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white shadow-amber-500/20 active:scale-95"
+                                >
+                                    <span>🔄 Panduan, Simulasi & Mulai Uji Ulang Tes</span>
+                                    <span>→</span>
+                                </a>
+                            </div>
+                        @else
+                            <div>
+                                <a
+                                    href="{{ route('career.psychotests.show', [$application->id, $test->id]) }}"
+                                    class="w-full py-3.5 rounded-2xl text-xs font-extrabold flex items-center justify-center space-x-2 transition-all shadow-md
+                                    {{ $isKraepelin
+                                        ? 'bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white shadow-blue-600/20'
+                                        : ($isLikert
+                                            ? 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white shadow-purple-600/20'
+                                            : 'bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white shadow-indigo-600/20') }} active:scale-95"
+                                >
+                                    <span>📖 Panduan, Simulasi & Mulai Tes</span>
+                                    <span>→</span>
+                                </a>
+                            </div>
+                        @endif
                     </div>
                 </div>
             @empty

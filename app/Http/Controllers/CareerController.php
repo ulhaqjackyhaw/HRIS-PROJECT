@@ -466,9 +466,9 @@ class CareerController extends Controller
     }
 
     /**
-     * Show interactive psychotest taking page (Kraepelin or Likert Personality).
+     * Show interactive psychotest taking page (Kraepelin, Likert Personality, or General).
      */
-    public function showPsychotest(Request $request, JobApplication $application, Psychotest $psychotest): View
+    public function showPsychotest(Request $request, JobApplication $application, Psychotest $psychotest): View|RedirectResponse
     {
         abort_unless($application->user_id === $request->user()->id, 403, 'Akses tidak diizinkan.');
         abort_unless($psychotest->is_active, 404, 'Modul psikotes tidak aktif.');
@@ -476,6 +476,11 @@ class CareerController extends Controller
         $existingResult = CandidatePsychotestResult::where('job_application_id', $application->id)
             ->where('psychotest_id', $psychotest->id)
             ->first();
+
+        if ($existingResult && $existingResult->isLocked()) {
+            return redirect()->route('career.psychotests.index', $application->id)
+                ->with('error', "Anda telah menyelesaikan tes '{$psychotest->title}'. Hasil tes bersifat permanen dan tidak dapat diulang kecuali diizinkan oleh HRD.");
+        }
 
         if ($psychotest->isKraepelin()) {
             $columnsCount = $psychotest->questions_data['columns_count'] ?? 30;
@@ -530,6 +535,24 @@ class CareerController extends Controller
     public function submitPsychotest(Request $request, JobApplication $application, Psychotest $psychotest): RedirectResponse|JsonResponse
     {
         abort_unless($application->user_id === $request->user()->id, 403, 'Akses tidak diizinkan.');
+
+        $existingResult = CandidatePsychotestResult::where('job_application_id', $application->id)
+            ->where('psychotest_id', $psychotest->id)
+            ->first();
+
+        if ($existingResult && $existingResult->isLocked()) {
+            if ($request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Tes ini sudah diselesaikan secara permanen dan tidak dapat diulang kembali.',
+                ], 403);
+            }
+
+            return redirect()->route('career.psychotests.index', $application->id)
+                ->with('error', 'Tes ini sudah diselesaikan secara permanen dan tidak dapat diulang kembali.');
+        }
+
+        $attemptNumber = $existingResult ? (($existingResult->attempt_number ?? 1) + ($existingResult->can_retake ? 1 : 0)) : 1;
 
         if ($psychotest->isKraepelin()) {
             $validated = $request->validate([
@@ -607,6 +630,8 @@ class CareerController extends Controller
                     'total_score' => $finalScore,
                     'result_status' => $isPassed ? 'PASSED' : 'FAILED',
                     'completed_at' => now(),
+                    'can_retake' => false,
+                    'attempt_number' => $attemptNumber,
                 ]
             );
         } elseif ($psychotest->isLikertPersonality()) {
@@ -660,6 +685,8 @@ class CareerController extends Controller
                     'total_score' => $finalScore,
                     'result_status' => $isPassed ? 'PASSED' : 'FAILED',
                     'completed_at' => now(),
+                    'can_retake' => false,
+                    'attempt_number' => $attemptNumber,
                 ]
             );
         } else {
@@ -697,6 +724,8 @@ class CareerController extends Controller
                     'total_score' => $finalScore,
                     'result_status' => $isPassed ? 'PASSED' : 'FAILED',
                     'completed_at' => now(),
+                    'can_retake' => false,
+                    'attempt_number' => $attemptNumber,
                 ]
             );
         }

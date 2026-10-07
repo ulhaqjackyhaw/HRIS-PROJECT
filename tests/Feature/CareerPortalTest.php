@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\CandidateProfile;
+use App\Models\CandidatePsychotestResult;
 use App\Models\Department;
 use App\Models\JobApplication;
 use App\Models\JobPosting;
@@ -571,5 +572,117 @@ class CareerPortalTest extends TestCase
             'total_score' => 100,
             'result_status' => 'PASSED',
         ]);
+    }
+
+    public function test_candidate_cannot_retake_completed_psychotest_without_hr_approval(): void
+    {
+        $user = User::factory()->create(['user_type' => 'CANDIDATE']);
+        $job = JobPosting::factory()->create();
+        $application = JobApplication::create([
+            'job_posting_id' => $job->id,
+            'user_id' => $user->id,
+            'applicant_name' => 'Kandidat Ujian',
+            'applicant_email' => $user->email,
+            'applicant_phone' => '081234567899',
+            'current_stage' => 'SHORTLISTED',
+        ]);
+
+        $psychotest = Psychotest::create([
+            'title' => 'Tes Logika Terkunci',
+            'test_type' => Psychotest::TYPE_GENERAL,
+            'passing_score' => 70,
+            'duration_minutes' => 15,
+            'is_active' => true,
+            'questions_data' => [
+                [
+                    'id' => 1,
+                    'question' => 'Soal 1',
+                    'options' => ['A' => '1', 'B' => '2'],
+                    'correct_answer' => 'A',
+                    'score_weight' => 100,
+                ],
+            ],
+        ]);
+
+        // Complete the psychotest initially
+        $this->actingAs($user)->post(route('career.psychotests.submit', [$application->id, $psychotest->id]), [
+            'answers' => [1 => 'A'],
+        ]);
+
+        // Hub should indicate test is locked
+        $hubResponse = $this->actingAs($user)->get(route('career.psychotests.index', $application->id));
+        $hubResponse->assertStatus(200);
+        $hubResponse->assertSee('Ujian Selesai (Hasil Fix / Terkunci)');
+
+        // Attempting to visit the test page directly should be blocked
+        $attemptResponse = $this->actingAs($user)->get(route('career.psychotests.show', [$application->id, $psychotest->id]));
+        $attemptResponse->assertRedirect(route('career.psychotests.index', $application->id));
+        $attemptResponse->assertSessionHas('error');
+
+        // Attempting to submit again should be blocked
+        $secondSubmitResponse = $this->actingAs($user)->post(route('career.psychotests.submit', [$application->id, $psychotest->id]), [
+            'answers' => [1 => 'B'],
+        ]);
+        $secondSubmitResponse->assertRedirect(route('career.psychotests.index', $application->id));
+        $secondSubmitResponse->assertSessionHas('error');
+    }
+
+    public function test_candidate_can_retake_psychotest_when_hr_allows_it(): void
+    {
+        $user = User::factory()->create(['user_type' => 'CANDIDATE']);
+        $job = JobPosting::factory()->create();
+        $application = JobApplication::create([
+            'job_posting_id' => $job->id,
+            'user_id' => $user->id,
+            'applicant_name' => 'Kandidat Ujian Retake',
+            'applicant_email' => $user->email,
+            'applicant_phone' => '081234567898',
+            'current_stage' => 'SHORTLISTED',
+        ]);
+
+        $psychotest = Psychotest::create([
+            'title' => 'Tes Kepribadian Retake',
+            'test_type' => Psychotest::TYPE_LIKERT_PERSONALITY,
+            'passing_score' => 60,
+            'duration_minutes' => 20,
+            'is_active' => true,
+            'questions_data' => [
+                'questions' => [
+                    ['id' => 1, 'dimension' => 'Inisiatif', 'statement' => 'Pernyataan 1'],
+                ],
+            ],
+        ]);
+
+        // Submit first attempt
+        $this->actingAs($user)->post(route('career.psychotests.submit', [$application->id, $psychotest->id]), [
+            'answers' => [1 => 2],
+        ]);
+
+        $result = CandidatePsychotestResult::where('job_application_id', $application->id)
+            ->where('psychotest_id', $psychotest->id)
+            ->first();
+        $this->assertEquals(40, $result->total_score);
+        $this->assertFalse($result->can_retake);
+
+        // HR grants retake
+        $result->update([
+            'can_retake' => true,
+            'retake_reason' => 'Izin perbaikan skor',
+        ]);
+
+        // Candidate can now view test page
+        $retakePageResponse = $this->actingAs($user)->get(route('career.psychotests.show', [$application->id, $psychotest->id]));
+        $retakePageResponse->assertStatus(200);
+
+        // Candidate submits retake attempt
+        $retakeSubmitResponse = $this->actingAs($user)->post(route('career.psychotests.submit', [$application->id, $psychotest->id]), [
+            'answers' => [1 => 5],
+        ]);
+        $retakeSubmitResponse->assertRedirect(route('career.psychotests.index', $application->id));
+
+        $result->refresh();
+        $this->assertEquals(100, $result->total_score);
+        $this->assertFalse($result->can_retake);
+        $this->assertEquals(2, $result->attempt_number);
     }
 }

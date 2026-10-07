@@ -377,10 +377,26 @@ class RecruitmentAtsTest extends TestCase
             'applied_at' => now(),
         ]);
 
+        $psychotest2 = Psychotest::create([
+            'title' => 'Tes Karakter & Kepribadian',
+            'duration_minutes' => 20,
+            'passing_score' => 60,
+            'questions_data' => [],
+            'is_active' => true,
+        ]);
+
         CandidatePsychotestResult::create([
             'job_application_id' => $application->id,
             'psychotest_id' => $psychotest->id,
             'total_score' => 85,
+            'result_status' => 'PASSED',
+            'completed_at' => now()->subHour(),
+        ]);
+
+        CandidatePsychotestResult::create([
+            'job_application_id' => $application->id,
+            'psychotest_id' => $psychotest2->id,
+            'total_score' => 95,
             'result_status' => 'PASSED',
             'completed_at' => now(),
         ]);
@@ -390,9 +406,81 @@ class RecruitmentAtsTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertSee('Monitoring Tes Psikotes Online');
-        $response->assertSee('Tes Logika Aritmatika & Penalaran');
         $response->assertSee('Diana Rose');
+        $response->assertSee('Tes Logika Aritmatika & Penalaran');
+        $response->assertSee('Tes Karakter & Kepribadian');
         $response->assertSee('85');
+        $response->assertSee('95');
+        $response->assertSee('90'); // Average (85 + 95) / 2
+        $response->assertSee('2 Modul Selesai');
         $response->assertSee('LULUS');
+
+        $searchResponse = $this->actingAs($this->hrUser)
+            ->get(route('recruitment.psychotests.index', ['search' => 'Diana']));
+        $searchResponse->assertStatus(200);
+        $searchResponse->assertSee('Diana Rose');
+
+        $notFoundResponse = $this->actingAs($this->hrUser)
+            ->get(route('recruitment.psychotests.index', ['search' => 'UnknownPersonXYZ']));
+        $notFoundResponse->assertStatus(200);
+        $notFoundResponse->assertDontSee('Diana Rose');
+    }
+
+    public function test_hr_can_grant_and_cancel_psychotest_retake_permission(): void
+    {
+        $psychotest = Psychotest::create([
+            'title' => 'Tes Kemampuan Numerik',
+            'duration_minutes' => 30,
+            'passing_score' => 70,
+            'questions_data' => [],
+            'is_active' => true,
+        ]);
+
+        $job = JobPosting::factory()->create();
+        $application = JobApplication::create([
+            'job_posting_id' => $job->id,
+            'applicant_name' => 'Budi Santoso',
+            'applicant_email' => 'budi@example.com',
+            'applicant_phone' => '081234567894',
+            'current_stage' => 'PSYCHOTEST_PASSED',
+            'applied_at' => now(),
+        ]);
+
+        $result = CandidatePsychotestResult::create([
+            'job_application_id' => $application->id,
+            'psychotest_id' => $psychotest->id,
+            'total_score' => 65,
+            'result_status' => 'FAILED',
+            'completed_at' => now(),
+            'can_retake' => false,
+        ]);
+
+        // HR grants retake permission
+        $grantResponse = $this->actingAs($this->hrUser)
+            ->post(route('recruitment.applications.psychotests.allow-retake', [$application->id, $psychotest->id]), [
+                'reason' => 'Kandidat mengalami koneksi terputus saat pengerjaan.',
+            ]);
+
+        $grantResponse->assertRedirect();
+        $grantResponse->assertSessionHas('success');
+
+        $result->refresh();
+        $this->assertTrue($result->can_retake);
+        $this->assertEquals('Kandidat mengalami koneksi terputus saat pengerjaan.', $result->retake_reason);
+        $this->assertEquals($this->hrUser->id, $result->retake_granted_by);
+
+        // Application stage should revert to SHORTLISTED
+        $application->refresh();
+        $this->assertEquals('SHORTLISTED', $application->current_stage);
+
+        // HR cancels retake permission
+        $cancelResponse = $this->actingAs($this->hrUser)
+            ->post(route('recruitment.applications.psychotests.cancel-retake', [$application->id, $psychotest->id]));
+
+        $cancelResponse->assertRedirect();
+        $cancelResponse->assertSessionHas('success');
+
+        $result->refresh();
+        $this->assertFalse($result->can_retake);
     }
 }

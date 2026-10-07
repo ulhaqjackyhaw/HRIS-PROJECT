@@ -66,45 +66,132 @@
     <main class="max-w-5xl mx-auto px-4 py-6 flex flex-col items-center justify-center min-h-[calc(100vh-140px)]">
 
         <!-- Pre-Test Briefing / Start Screen -->
-        <div id="briefing-modal" class="max-w-xl w-full bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-xl space-y-6 text-center">
-            <div class="w-16 h-16 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-3xl mx-auto border border-blue-200 shadow-inner">
-                ⚡
-            </div>
-            <div>
-                <h1 class="text-2xl font-black text-slate-900 tracking-tight">Aturan & Simulasi Tes Kraepelin</h1>
-                <p class="text-xs text-slate-500 mt-2 leading-relaxed">
-                    Tes ini mengukur kecepatan, ketahanan ritme kerja, serta ketelitian konsentrasi numerik Anda.
-                </p>
+        <!-- Pre-Test Briefing & Interactive Simulation Stage -->
+        <div id="briefing-modal" class="max-w-2xl w-full bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-xl space-y-6 text-center">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                <div class="text-left">
+                    <span class="px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200 inline-block mb-1">
+                        ⚡ TAHAP 1 DARI 2: PANDUAN & SIMULASI
+                    </span>
+                    <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Aturan & Simulasi Tes Kraepelin</h1>
+                </div>
+                <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl shrink-0 border border-blue-200 shadow-inner">
+                    ⚡
+                </div>
             </div>
 
-            <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 text-left space-y-2.5 text-xs text-slate-700">
-                <div class="flex items-start space-x-2">
-                    <span class="text-blue-600 font-bold">1.</span>
-                    <span>Jumlahkan <strong>2 angka berdekatan dari bawah ke atas</strong> pada kolom yang sedang aktif.</span>
+            <!-- Aturan Pengerjaan -->
+            <div class="bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-200 text-left space-y-2 text-xs text-slate-700">
+                <div class="font-bold text-slate-900 text-xs mb-1 flex items-center space-x-1.5">
+                    <span>📌</span>
+                    <span>Instruksi Penjumlahan Angka:</span>
                 </div>
                 <div class="flex items-start space-x-2">
-                    <span class="text-blue-600 font-bold">2.</span>
+                    <span class="text-blue-600 font-bold shrink-0">1.</span>
+                    <span>Jumlahkan <strong>2 angka berurutan dari bawah ke atas</strong> pada kolom yang sedang aktif.</span>
+                </div>
+                <div class="flex items-start space-x-2">
+                    <span class="text-blue-600 font-bold shrink-0">2.</span>
                     <span>Ketik hanya <strong>digit satuan terakhir</strong> dari hasil penjumlahan:<br/>
                         <span class="text-slate-500 italic">Contoh: 7 + 8 = 15 &rarr; Tekan <strong class="text-blue-600">5</strong> | 3 + 4 = 7 &rarr; Tekan <strong class="text-blue-600">7</strong></span>
                     </span>
                 </div>
                 <div class="flex items-start space-x-2">
-                    <span class="text-blue-600 font-bold">3.</span>
-                    <span>Setiap kolom berdurasi <strong>{{ $secondsPerColumn }} detik</strong>. Sistem akan otomatis memindahkan Anda ke kolom berikutnya setelah waktu habis ("PINDAH!").</span>
+                    <span class="text-blue-600 font-bold shrink-0">3.</span>
+                    <span>Setiap kolom berdurasi <strong>{{ $secondsPerColumn }} detik</strong>. Sistem otomatis berpindah ke kolom berikutnya saat waktu habis ("PINDAH!"). Total: {{ $columnsCount }} kolom.</span>
                 </div>
                 <div class="flex items-start space-x-2">
-                    <span class="text-blue-600 font-bold">4.</span>
-                    <span>Gunakan tombol angka pada <strong>Keyboard / Numpad</strong> atau <strong>Virtual Keypad</strong> di bawah layar.</span>
+                    <span class="text-blue-600 font-bold shrink-0">4.</span>
+                    <span>Gunakan tombol angka pada <strong>Keyboard / Numpad</strong> atau <strong>Virtual Keypad</strong> di layar.</span>
                 </div>
             </div>
 
-            <button
-                type="button"
-                id="btn-start-test"
-                class="w-full py-4 rounded-2xl text-sm font-extrabold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-xl shadow-blue-600/20 transition-all transform active:scale-95"
-            >
-                Mulai Tes Kraepelin Sekarang (Fokus Penuh) →
-            </button>
+            <!-- Interactive Practice Arena (Simulasi Langsung) -->
+            <div class="p-4 sm:p-6 rounded-2xl bg-blue-50/50 border border-blue-200 text-left space-y-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <span class="text-[10px] font-black uppercase tracking-wider text-blue-700 block">Simulasi Latihan Interaktif</span>
+                        <p class="text-xs text-slate-600 mt-0.5">Coba jumlahkan angka pada kolom latihan di bawah ini menggunakan tombol angka atau keypad.</p>
+                    </div>
+                    <span id="sim-progress-badge" class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-white text-blue-700 border border-blue-200 shrink-0">
+                        Latihan: 0/4
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
+                    <!-- Mini Column Visualizer -->
+                    <div class="bg-white rounded-2xl border-2 border-blue-300 p-4 shadow-sm flex flex-col items-center justify-center min-h-[170px]">
+                        <span class="text-[10px] text-slate-400 font-bold uppercase mb-2">Kolom Latihan</span>
+                        <div id="sim-column-wrapper" class="flex flex-col-reverse items-center space-y-reverse space-y-1">
+                            <!-- Rendered via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Live Feedback & Virtual Numpad for Simulation -->
+                    <div class="space-y-3">
+                        <div id="sim-feedback-box" class="p-2.5 rounded-xl bg-white border border-slate-200 text-xs text-slate-700 min-h-[44px] flex items-center justify-center text-center font-medium leading-relaxed">
+                            <span>Jumlahkan 2 angka yang berwarna biru (mulai dari bawah).</span>
+                        </div>
+
+                        <!-- Mini Keypad (Telephone 3-Column Format) -->
+                        <div>
+                            <div class="grid grid-cols-3 gap-1.5 max-w-[210px] mx-auto">
+                                @for($n = 1; $n <= 9; $n++)
+                                    <button
+                                        type="button"
+                                        onclick="handleSimInput({{ $n }})"
+                                        class="h-10 rounded-xl bg-white hover:bg-blue-600 active:bg-blue-700 text-slate-800 hover:text-white font-black text-base transition-all border border-slate-200 shadow-2xs active:scale-95 select-none flex items-center justify-center cursor-pointer"
+                                        style="touch-action: manipulation;"
+                                    >
+                                        {{ $n }}
+                                    </button>
+                                @endfor
+                                <button
+                                    type="button"
+                                    onclick="handleSimInput(0)"
+                                    class="h-10 rounded-xl bg-white hover:bg-blue-600 active:bg-blue-700 text-slate-800 hover:text-white font-black text-base transition-all border border-slate-200 shadow-2xs active:scale-95 select-none flex items-center justify-center col-start-2 cursor-pointer"
+                                    style="touch-action: manipulation;"
+                                >
+                                    0
+                                </button>
+                            </div>
+                        </div>
+
+                        <button
+                            type="button"
+                            onclick="resetKraepelinSimulation()"
+                            class="text-[10px] text-blue-600 hover:text-blue-800 font-bold underline cursor-pointer block text-center w-full"
+                        >
+                            ↺ Ulangi Latihan Simulasi
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Button -->
+            <div class="space-y-2">
+                <button
+                    type="button"
+                    id="btn-start-test"
+                    onclick="startKraepelinWithCountdown()"
+                    class="w-full py-4 rounded-2xl text-sm font-extrabold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-xl shadow-blue-600/20 transition-all transform active:scale-95 flex items-center justify-center space-x-2"
+                >
+                    <span>Lanjut ke Ujian Sesungguhnya ({{ $columnsCount }} Kolom)</span>
+                    <span>→</span>
+                </button>
+                <p class="text-[10px] text-slate-400">
+                    ⚠️ Begitu ujian sesungguhnya dimulai, timer akan berjalan dan hasil akhir bersifat permanen (tidak dapat diulang kembali kecuali diizinkan oleh HR).
+                </p>
+            </div>
+        </div>
+
+        <!-- 3-Second Countdown Overlay Modal -->
+        <div id="countdown-overlay" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm hidden flex flex-col items-center justify-center text-white text-center p-4">
+            <div class="space-y-4 max-w-sm">
+                <span class="text-xs uppercase tracking-widest text-blue-400 font-extrabold block">Bersiap untuk Ujian Kraepelin</span>
+                <div class="text-7xl sm:text-8xl font-black text-white tabular-nums animate-pulse" id="countdown-number">3</div>
+                <p class="text-xs text-slate-300">Posisi tangan bersiap pada keypad / keyboard. Ujian akan dimulai secara otomatis...</p>
+            </div>
         </div>
 
         <!-- In-Test Container (Hidden before start) -->
@@ -122,19 +209,19 @@
                 </div>
             </div>
 
-            <!-- Virtual Numpad & Keyboard Helper (Mobile Ergonomic Sticky Bottom) -->
-            <div class="w-full max-w-md bg-white/95 backdrop-blur-md border border-slate-200 rounded-3xl p-3 sm:p-6 shadow-2xl space-y-2 sm:space-y-3 sticky bottom-2 z-30">
+            <!-- Virtual Numpad & Keyboard Helper (Telephone 3-Column Layout Sticky Bottom) -->
+            <div class="w-full max-w-xs bg-white/95 backdrop-blur-md border border-slate-200 rounded-3xl p-3 sm:p-5 shadow-2xl space-y-2.5 sticky bottom-2 z-30">
                 <div class="flex items-center justify-between text-[11px] text-slate-500 font-bold px-1">
                     <span>Virtual Keypad (Tekan 0-9)</span>
                     <span class="text-blue-600 font-extrabold">Auto-submit</span>
                 </div>
 
-                <div class="grid grid-cols-5 gap-1.5 sm:gap-2.5">
+                <div class="grid grid-cols-3 gap-2 sm:gap-2.5 max-w-[260px] sm:max-w-[280px] mx-auto">
                     @for($n = 1; $n <= 9; $n++)
                         <button
                             type="button"
                             onclick="handleInput({{ $n }})"
-                            class="h-12 sm:h-16 rounded-xl sm:rounded-2xl bg-slate-50 hover:bg-blue-600 active:bg-blue-700 text-slate-900 hover:text-white font-black text-xl sm:text-2xl transition-all shadow-sm active:scale-90 border-2 border-slate-200 hover:border-blue-500 select-none"
+                            class="h-12 sm:h-14 rounded-2xl bg-slate-50 hover:bg-blue-600 active:bg-blue-700 text-slate-900 hover:text-white font-black text-xl sm:text-2xl transition-all shadow-xs active:scale-95 border-2 border-slate-200 hover:border-blue-500 select-none flex items-center justify-center cursor-pointer"
                             style="touch-action: manipulation; -webkit-tap-highlight-color: transparent;"
                         >
                             {{ $n }}
@@ -143,7 +230,7 @@
                     <button
                         type="button"
                         onclick="handleInput(0)"
-                        class="h-12 sm:h-16 rounded-xl sm:rounded-2xl bg-slate-50 hover:bg-blue-600 active:bg-blue-700 text-slate-900 hover:text-white font-black text-xl sm:text-2xl transition-all shadow-sm active:scale-90 border-2 border-slate-200 hover:border-blue-500 col-span-1 select-none"
+                        class="h-12 sm:h-14 rounded-2xl bg-slate-50 hover:bg-blue-600 active:bg-blue-700 text-slate-900 hover:text-white font-black text-xl sm:text-2xl transition-all shadow-xs active:scale-95 border-2 border-slate-200 hover:border-blue-500 col-start-2 select-none flex items-center justify-center cursor-pointer"
                         style="touch-action: manipulation; -webkit-tap-highlight-color: transparent;"
                     >
                         0
@@ -294,6 +381,118 @@
         const passingScore = {{ $psychotest->passing_score }};
         const submitUrl = "{{ route('career.psychotests.submit', [$application->id, $psychotest->id]) }}";
 
+        // Simulation State
+        const simDigits = [4, 7, 3, 7, 4]; // Pairs: (7+4=11 -> 1), (3+7=10 -> 0), (7+3=10 -> 0), (4+7=11 -> 1)
+        let simRowIdx = 0;
+        let simComplete = false;
+
+        function renderSimColumn() {
+            const wrapper = document.getElementById('sim-column-wrapper');
+            if (!wrapper) return;
+            wrapper.innerHTML = '';
+            for (let r = 0; r < simDigits.length; r++) {
+                const dEl = document.createElement('div');
+                dEl.id = `sim-digit-${r}`;
+                const isPair = (r === simRowIdx || r === simRowIdx + 1) && !simComplete;
+                dEl.className = `w-8 h-7 flex items-center justify-center font-bold text-base rounded-md transition-all select-none ${
+                    isPair
+                        ? 'bg-gradient-to-tr from-blue-600 to-indigo-600 text-white shadow-sm font-black scale-105'
+                        : 'text-slate-800'
+                }`;
+                dEl.textContent = simDigits[r];
+                wrapper.appendChild(dEl);
+            }
+        }
+
+        function handleSimInput(digit) {
+            if (simComplete || simRowIdx >= simDigits.length - 1) return;
+            const b = simDigits[simRowIdx];
+            const t = simDigits[simRowIdx + 1];
+            const expected = (b + t) % 10;
+            const feedbackBox = document.getElementById('sim-feedback-box');
+            const badge = document.getElementById('sim-progress-badge');
+
+            if (digit === expected) {
+                simRowIdx++;
+                if (badge) badge.textContent = `Latihan: ${simRowIdx}/4`;
+                if (simRowIdx >= simDigits.length - 1) {
+                    simComplete = true;
+                    if (feedbackBox) {
+                        feedbackBox.className = 'p-2.5 rounded-xl bg-emerald-50 border border-emerald-300 text-xs text-emerald-800 font-bold min-h-[44px] flex items-center justify-center text-center';
+                        feedbackBox.innerHTML = '🎉 Latihan Selesai! Anda siap memulai ujian 30 kolom.';
+                    }
+                    if (badge) {
+                        badge.className = 'px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-300 shrink-0';
+                        badge.textContent = '✓ Simulasi Lulus (4/4)';
+                    }
+                } else {
+                    if (feedbackBox) {
+                        feedbackBox.className = 'p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 font-semibold min-h-[44px] flex items-center justify-center text-center';
+                        feedbackBox.innerHTML = `✓ Tepat! ${b} + ${t} = ${b+t} &rarr; tekan ${expected}. Lanjut ke pasangan berikutnya!`;
+                    }
+                }
+            } else {
+                if (feedbackBox) {
+                    feedbackBox.className = 'p-2.5 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-800 font-semibold min-h-[44px] flex items-center justify-center text-center';
+                    feedbackBox.innerHTML = `✗ Belum tepat. ${b} + ${t} = ${b+t} &rarr; tekan digit satuan: <strong class="text-rose-900 ml-1 font-black">${expected}</strong>`;
+                }
+            }
+            renderSimColumn();
+        }
+
+        function resetKraepelinSimulation() {
+            simRowIdx = 0;
+            simComplete = false;
+            const badge = document.getElementById('sim-progress-badge');
+            const feedbackBox = document.getElementById('sim-feedback-box');
+            if (badge) {
+                badge.className = 'px-2.5 py-1 rounded-full text-[10px] font-bold bg-white text-blue-700 border border-blue-200 shrink-0';
+                badge.textContent = 'Latihan: 0/4';
+            }
+            if (feedbackBox) {
+                feedbackBox.className = 'p-2.5 rounded-xl bg-white border border-slate-200 text-xs text-slate-700 min-h-[44px] flex items-center justify-center text-center font-medium leading-relaxed';
+                feedbackBox.textContent = 'Jumlahkan 2 angka yang berwarna biru (mulai dari bawah).';
+            }
+            renderSimColumn();
+        }
+
+        // Initialize simulation column on load
+        renderSimColumn();
+
+        // Briefing keyboard listener
+        window.addEventListener('keydown', (e) => {
+            const briefingModal = document.getElementById('briefing-modal');
+            if (!isRunning && briefingModal && !briefingModal.classList.contains('hidden')) {
+                if (e.key >= '0' && e.key <= '9') {
+                    e.preventDefault();
+                    handleSimInput(parseInt(e.key, 10));
+                }
+            }
+        });
+
+        function startKraepelinWithCountdown() {
+            const modal = document.getElementById('briefing-modal');
+            if (modal) modal.classList.add('hidden');
+
+            const countdownOverlay = document.getElementById('countdown-overlay');
+            const countNum = document.getElementById('countdown-number');
+            if (countdownOverlay) countdownOverlay.classList.remove('hidden');
+
+            let count = 3;
+            if (countNum) countNum.textContent = count;
+
+            const timer = setInterval(() => {
+                count--;
+                if (count > 0) {
+                    if (countNum) countNum.textContent = count;
+                } else {
+                    clearInterval(timer);
+                    if (countdownOverlay) countdownOverlay.classList.add('hidden');
+                    startKraepelinTest();
+                }
+            }, 1000);
+        }
+
         let currentColumnIdx = 0;
         let currentRowIdx = 0; // Starts from bottom: 0 is lowest pair
         let totalAttempted = 0;
@@ -303,8 +502,6 @@
         let colTimeLeft = secondsPerCol;
         let timerInterval = null;
         let isRunning = false;
-
-        document.getElementById('btn-start-test').addEventListener('click', startKraepelinTest);
 
         function startKraepelinTest() {
             document.getElementById('briefing-modal').classList.add('hidden');

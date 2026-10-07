@@ -94,16 +94,45 @@
         </div>
     </div>
 
-    <!-- Candidate Results Table Section -->
+    <!-- Candidate Results Table Section (Grouped by Candidate) -->
     <div class="bg-white border border-slate-200/90 rounded-3xl shadow-xs overflow-hidden">
-        <div class="p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="p-6 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
-                <h2 class="text-lg font-extrabold text-slate-900 flex items-center space-x-2">
-                    <span>📊</span>
-                    <span>Riwayat Hasil Tes Psikotes Pelamar</span>
-                </h2>
-                <p class="text-xs text-slate-500 mt-0.5">Hasil ujian dan skor yang diselesaikan kandidat melalui portal karir</p>
+                <div class="flex items-center space-x-2">
+                    <h2 class="text-lg font-extrabold text-slate-900 flex items-center space-x-2">
+                        <span>📊</span>
+                        <span>Riwayat Hasil Tes Psikotes Pelamar</span>
+                    </h2>
+                    <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-cyan-50 text-cyan-700 border border-cyan-200">
+                        {{ $candidateApplications->total() }} Kandidat
+                    </span>
+                </div>
+                <p class="text-xs text-slate-500 mt-1">Daftar kandidat yang telah menyelesaikan asesmen psikometri beserta rincian modul dan skor kelulusan.</p>
             </div>
+
+            <!-- Search Bar -->
+            <form method="GET" action="{{ route('recruitment.psychotests.index') }}" class="flex items-center gap-2">
+                <div class="relative">
+                    <input
+                        type="text"
+                        name="search"
+                        value="{{ request('search') }}"
+                        placeholder="Cari kandidat / lowongan..."
+                        class="w-64 pl-9 pr-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:bg-white focus:border-cyan-600 focus:ring-1 focus:ring-cyan-600 focus:outline-none transition-colors"
+                    >
+                    <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
+                <button type="submit" class="px-3.5 py-2 rounded-xl text-xs font-bold text-white bg-cyan-700 hover:bg-cyan-800 transition-colors shadow-2xs cursor-pointer">
+                    Cari
+                </button>
+                @if(request('search'))
+                    <a href="{{ route('recruitment.psychotests.index') }}" class="px-3 py-2 rounded-xl text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors">
+                        Reset
+                    </a>
+                @endif
+            </form>
         </div>
 
         <div class="overflow-x-auto">
@@ -112,84 +141,226 @@
                     <tr>
                         <th class="px-6 py-4">Kandidat</th>
                         <th class="px-6 py-4">Lowongan Kerja</th>
-                        <th class="px-6 py-4">Paket Tes</th>
-                        <th class="px-6 py-4 text-center">Skor Akhir</th>
-                        <th class="px-6 py-4 text-center">Status Hasil</th>
+                        <th class="px-6 py-4">Modul Psikotes & Skor</th>
+                        <th class="px-6 py-4 text-center">Ringkasan Evaluasi</th>
                         <th class="px-6 py-4">Waktu Ujian</th>
                         <th class="px-6 py-4 text-right">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
-                    @forelse($testResults as $result)
+                    @forelse($candidateApplications as $app)
                         @php
-                            $app = $result->jobApplication;
-                            $score = $result->total_score;
-                            $passingScore = $result->psychotest?->passing_score ?? 70;
-                            $passed = $result->result_status === 'PASSED' || $score >= $passingScore;
+                            $results = $app->psychotestResults;
+                            $totalCompleted = $results->count();
+                            $avgScore = $totalCompleted > 0 ? round($results->avg('total_score'), 1) : 0;
+                            $hasRetake = $results->contains('can_retake', true);
+                            $allPassed = $totalCompleted > 0 && $results->every(function ($r) {
+                                return $r->result_status === 'PASSED' || $r->total_score >= ($r->psychotest?->passing_score ?? 70);
+                            });
+                            $latestCompleted = $results->sortByDesc('completed_at')->first()?->completed_at;
+
+                            // Initials for avatar
+                            $initials = collect(explode(' ', $app->applicant_name ?? 'Kandidat'))
+                                ->map(fn($part) => mb_substr($part, 0, 1))
+                                ->take(2)
+                                ->join('');
                         @endphp
-                        <tr class="hover:bg-slate-50 transition-colors">
-                            <td class="px-6 py-4">
-                                <div class="font-bold text-slate-900">{{ $app?->applicant_name ?? 'Kandidat #'.$result->id }}</div>
-                                <div class="text-[11px] text-slate-500">{{ $app?->applicant_email ?? '-' }}</div>
-                            </td>
-                            <td class="px-6 py-4">
-                                <div class="font-semibold text-slate-800">{{ $app?->jobPosting?->title ?? '-' }}</div>
-                                <div class="text-[10px] text-slate-500">{{ $app?->jobPosting?->department?->name ?? 'Dept. Umum' }}</div>
-                            </td>
-                            <td class="px-6 py-4">
-                                <div class="font-semibold text-cyan-800">{{ $result->psychotest?->title ?? 'Psikotes Standar' }}</div>
-                                @if(is_array($result->answers_submitted))
-                                    <div class="text-[10px] text-slate-500 mt-0.5">
-                                        @if(($result->answers_submitted['type'] ?? '') === 'KRAEPELIN')
-                                            <div class="flex flex-wrap items-center gap-2 mt-1">
-                                                <span class="text-cyan-700 font-semibold">⚡ Kraepelin:</span>
-                                                <span>Akurasi {{ $result->answers_submitted['accuracy_rate'] ?? '-' }}% • {{ $result->answers_submitted['total_attempted'] ?? '-' }} hitungan ({{ $result->answers_submitted['columns_completed'] ?? '-' }} kolom)</span>
-                                                <button type="button"
-                                                        onclick='openKraepelinModal(@json($result->answers_submitted), "{{ addslashes($app?->applicant_name ?? 'Kandidat') }}", "{{ $result->total_score }}", "{{ $result->result_status }}")'
-                                                        class="px-2 py-0.5 rounded-md text-[10px] font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 transition-all inline-flex items-center gap-1 cursor-pointer">
-                                                    <span>📈 Lihat Kurva</span>
-                                                </button>
-                                            </div>
-                                        @elseif(($result->answers_submitted['type'] ?? '') === 'LIKERT_PERSONALITY')
-                                            <span class="text-purple-700 font-semibold">🧠 Likert:</span> Rata-rata {{ $result->answers_submitted['average_rating'] ?? '-' }}/5.0 • {{ count($result->answers_submitted['answers'] ?? []) }} butir
-                                        @endif
+                        <tr class="hover:bg-slate-50/60 transition-colors align-top">
+                            <!-- Kandidat Info -->
+                            <td class="px-6 py-5">
+                                <div class="flex items-start space-x-3">
+                                    <div class="w-10 h-10 rounded-2xl bg-cyan-50 border border-cyan-200 text-cyan-800 font-extrabold flex items-center justify-center text-xs shrink-0 shadow-2xs">
+                                        {{ strtoupper($initials) }}
                                     </div>
-                                @endif
-                            </td>
-                            <td class="px-6 py-4 text-center">
-                                <div class="inline-flex items-baseline space-x-1">
-                                    <span class="text-base font-extrabold {{ $passed ? 'text-emerald-700' : 'text-rose-700' }}">{{ $score }}</span>
-                                    <span class="text-[10px] text-slate-400">/ 100</span>
+                                    <div class="min-w-0">
+                                        <div class="font-extrabold text-slate-900 text-sm leading-snug truncate">
+                                            {{ $app->applicant_name ?? 'Kandidat #'.$app->id }}
+                                        </div>
+                                        <div class="text-[11px] text-slate-500 font-medium truncate mt-0.5">
+                                            {{ $app->applicant_email ?? '-' }}
+                                        </div>
+                                        @if($app->applicant_phone)
+                                            <div class="text-[10px] text-slate-400 mt-0.5">
+                                                📞 {{ $app->applicant_phone }}
+                                            </div>
+                                        @endif
+                                        <div class="mt-2">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200">
+                                                {{ $app->stage_label }}
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
                             </td>
-                            <td class="px-6 py-4 text-center">
-                                @if($passed)
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                                        ✓ LULUS ({{ $result->result_status ?? 'PASSED' }})
-                                    </span>
-                                @else
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-extrabold bg-rose-50 text-rose-700 border border-rose-200">
-                                        ✗ TIDAK LULUS
-                                    </span>
-                                @endif
+
+                            <!-- Lowongan Kerja -->
+                            <td class="px-6 py-5">
+                                <div class="font-bold text-slate-800 leading-snug">
+                                    {{ $app->jobPosting?->title ?? 'Posisi Terhapus' }}
+                                </div>
+                                <div class="text-[11px] text-slate-500 font-medium mt-1">
+                                    {{ $app->jobPosting?->department?->name ?? 'Dept. Umum' }}
+                                </div>
+                                <div class="text-[10px] text-slate-400 mt-2">
+                                    Melamar: {{ $app->applied_at ? $app->applied_at->format('d M Y') : '-' }}
+                                </div>
                             </td>
-                            <td class="px-6 py-4 text-slate-500 text-[11px]">
-                                {{ $result->completed_at ? $result->completed_at->format('d M Y, H:i') : '-' }}
+
+                            <!-- Modul Psikotes & Skor (Individual Test Cards) -->
+                            <td class="px-6 py-5">
+                                <div class="space-y-2.5 min-w-[340px] max-w-[460px]">
+                                    @foreach($results as $result)
+                                        @php
+                                            $score = $result->total_score;
+                                            $passingScore = $result->psychotest?->passing_score ?? 70;
+                                            $passed = $result->result_status === 'PASSED' || $score >= $passingScore;
+                                            $isKraepelin = $result->psychotest?->isKraepelin() || (($result->answers_submitted['type'] ?? '') === 'KRAEPELIN');
+                                            $isLikert = $result->psychotest?->isLikertPersonality() || (($result->answers_submitted['type'] ?? '') === 'LIKERT_PERSONALITY');
+                                        @endphp
+                                        <div class="p-3 rounded-2xl bg-white border border-slate-200 hover:border-slate-300 shadow-2xs transition-all space-y-2">
+                                            <!-- Card Header: Title & Score -->
+                                            <div class="flex items-start justify-between gap-2">
+                                                <div class="min-w-0">
+                                                    <div class="flex items-center space-x-1.5 mb-0.5">
+                                                        <span class="px-1.5 py-0.5 rounded text-[9px] font-black uppercase tracking-wider {{ $isKraepelin ? 'bg-cyan-50 text-cyan-700 border border-cyan-200' : ($isLikert ? 'bg-purple-50 text-purple-700 border border-purple-200' : 'bg-slate-100 text-slate-600 border border-slate-200') }}">
+                                                            {{ $isKraepelin ? '⚡ Kraepelin' : ($isLikert ? '🧠 Likert' : 'Logika/Umum') }}
+                                                        </span>
+                                                        <span class="text-[10px] text-slate-400 font-semibold">
+                                                            (Pass: {{ $passingScore }}%)
+                                                        </span>
+                                                    </div>
+                                                    <h4 class="font-bold text-slate-900 text-xs leading-snug truncate" title="{{ $result->psychotest?->title ?? 'Modul Psikotes' }}">
+                                                        {{ $result->psychotest?->title ?? 'Modul Psikotes' }}
+                                                    </h4>
+                                                </div>
+
+                                                <div class="flex flex-col items-end shrink-0">
+                                                    <div class="inline-flex items-baseline space-x-0.5">
+                                                        <span class="text-sm font-extrabold {{ $passed ? 'text-emerald-700' : 'text-rose-700' }}">{{ $score }}</span>
+                                                        <span class="text-[10px] text-slate-400">/ 100</span>
+                                                    </div>
+                                                    <div class="mt-0.5">
+                                                        @if($result->can_retake)
+                                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-black bg-amber-50 text-amber-800 border border-amber-300">
+                                                                ⚠️ Izin Uji Ulang
+                                                            </span>
+                                                        @elseif($passed)
+                                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                                                ✓ LULUS
+                                                            </span>
+                                                        @else
+                                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-bold bg-rose-50 text-rose-700 border border-rose-200">
+                                                                ✗ TIDAK LULUS
+                                                            </span>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Metric Details (Kraepelin / Likert) -->
+                                            @if(is_array($result->answers_submitted))
+                                                @if($isKraepelin)
+                                                    <div class="flex flex-wrap items-center justify-between gap-1.5 pt-1.5 border-t border-slate-100 text-[10px] text-slate-600">
+                                                        <div class="flex items-center gap-1.5">
+                                                            <span class="font-bold text-cyan-700">Akurasi {{ $result->answers_submitted['accuracy_rate'] ?? '-' }}%</span>
+                                                            <span>•</span>
+                                                            <span>{{ $result->answers_submitted['total_attempted'] ?? '-' }} hitungan ({{ $result->answers_submitted['columns_completed'] ?? '-' }} kol)</span>
+                                                        </div>
+                                                        <button type="button"
+                                                                onclick='openKraepelinModal(@json($result->answers_submitted), "{{ addslashes($app->applicant_name) }}", "{{ $result->total_score }}", "{{ $result->result_status }}")'
+                                                                class="px-2 py-0.5 rounded-md text-[10px] font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 transition-all inline-flex items-center gap-1 cursor-pointer">
+                                                            <span>📈 Lihat Kurva</span>
+                                                        </button>
+                                                    </div>
+                                                @elseif($isLikert)
+                                                    <div class="pt-1.5 border-t border-slate-100 text-[10px] text-purple-700 flex items-center justify-between">
+                                                        <span>🧠 Likert: Rata-rata {{ $result->answers_submitted['average_rating'] ?? '-' }}/5.0</span>
+                                                        <span class="text-slate-400">{{ count($result->answers_submitted['answers'] ?? []) }} butir</span>
+                                                    </div>
+                                                @endif
+                                            @endif
+
+                                            <!-- Card Footer: Attempt info & HR Retake controls -->
+                                            <div class="flex items-center justify-between gap-2 pt-1.5 border-t border-slate-100 text-[10px]">
+                                                <div class="text-slate-400">
+                                                    Ujian ke-{{ $result->attempt_number ?? 1 }}
+                                                    @if($result->completed_at)
+                                                        • {{ $result->completed_at->format('d/m/Y H:i') }}
+                                                    @endif
+                                                </div>
+
+                                                <div class="flex items-center space-x-1.5">
+                                                    @if($result->can_retake)
+                                                        <form action="{{ route('recruitment.applications.psychotests.cancel-retake', [$app->id, $result->psychotest_id]) }}" method="POST" class="inline">
+                                                            @csrf
+                                                            <button type="submit" class="px-2 py-1 rounded-lg text-[10px] font-bold text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 transition-all cursor-pointer" title="Batalkan Izin Uji Ulang">
+                                                                ✕ Batal Retake
+                                                            </button>
+                                                        </form>
+                                                    @else
+                                                        <button type="button"
+                                                                onclick='openRetakeModalIndex("{{ $app->id }}", "{{ $result->psychotest_id }}", "{{ addslashes($app->applicant_name) }}", "{{ addslashes($result->psychotest?->title ?? 'Modul') }}")'
+                                                                class="px-2 py-1 rounded-lg text-[10px] font-bold text-amber-800 bg-amber-50 hover:bg-amber-100 border border-amber-200 transition-all cursor-pointer" title="Izinkan Uji Ulang Modul Ini">
+                                                            🔄 Retake
+                                                        </button>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
                             </td>
-                            <td class="px-6 py-4 text-right">
-                                @if($app)
-                                    <a href="{{ route('recruitment.applications.show', $app->id) }}" class="px-3.5 py-1.5 rounded-lg text-xs font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 transition-all inline-flex items-center space-x-1 shadow-xs">
-                                        <span>Dossier</span>
-                                        <span>→</span>
-                                    </a>
-                                @else
-                                    <span class="text-slate-400">-</span>
-                                @endif
+
+                            <!-- Ringkasan Evaluasi -->
+                            <td class="px-6 py-5 text-center">
+                                <div class="inline-flex flex-col items-center p-3 rounded-2xl bg-slate-50 border border-slate-200/80 w-full max-w-[140px]">
+                                    <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-0.5">Rata-Rata</div>
+                                    <div class="inline-flex items-baseline space-x-0.5">
+                                        <span class="text-lg font-black text-slate-900">{{ $avgScore }}</span>
+                                        <span class="text-[10px] text-slate-400">/ 100</span>
+                                    </div>
+                                    <div class="text-[10px] font-semibold text-slate-500 mt-1">
+                                        {{ $totalCompleted }} Modul Selesai
+                                    </div>
+                                    <div class="mt-2.5">
+                                        @if($hasRetake)
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-black bg-amber-50 text-amber-800 border border-amber-300">
+                                                ⚠️ Ada Retake
+                                            </span>
+                                        @elseif($allPassed)
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[9px] font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                                ✓ LULUS SEMUA
+                                            </span>
+                                        @else
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[9px] font-extrabold bg-rose-50 text-rose-700 border border-rose-200">
+                                                ✗ SEBAGIAN GAGAL
+                                            </span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </td>
+
+                            <!-- Waktu Ujian Terakhir -->
+                            <td class="px-6 py-5">
+                                <div class="font-semibold text-slate-700 text-xs">
+                                    {{ $latestCompleted ? $latestCompleted->format('d M Y') : '-' }}
+                                </div>
+                                <div class="text-[10px] text-slate-400 mt-0.5">
+                                    {{ $latestCompleted ? $latestCompleted->format('H:i') . ' WIB' : '' }}
+                                </div>
+                            </td>
+
+                            <!-- Aksi -->
+                            <td class="px-6 py-5 text-right">
+                                <a href="{{ route('recruitment.applications.show', $app->id) }}" class="px-3 py-1.5 rounded-xl text-xs font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 transition-all inline-flex items-center space-x-1.5 shadow-2xs">
+                                    <span>Dossier</span>
+                                    <span>→</span>
+                                </a>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="px-6 py-12 text-center text-slate-500">
+                            <td colspan="6" class="px-6 py-12 text-center text-slate-500">
                                 <div class="text-3xl mb-2">📝</div>
                                 <div class="font-semibold text-slate-900">Belum ada kandidat yang menyelesaikan psikotes</div>
                                 <p class="text-xs text-slate-400 mt-1">Kandidat yang masuk tahap psikotes akan mengerjakan ujian melalui portal kandidat.</p>
@@ -200,9 +371,9 @@
             </table>
         </div>
 
-        @if($testResults->hasPages())
+        @if($candidateApplications->hasPages())
             <div class="p-4 border-t border-slate-100 bg-white">
-                {{ $testResults->links() }}
+                {{ $candidateApplications->links() }}
             </div>
         @endif
     </div>
@@ -439,5 +610,61 @@
             </svg>
         `;
     }
+
+    function openRetakeModalIndex(appId, testId, candName, testTitle) {
+        document.getElementById('retake-index-cand-name').textContent = candName;
+        document.getElementById('retake-index-test-title').textContent = testTitle;
+        document.getElementById('retake-index-form').action = `{{ url('recruitment/applications') }}/${appId}/psychotests/${testId}/allow-retake`;
+        document.getElementById('retake-index-modal').classList.remove('hidden');
+    }
+
+    function closeRetakeModalIndex() {
+        document.getElementById('retake-index-modal').classList.add('hidden');
+    }
 </script>
+
+<!-- Modal Atur Uji Ulang (Monitoring Hub) -->
+<div id="retake-index-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white border border-slate-200 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl space-y-4 my-auto">
+        <div class="flex items-start justify-between border-b border-slate-100 pb-3">
+            <div>
+                <span class="px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-wider bg-amber-50 text-amber-800 border border-amber-200 inline-block mb-1">
+                    🔄 Manajemen Uji Ulang
+                </span>
+                <h3 class="text-base font-bold text-slate-900">Atur Izin Uji Ulang Psikotes</h3>
+            </div>
+            <button type="button" onclick="closeRetakeModalIndex()" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-sm font-bold cursor-pointer">
+                ✕
+            </button>
+        </div>
+
+        <p class="text-xs text-slate-600 leading-relaxed">
+            Apakah Anda yakin ingin mengizinkan kandidat <strong id="retake-index-cand-name" class="text-slate-900">-</strong> mengerjakan ulang tes <strong id="retake-index-test-title" class="text-slate-900">-</strong>?
+        </p>
+
+        <form id="retake-index-form" method="POST" action="" class="space-y-4">
+            @csrf
+            <div>
+                <label for="retake_index_reason" class="block text-xs font-semibold text-slate-700 mb-1">Alasan / Catatan HR untuk Uji Ulang</label>
+                <textarea
+                    id="retake_index_reason"
+                    name="reason"
+                    rows="3"
+                    class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 rounded-xl text-xs focus:bg-white focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 focus:outline-none transition-colors"
+                    placeholder="Contoh: Kendala teknis / izin pengujian ulang hasil nilai..."
+                ></textarea>
+                <span class="text-[10px] text-slate-500">Catatan ini akan dapat dibaca kandidat di portal karir sebelum mengerjakan tes kembali.</span>
+            </div>
+
+            <div class="flex items-center justify-end space-x-2 pt-2 border-t border-slate-100">
+                <button type="button" onclick="closeRetakeModalIndex()" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors">
+                    Batal
+                </button>
+                <button type="submit" class="px-5 py-2 rounded-xl text-xs font-bold text-white bg-amber-600 hover:bg-amber-700 shadow-md shadow-amber-600/20 transition-colors">
+                    ✓ Konfirmasi Izinkan Uji Ulang
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 @endsection

@@ -17,6 +17,11 @@ class CandidatePsychotestResult extends Model
         'total_score',
         'result_status',
         'completed_at',
+        'can_retake',
+        'retake_reason',
+        'retake_granted_at',
+        'retake_granted_by',
+        'attempt_number',
     ];
 
     protected function casts(): array
@@ -25,7 +30,20 @@ class CandidatePsychotestResult extends Model
             'answers_submitted' => 'array',
             'total_score' => 'integer',
             'completed_at' => 'datetime',
+            'can_retake' => 'boolean',
+            'retake_granted_at' => 'datetime',
+            'attempt_number' => 'integer',
         ];
+    }
+
+    public function isLocked(): bool
+    {
+        return $this->completed_at !== null && ! $this->can_retake;
+    }
+
+    public function getIsLockedAttribute(): bool
+    {
+        return $this->isLocked();
     }
 
     public function jobApplication(): BelongsTo
@@ -36,5 +54,10 @@ class CandidatePsychotestResult extends Model
     public function psychotest(): BelongsTo
     {
         return $this->belongsTo(Psychotest::class);
+    }
+
+    public function retakeGrantedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'retake_granted_by');
     }
 }
