@@ -25,6 +25,8 @@ class Attendance extends Model
         'clock_out_distance_meters',
         'clock_out_photo_path',
         'status',
+        'is_holiday_work',
+        'holiday_id',
         'late_minutes',
         'early_leave_minutes',
         'total_work_minutes',
@@ -34,6 +36,7 @@ class Attendance extends Model
     {
         return [
             'date' => 'date',
+            'is_holiday_work' => 'boolean',
             'clock_in' => 'datetime',
             'clock_out' => 'datetime',
             'clock_in_lat' => 'float',
@@ -71,5 +74,10 @@ class Attendance extends Model
     public function shift(): BelongsTo
     {
         return $this->belongsTo(Shift::class);
+    }
+
+    public function holiday(): BelongsTo
+    {
+        return $this->belongsTo(Holiday::class);
     }
 }

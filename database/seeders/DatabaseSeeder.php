@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             ['email' => 'admin@hris.corp'],
             [
                 'name' => 'HR Administrator',
+                'user_type' => User::TYPE_HR,
                 'password' => bcrypt('password'),
             ]
         );
@@ -237,6 +238,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             AttendanceModuleSeeder::class,
             LeaveTypeSeeder::class,
+            RecruitmentSeeder::class,
         ]);
     }
 }

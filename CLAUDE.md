@@ -118,4 +118,13 @@ Before relying on a package's API, confirm its installed version:
 - Rerun a test after each change to it.
 - Run `vendor/bin/phpunit` to call the test runner directly. It accepts the same file path and `--filter=testName` arguments.
 
+=== ui/ux design system rules ===
+
+# UI/UX & Frontend Consistency Guidelines
+
+- Always follow the established Design System documented in `UI_UX_DESIGN_GUIDELINES.md` and `.agents/rules/ui-ux-design-system.md`.
+- Strict Light Theme Policy: All views must strictly use the modern light theme (`bg-slate-50` body, `bg-white` cards with `border-slate-200`, `text-slate-900` headings, `text-slate-700/600` text). Do not revert any page to Dark Mode.
+- Interactive Feedback: Selection options (Likert 1-5, Multiple Choice, Kraepelin numpad) must have distinctive visual states when selected (`peer-checked:` active rings, vibrant background, bold status badges).
+- Mobile-First: Non-HR roles (Career portal, Psychotests, ESS Attendance) must be 100% mobile-friendly with touch targets >= 44px, sticky keypads/CTAs, `touch-action: manipulation`, and responsive grids.
+
 </laravel-boost-guidelines>

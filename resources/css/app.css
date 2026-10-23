@@ -8,3 +8,61 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+/* ==============================================================
+   ACCESSIBILITY & SENIOR-FRIENDLY TYPOGRAPHY ENHANCEMENTS
+   Upgrades micro/tiny fonts to comfortable, readable dimensions
+   ============================================================== */
+html {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+}
+
+/* Override micro arbitrary pixel fonts so they are legible to older eyes */
+.text-\[8px\],
+.text-\[9px\] {
+    font-size: 0.75rem !important; /* Min 12px instead of 8-9px */
+    line-height: 1.15rem !important;
+}
+
+.text-\[10px\] {
+    font-size: 0.8125rem !important; /* 13px instead of 10px */
+    line-height: 1.25rem !important;
+}
+
+.text-\[11px\] {
+    font-size: 0.875rem !important; /* 14px instead of 11px */
+    line-height: 1.35rem !important;
+}
+
+/* Upgrade text-xs (was 12px) to 13.5px-14px for easy reading */
+.text-xs {
+    font-size: 0.875rem !important; /* 14px */
+    line-height: 1.35rem !important;
+}
+
+/* Upgrade text-sm to 15px */
+.text-sm {
+    font-size: 0.95rem !important; /* 15.2px */
+    line-height: 1.45rem !important;
+}
+
+/* Form controls & labels readability */
+label {
+    font-size: 0.875rem !important;
+    letter-spacing: 0.01em;
+}
+
+input, select, textarea {
+    font-size: 0.9375rem !important;
+}
+
+/* Table headers & data cells readability */
+table th {
+    font-size: 0.8125rem !important; /* 13px min */
+    letter-spacing: 0.03em;
+}
+
+table td {
+    font-size: 0.875rem !important; /* 14px */
+}

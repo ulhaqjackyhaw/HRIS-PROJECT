@@ -27,10 +27,41 @@ class UserFactory extends Factory
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
+            'user_type' => User::TYPE_HR,
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
         ];
+    }
+
+    /**
+     * Indicate that the user is an HR admin.
+     */
+    public function hr(): static
+    {
+        return $this->state(fn () => [
+            'user_type' => User::TYPE_HR,
+        ]);
+    }
+
+    /**
+     * Indicate that the user is an internal employee.
+     */
+    public function employee(): static
+    {
+        return $this->state(fn () => [
+            'user_type' => User::TYPE_EMPLOYEE,
+        ]);
+    }
+
+    /**
+     * Indicate that the user is a job candidate.
+     */
+    public function candidate(): static
+    {
+        return $this->state(fn () => [
+            'user_type' => User::TYPE_CANDIDATE,
+        ]);
     }
 
     /**
