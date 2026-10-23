@@ -483,4 +483,39 @@ class RecruitmentAtsTest extends TestCase
         $result->refresh();
         $this->assertFalse($result->can_retake);
     }
+
+    public function test_hr_can_reject_applicant_with_reason_and_notification(): void
+    {
+        $job = JobPosting::factory()->create(['title' => 'Software Engineer']);
+        $application = JobApplication::create([
+            'job_posting_id' => $job->id,
+            'applicant_name' => 'Doni Kusuma',
+            'applicant_email' => 'doni@example.com',
+            'applicant_phone' => '081299998888',
+            'current_stage' => 'INTERVIEW_HR',
+            'applied_at' => now(),
+        ]);
+
+        $response = $this->actingAs($this->hrUser)
+            ->post(route('recruitment.applications.reject', $application->id), [
+                'rejection_category' => 'Kualifikasi CV/Skill Belum Sesuai',
+                'rejection_reason' => 'Pengalaman teknis di bidang Laravel belum memenuhi requirement posisi.',
+                'send_notification' => 1,
+                'channel' => 'WHATSAPP',
+            ]);
+
+        $response->assertRedirect();
+        $response->assertSessionHas('success');
+
+        $application->refresh();
+        $this->assertEquals('REJECTED', $application->current_stage);
+        $this->assertStringContainsString('Ditolak [Kategori: Kualifikasi CV/Skill Belum Sesuai]', $application->stage_notes);
+        $this->assertStringContainsString('Pengalaman teknis di bidang Laravel belum memenuhi requirement posisi.', $application->stage_notes);
+
+        $this->assertDatabaseHas('application_communications', [
+            'job_application_id' => $application->id,
+            'channel' => 'WHATSAPP',
+            'recipient' => '081299998888',
+        ]);
+    }
 }

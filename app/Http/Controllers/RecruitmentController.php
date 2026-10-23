@@ -298,9 +298,14 @@ class RecruitmentController extends Controller
         $oldStage = $application->current_stage;
         $newStage = $validated['stage'];
 
+        $notes = $validated['stage_notes'] ?? $request->input('notes') ?? $application->stage_notes;
+        if ($newStage === 'REJECTED' && ! empty($validated['rejection_reason'])) {
+            $notes = "Catatan Penolakan HR: {$validated['rejection_reason']}";
+        }
+
         $updateData = [
             'current_stage' => $newStage,
-            'stage_notes' => $validated['stage_notes'] ?? $request->input('notes') ?? $application->stage_notes,
+            'stage_notes' => $notes,
         ];
 
         if ($newStage === 'HIRED' && ! $application->hired_at) {
@@ -310,6 +315,45 @@ class RecruitmentController extends Controller
         $application->update($updateData);
 
         return back()->with('success', "Tahapan pelamar {$application->applicant_name} berhasil diubah ke: {$application->stage_label}.");
+    }
+
+    /**
+     * Reject Applicant (HR Role Action).
+     */
+    public function rejectApplication(Request $request, JobApplication $application): RedirectResponse
+    {
+        $validated = $request->validate([
+            'rejection_category' => ['required', 'string', 'max:255'],
+            'rejection_reason' => ['required', 'string', 'max:1000'],
+            'send_notification' => ['nullable', 'boolean'],
+            'channel' => ['nullable', 'in:WHATSAPP,EMAIL'],
+        ]);
+
+        $category = $validated['rejection_category'];
+        $reason = $validated['rejection_reason'];
+        $fullNote = "Ditolak [Kategori: {$category}]: {$reason}";
+
+        $application->update([
+            'current_stage' => 'REJECTED',
+            'stage_notes' => $fullNote,
+        ]);
+
+        if ($request->boolean('send_notification')) {
+            $channel = $validated['channel'] ?? 'WHATSAPP';
+            $recipient = $channel === 'WHATSAPP' ? $application->applicant_phone : $application->applicant_email;
+            $jobTitle = $application->jobPosting->title ?? 'Posisi Terkait';
+
+            ApplicationCommunication::create([
+                'job_application_id' => $application->id,
+                'channel' => $channel,
+                'recipient' => $recipient,
+                'subject' => "Pemberitahuan Hasil Seleksi - {$jobTitle}",
+                'message' => "Yth. {$application->applicant_name},\n\nTerima kasih atas minat dan partisipasi Anda dalam proses seleksi untuk posisi {$jobTitle} di perusahaan kami.\n\nSetelah melakukan evaluasi yang cermat, kami menginformasikan bahwa saat ini kami belum dapat melanjutkan lamaran Anda ke tahap berikutnya.\n\nCatatan Tambahan: {$reason}\n\nKami sangat mengapresiasi waktu dan usaha yang telah Anda berikan, serta mendoakan kesuksesan untuk karir Anda di masa mendatang.\n\nSalam hangat,\nTim HR Recruitment",
+                'sent_at' => now(),
+            ]);
+        }
+
+        return back()->with('success', "Lamaran {$application->applicant_name} berhasil ditolak. Catatan penolakan telah tersimpan.");
     }
 
     /**

@@ -57,7 +57,7 @@
             </div>
             <div>
                 <span class="font-bold tracking-tight text-sm block leading-tight text-slate-900">{{ $moduleName }}</span>
-                <span class="text-[10px] text-slate-500">HRIS Enterprise</span>
+                <span class="text-xs text-slate-500 font-medium">HRIS Enterprise</span>
             </div>
         </div>
         <button type="button" id="mobile-menu-btn" class="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 focus:outline-none">
@@ -77,7 +77,7 @@
                 </div>
                 <div class="min-w-0">
                     <span class="font-bold text-slate-900 text-base tracking-wide block leading-none truncate">{{ $moduleName }}</span>
-                    <span class="text-[10px] text-indigo-600 font-semibold tracking-wider uppercase truncate block mt-0.5">{{ $moduleSubtitle }}</span>
+                    <span class="text-xs text-indigo-600 font-bold tracking-wider uppercase truncate block mt-1">{{ $moduleSubtitle }}</span>
                 </div>
             </div>
         </div>
@@ -93,7 +93,7 @@
                         </svg>
                         <span>{{ auth()->user()?->isHr() ? 'Pusat Modul Hub' : 'Dashboard Karyawan' }}</span>
                     </span>
-                    <span class="text-[10px] {{ $isAttendance ? 'bg-amber-100 text-amber-800' : 'bg-indigo-100 text-indigo-800' }} px-2 py-0.5 rounded-full font-medium">{{ auth()->user()?->isHr() ? 'Ganti &rarr;' : 'ESS' }}</span>
+                    <span class="text-xs {{ $isAttendance ? 'bg-amber-100 text-amber-800' : 'bg-indigo-100 text-indigo-800' }} px-2.5 py-0.5 rounded-full font-bold">{{ auth()->user()?->isHr() ? 'Ganti &rarr;' : 'ESS' }}</span>
                 </a>
             </div>
 
@@ -101,7 +101,7 @@
                 {{-- ============================================================== --}}
                 {{-- ATTENDANCE MODULE SPECIFIC SIDEBAR --}}
                 {{-- ============================================================== --}}
-                <p class="px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Self-Service ESS</p>
+                <p class="px-3 text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Self-Service ESS</p>
 
                 <a href="{{ route('attendance.check-in') }}" 
                    class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-medium text-sm transition-all {{ request()->routeIs('attendance.check-in*') ? 'bg-amber-600 text-white shadow-md shadow-amber-600/30' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
@@ -127,7 +127,7 @@
                     <span>Persetujuan Manajer (MSS)</span>
                 </a>
 
-                <p class="px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider mt-5 mb-2">Monitoring & Audit</p>
+                <p class="px-3 text-xs font-bold text-slate-500 uppercase tracking-wider mt-5 mb-2">Monitoring & Audit</p>
 
                 <a href="{{ route('attendance.index') }}" 
                    class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-medium text-sm transition-all {{ request()->routeIs('attendance.index') ? 'bg-amber-600 text-white shadow-md shadow-amber-600/30' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
@@ -145,7 +145,7 @@
                     <span>Rekapitulasi Presensi HR</span>
                 </a>
 
-                <p class="px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider mt-5 mb-2">Pengaturan Shift & Jadwal</p>
+                <p class="px-3 text-xs font-bold text-slate-500 uppercase tracking-wider mt-5 mb-2">Pengaturan Shift & Jadwal</p>
 
                 <a href="{{ route('shifts.index') }}" 
                    class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-medium text-sm transition-all {{ request()->routeIs('shifts.*') ? 'bg-amber-600 text-white shadow-md shadow-amber-600/30' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
@@ -169,10 +169,18 @@
                     <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                     </svg>
-                    <span>Roster & Jadwal</span>
+                    <span>Roster & Jadwal Shift</span>
                 </a>
 
-                <p class="px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider mt-5 mb-2">Lembur & SPL</p>
+                <a href="{{ route('holidays.index') }}" 
+                   class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-medium text-sm transition-all {{ request()->routeIs('holidays.*') ? 'bg-amber-600 text-white shadow-md shadow-amber-600/30' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
+                    <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                    <span>Kalender Libur & Cuti</span>
+                </a>
+
+                <p class="px-3 text-xs font-bold text-slate-500 uppercase tracking-wider mt-5 mb-2">Lembur & SPL</p>
 
                 <a href="{{ route('overtimes.index') }}" 
                    class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-medium text-sm transition-all {{ request()->routeIs('overtimes.*') ? 'bg-amber-600 text-white shadow-md shadow-amber-600/30' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
@@ -184,20 +192,20 @@
 
                 <!-- Quick Switcher to Other Modules -->
                 <div class="pt-4 mt-6 border-t border-slate-200 space-y-1">
-                    <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-2">Pintas Modul Lain</p>
+                    <p class="px-3 text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Pintas Modul Lain</p>
                     <a href="{{ route('dashboard') }}" class="flex items-center justify-between px-3 py-2 rounded-xl text-xs text-slate-600 hover:text-indigo-600 hover:bg-slate-100 transition-colors">
                         <span class="flex items-center gap-2">
                             <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
                             <span>Core HR & Kepegawaian</span>
                         </span>
-                        <span class="text-[10px] text-slate-400">&rarr;</span>
+                        <span class="text-xs text-slate-400">&rarr;</span>
                     </a>
                     <a href="{{ route('recruitment.dashboard') }}" class="flex items-center justify-between px-3 py-2 rounded-xl text-xs text-slate-600 hover:text-cyan-600 hover:bg-slate-100 transition-colors">
                         <span class="flex items-center gap-2">
                             <span class="w-2 h-2 rounded-full bg-cyan-500"></span>
                             <span>Recruitment & ATS</span>
                         </span>
-                        <span class="text-[10px] text-slate-400">&rarr;</span>
+                        <span class="text-xs text-slate-400">&rarr;</span>
                     </a>
                 </div>
 
@@ -205,7 +213,7 @@
                 {{-- ============================================================== --}}
                 {{-- RECRUITMENT & ATS MODULE SPECIFIC SIDEBAR --}}
                 {{-- ============================================================== --}}
-                <p class="px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Ikhtisar Domain</p>
+                <p class="px-3 text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Ikhtisar Domain</p>
 
                 <a href="{{ route('recruitment.dashboard') }}" 
                    class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-medium text-sm transition-all {{ request()->routeIs('recruitment.dashboard') ? 'bg-cyan-600 text-white shadow-md shadow-cyan-600/30' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
@@ -215,7 +223,7 @@
                     <span>Dashboard ATS</span>
                 </a>
 
-                <p class="px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider mt-5 mb-2">Pipeline Pelamar</p>
+                <p class="px-3 text-xs font-bold text-slate-500 uppercase tracking-wider mt-5 mb-2">Pipeline Pelamar</p>
 
                 <a href="{{ route('recruitment.applications.index') }}" 
                    class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-medium text-sm transition-all {{ request()->routeIs('recruitment.applications.*') ? 'bg-cyan-600 text-white shadow-md shadow-cyan-600/30' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
@@ -225,7 +233,7 @@
                     <span>Pipeline Seleksi (ATS)</span>
                 </a>
 
-                <p class="px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider mt-5 mb-2">Manajemen Lowongan</p>
+                <p class="px-3 text-xs font-bold text-slate-500 uppercase tracking-wider mt-5 mb-2">Manajemen Lowongan</p>
 
                 <a href="{{ route('recruitment.jobs.index') }}" 
                    class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-medium text-sm transition-all {{ request()->routeIs('recruitment.jobs.*') ? 'bg-cyan-600 text-white shadow-md shadow-cyan-600/30' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
@@ -235,7 +243,7 @@
                     <span>Daftar Lowongan Kerja</span>
                 </a>
 
-                <p class="px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider mt-5 mb-2">Asesmen & Tes</p>
+                <p class="px-3 text-xs font-bold text-slate-500 uppercase tracking-wider mt-5 mb-2">Asesmen & Tes</p>
 
                 <a href="{{ route('recruitment.psychotests.index') }}" 
                    class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-medium text-sm transition-all {{ request()->routeIs('recruitment.psychotests.*') ? 'bg-cyan-600 text-white shadow-md shadow-cyan-600/30' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
@@ -247,20 +255,20 @@
 
                 <!-- Quick Switcher to Other Modules -->
                 <div class="pt-4 mt-6 border-t border-slate-200 space-y-1">
-                    <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-2">Pintas Modul Lain</p>
+                    <p class="px-3 text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Pintas Modul Lain</p>
                     <a href="{{ route('career.landing') }}" target="_blank" class="flex items-center justify-between px-3 py-2 rounded-xl text-xs text-slate-600 hover:text-cyan-600 hover:bg-slate-100 transition-colors">
                         <span class="flex items-center gap-2">
                             <span class="w-2 h-2 rounded-full bg-cyan-500"></span>
                             <span>Buka Candidate Portal ↗</span>
                         </span>
-                        <span class="text-[10px] text-slate-400">&rarr;</span>
+                        <span class="text-xs text-slate-400">&rarr;</span>
                     </a>
                     <a href="{{ route('dashboard') }}" class="flex items-center justify-between px-3 py-2 rounded-xl text-xs text-slate-600 hover:text-indigo-600 hover:bg-slate-100 transition-colors">
                         <span class="flex items-center gap-2">
                             <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
                             <span>Core HR & Kepegawaian</span>
                         </span>
-                        <span class="text-[10px] text-slate-400">&rarr;</span>
+                        <span class="text-xs text-slate-400">&rarr;</span>
                     </a>
                 </div>
 
@@ -268,7 +276,7 @@
                 {{-- ============================================================== --}}
                 {{-- CORE HR MODULE SPECIFIC SIDEBAR --}}
                 {{-- ============================================================== --}}
-                <p class="px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Ikhtisar Domain</p>
+                <p class="px-3 text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Ikhtisar Domain</p>
 
                 <a href="{{ route('dashboard') }}" 
                    class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-medium text-sm transition-all {{ request()->routeIs('dashboard') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
@@ -278,7 +286,7 @@
                     <span>Dashboard Core HR</span>
                 </a>
 
-                <p class="px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider mt-5 mb-2">Manajemen SDM</p>
+                <p class="px-3 text-xs font-bold text-slate-500 uppercase tracking-wider mt-5 mb-2">Manajemen SDM</p>
 
                 <a href="{{ route('employees.index') }}" 
                    class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-medium text-sm transition-all {{ request()->routeIs('employees.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
@@ -288,7 +296,7 @@
                     <span>Data Karyawan</span>
                 </a>
 
-                <p class="px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider mt-5 mb-2">Master Organisasi</p>
+                <p class="px-3 text-xs font-bold text-slate-500 uppercase tracking-wider mt-5 mb-2">Master Organisasi</p>
 
                 <a href="{{ route('departments.index') }}" 
                    class="flex items-center space-x-3 px-3.5 py-2.5 rounded-xl font-medium text-sm transition-all {{ request()->routeIs('departments.*') ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
@@ -308,20 +316,20 @@
 
                 <!-- Quick Switcher to Other Modules -->
                 <div class="pt-4 mt-6 border-t border-slate-200 space-y-1">
-                    <p class="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-2">Pintas Modul Lain</p>
+                    <p class="px-3 text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Pintas Modul Lain</p>
                     <a href="{{ route('recruitment.dashboard') }}" class="flex items-center justify-between px-3 py-2 rounded-xl text-xs text-slate-600 hover:text-cyan-600 hover:bg-slate-100 transition-colors">
                         <span class="flex items-center gap-2">
                             <span class="w-2 h-2 rounded-full bg-cyan-500"></span>
                             <span>Recruitment & ATS</span>
                         </span>
-                        <span class="text-[10px] text-slate-400">&rarr;</span>
+                        <span class="text-xs text-slate-400">&rarr;</span>
                     </a>
                     <a href="{{ route('attendance.check-in') }}" class="flex items-center justify-between px-3 py-2 rounded-xl text-xs text-slate-600 hover:text-amber-600 hover:bg-slate-100 transition-colors">
                         <span class="flex items-center gap-2">
                             <span class="w-2 h-2 rounded-full bg-amber-500"></span>
                             <span>Time & Attendance</span>
                         </span>
-                        <span class="text-[10px] text-slate-400">&rarr;</span>
+                        <span class="text-xs text-slate-400">&rarr;</span>
                     </a>
                 </div>
             @endif

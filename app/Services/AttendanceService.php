@@ -5,7 +5,10 @@ namespace App\Services;
 use App\Models\Attendance;
 use App\Models\Employee;
 use App\Models\EmployeeSchedule;
+use App\Models\Holiday;
 use App\Models\OfficeLocation;
+use App\Models\OvertimeRequest;
+use App\Models\Shift;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\UploadedFile;
@@ -60,13 +63,25 @@ class AttendanceService
             ->whereDate('date', $today)
             ->first();
 
-        if (! $schedule || $schedule->is_day_off || ! $schedule->shift) {
-            throw new Exception('Hari ini adalah hari libur atau Anda tidak memiliki jadwal kerja.');
-        }
-
-        $location = $schedule->officeLocation ?? OfficeLocation::where('is_active', true)->first();
+        $location = $schedule?->officeLocation ?? OfficeLocation::where('is_active', true)->first();
         if (! $location) {
             throw new Exception('Titik lokasi kantor belum dikonfigurasi.');
+        }
+
+        // Cek apakah hari ini adalah Hari Libur Nasional / Cuti Bersama
+        $holiday = Holiday::getHolidayForDate($today, $location->id);
+        $isHolidayWork = false;
+        $holidayId = null;
+
+        if ($holiday) {
+            $isHolidayWork = true;
+            $holidayId = $holiday->id;
+            $shift = $schedule?->shift ?? Shift::first();
+        } else {
+            if (! $schedule || $schedule->is_day_off || ! $schedule->shift) {
+                throw new Exception('Hari ini adalah hari libur atau Anda tidak memiliki jadwal kerja.');
+            }
+            $shift = $schedule->shift;
         }
 
         // 3. Validasi Geofencing (Radius)
@@ -79,14 +94,14 @@ class AttendanceService
         $photoPath = $this->storePhoto($photo, 'attendances/clock_in');
 
         // 5. Hitung Keterlambatan
-        $shiftStartTime = Carbon::parse($today.' '.$schedule->shift->start_time);
-        $toleranceMinutes = $schedule->shift->late_tolerance_minutes;
+        $shiftStartTime = Carbon::parse($today.' '.($shift?->start_time ?? '08:00:00'));
+        $toleranceMinutes = $shift?->late_tolerance_minutes ?? 15;
         $maxOnTime = $shiftStartTime->copy()->addMinutes($toleranceMinutes);
 
         $lateMinutes = 0;
         $status = 'PRESENT';
 
-        if ($now->greaterThan($maxOnTime)) {
+        if (! $isHolidayWork && $now->greaterThan($maxOnTime)) {
             $lateMinutes = (int) round($shiftStartTime->diffInMinutes($now));
             $status = 'LATE';
         }
@@ -98,13 +113,15 @@ class AttendanceService
                 'date' => $today,
             ],
             [
-                'shift_id' => $schedule->shift_id,
+                'shift_id' => $shift?->id,
                 'clock_in' => $now,
                 'clock_in_lat' => $userLat,
                 'clock_in_lng' => $userLng,
                 'clock_in_distance_meters' => $distance,
                 'clock_in_photo_path' => $photoPath,
                 'status' => $status,
+                'is_holiday_work' => $isHolidayWork,
+                'holiday_id' => $holidayId,
                 'late_minutes' => (int) $lateMinutes,
             ]
         );
@@ -176,6 +193,27 @@ class AttendanceService
             'early_leave_minutes' => (int) $earlyLeaveMinutes,
             'status' => $status,
         ]);
+
+        // Jika kehadiran dilakukan di hari libur nasional / cuti bersama, buat otomatis permohonan lembur hari libur
+        if ($attendance->is_holiday_work || $attendance->holiday_id) {
+            $holiday = $attendance->holiday ?? Holiday::find($attendance->holiday_id);
+            $holidayName = $holiday?->name ?? 'Hari Libur Nasional / Cuti Bersama';
+            $hours = round($totalWorkMinutes / 60, 2);
+
+            OvertimeRequest::updateOrCreate(
+                [
+                    'employee_id' => $employee->id,
+                    'date' => $today,
+                ],
+                [
+                    'start_time' => $attendance->clock_in,
+                    'end_time' => $now,
+                    'total_hours' => $hours,
+                    'reason' => "[Otomatis] Kerja di Hari Libur: {$holidayName} ({$hours} jam kerja aktual)",
+                    'status' => 'PENDING',
+                ]
+            );
+        }
 
         return $attendance;
     }

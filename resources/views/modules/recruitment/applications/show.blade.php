@@ -63,6 +63,17 @@
                     🔄 Pindah Tahap
                 </button>
 
+                <!-- Tolak Pelamar -->
+                @if($application->current_stage !== 'REJECTED')
+                    <button type="button" onclick="document.getElementById('modal-reject-application').classList.remove('hidden')" class="px-4 py-2.5 rounded-xl text-xs font-bold text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 transition-colors shadow-xs">
+                        🚫 Tolak Pelamar
+                    </button>
+                @else
+                    <span class="px-3 py-2 rounded-xl text-xs font-bold text-rose-800 bg-rose-100 border border-rose-200 flex items-center gap-1.5">
+                        <span>🚫 Status: Ditolak</span>
+                    </span>
+                @endif
+
                 <!-- Jadwalkan Wawancara -->
                 <button type="button" onclick="document.getElementById('modal-schedule-interview').classList.remove('hidden')" class="px-4 py-2.5 rounded-xl text-xs font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 shadow-xs transition-colors">
                     📅 Jadwal Interview
@@ -1028,6 +1039,7 @@
                         <option value="shortlist">Undangan Psikotes Online</option>
                         <option value="interview">Undangan Sesi Interview</option>
                         <option value="offering">Pemberitahuan Offering Letter</option>
+                        <option value="rejection">Surat Penolakan Resmi (Rejection Notice)</option>
                     </select>
                 </div>
             </div>
@@ -1126,12 +1138,75 @@
     </div>
 </div>
 
+<!-- 5. Modal Tolak Pelamar (HR Rejection Modal) -->
+<div id="modal-reject-application" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl space-y-4">
+        <div class="flex items-center space-x-3 pb-3 border-b border-slate-100">
+            <span class="w-10 h-10 rounded-2xl bg-rose-50 text-rose-600 border border-rose-200 font-black flex items-center justify-center text-lg">🚫</span>
+            <div>
+                <h3 class="text-lg font-bold text-slate-900">Konfirmasi Penolakan Pelamar</h3>
+                <span class="text-xs text-rose-600 font-semibold">Gagal Seleksi / Belum Memenuhi Kualifikasi</span>
+            </div>
+        </div>
+
+        <p class="text-xs text-slate-600 leading-relaxed">
+            Anda akan mengubah status lamaran untuk <strong>{{ $application->applicant_name }}</strong> (Posisi: <strong>{{ $application->jobPosting->title ?? '-' }}</strong>) menjadi <strong class="text-rose-700">Ditolak (REJECTED)</strong>.
+        </p>
+
+        <form action="{{ route('recruitment.applications.reject', $application->id) }}" method="POST" class="space-y-4">
+            @csrf
+
+            <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1.5">Kategori Penolakan*</label>
+                <select name="rejection_category" required class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:bg-white focus:border-rose-600 focus:ring-1 focus:ring-rose-600 rounded-xl text-sm">
+                    <option value="Kualifikasi CV/Skill Belum Sesuai">Kualifikasi CV & Skill Belum Sesuai</option>
+                    <option value="Hasil Psikotes Belum Memenuhi Standard">Hasil Skor Psikotes Belum Memenuhi Standard</option>
+                    <option value="Hasil Interview HR/User Belum Memenuhi">Hasil Evaluasi Interview (HR / User) Belum Sesuai</option>
+                    <option value="Ekspektasi Gaji & Benefit Tidak Sesuai">Ekspektasi Gaji & Package Belum Matched</option>
+                    <option value="Lokasi / Penempatan Kerja">Kendala Lokasi / Penempatan / Jadwal Join</option>
+                    <option value="Tidak Hadir / Membatalkan Proses">Tidak Hadir Sesi Seleksi / Membatalkan Proses</option>
+                    <option value="Lainnya">Alasan Lainnya</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1.5">Alasan / Catatan Penolakan Tambahan*</label>
+                <textarea name="rejection_reason" rows="3" required placeholder="Jelaskan secara ringkas poin evaluasi penolakan untuk catatan internal HR..." class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:bg-white focus:border-rose-600 focus:ring-1 focus:ring-rose-600 rounded-xl text-xs">Kualifikasi dan latar belakang pengalaman pelamar belum memenuhi standar spesifikasi posisi saat ini.</textarea>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+                <label class="flex items-center space-x-2.5 cursor-pointer">
+                    <input type="checkbox" name="send_notification" value="1" checked class="w-4 h-4 text-rose-600 rounded border-slate-300 focus:ring-rose-500" />
+                    <span class="text-xs font-bold text-slate-800">Kirimkan Notifikasi Surat Penolakan Resmi ke Pelamar</span>
+                </label>
+
+                <div>
+                    <label class="block text-[11px] font-semibold text-slate-600 mb-1">Saluran Notifikasi</label>
+                    <select name="channel" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs text-slate-900 focus:border-rose-600">
+                        <option value="WHATSAPP">WhatsApp ({{ $application->applicant_phone }})</option>
+                        <option value="EMAIL">Email ({{ $application->applicant_email }})</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-end space-x-3 pt-4 border-t border-slate-100">
+                <button type="button" onclick="document.getElementById('modal-reject-application').classList.add('hidden')" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-500 hover:text-slate-800">
+                    Batal
+                </button>
+                <button type="submit" class="px-6 py-2.5 rounded-xl text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 shadow-md shadow-rose-600/20 transition-all">
+                    🚫 Konfirmasi Tolak Pelamar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
 function applyTemplate(type) {
     const subjectEl = document.getElementById('comm_subject');
     const messageEl = document.getElementById('comm_message');
     const name = "{{ $application->applicant_name }}";
-    const job = "{{ $application->jobPosting->title }}";
+    const job = "{{ $application->jobPosting->title ?? 'Posisi' }}";
 
     if (type === 'shortlist') {
         subjectEl.value = `Undangan Psikotes Online - ${job}`;
@@ -1142,6 +1217,9 @@ function applyTemplate(type) {
     } else if (type === 'offering') {
         subjectEl.value = `Offering Letter & Onboarding - ${job}`;
         messageEl.value = `Halo ${name},\n\nSelamat! Anda terpilih untuk bergabung bersama kami pada posisi ${job}. Kami telah menerbitkan penawaran kerja resmi. Silakan hubungi tim HR untuk konfirmasi jadwal onboarding.\n\nSalam,\nTim HR Recruitment`;
+    } else if (type === 'rejection') {
+        subjectEl.value = `Pemberitahuan Hasil Seleksi - ${job}`;
+        messageEl.value = `Yth. ${name},\n\nTerima kasih atas minat dan partisipasi Anda dalam proses seleksi posisi ${job} di perusahaan kami.\n\nSetelah melakukan evaluasi cermat, kami menginformasikan bahwa saat ini kami belum dapat melanjutkan lamaran Anda ke tahap berikutnya.\n\nKami sangat mengapresiasi waktu Anda dan mendoakan kesuksesan untuk karir Anda di masa mendatang.\n\nHormat kami,\nTim HR Recruitment`;
     }
 }
 </script>

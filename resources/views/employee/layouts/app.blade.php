@@ -29,7 +29,7 @@
                         </div>
                         <div>
                             <span class="font-extrabold text-slate-900 text-base tracking-tight block leading-tight">HRIS Portal Karyawan</span>
-                            <span class="text-[10px] text-amber-700 font-bold uppercase tracking-wider block">Employee Self-Service</span>
+                            <span class="text-xs text-amber-700 font-bold uppercase tracking-wider block">Employee Self-Service</span>
                         </div>
                     </a>
                 </div>
@@ -37,31 +37,31 @@
                 <!-- Center: Desktop Horizontal Tab Navigation -->
                 <nav class="hidden md:flex items-center space-x-1">
                     <a href="{{ route('employee.dashboard') }}" 
-                       class="px-3.5 py-2 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('employee.dashboard') ? 'bg-amber-500 text-white shadow-sm shadow-amber-500/30' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100' }}">
+                       class="px-3.5 py-2 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('employee.dashboard') ? 'bg-amber-500 text-white shadow-sm shadow-amber-500/30' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100' }}">
                         Beranda
                     </a>
                     <a href="{{ route('employee.attendance.check-in') }}" 
-                       class="px-3.5 py-2 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('employee.attendance.check-in') ? 'bg-amber-500 text-white shadow-sm shadow-amber-500/30' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100' }}">
+                       class="px-3.5 py-2 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('employee.attendance.check-in') ? 'bg-amber-500 text-white shadow-sm shadow-amber-500/30' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100' }}">
                         Presensi Selfie
                     </a>
                     <a href="{{ route('employee.attendance.history') }}" 
-                       class="px-3.5 py-2 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('employee.attendance.history') ? 'bg-amber-500 text-white shadow-sm shadow-amber-500/30' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100' }}">
+                       class="px-3.5 py-2 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('employee.attendance.history') ? 'bg-amber-500 text-white shadow-sm shadow-amber-500/30' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100' }}">
                         Riwayat Presensi
                     </a>
                     <a href="{{ route('employee.leaves.index') }}" 
-                       class="px-3.5 py-2 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('employee.leaves.*') ? 'bg-amber-500 text-white shadow-sm shadow-amber-500/30' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100' }}">
+                       class="px-3.5 py-2 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('employee.leaves.*') ? 'bg-amber-500 text-white shadow-sm shadow-amber-500/30' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100' }}">
                         Cuti & Izin
                     </a>
                     <a href="{{ route('employee.overtimes.index') }}" 
-                       class="px-3.5 py-2 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('employee.overtimes.*') ? 'bg-amber-500 text-white shadow-sm shadow-amber-500/30' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100' }}">
+                       class="px-3.5 py-2 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('employee.overtimes.*') ? 'bg-amber-500 text-white shadow-sm shadow-amber-500/30' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100' }}">
                         Lembur
                     </a>
                     <a href="{{ route('employee.schedules.index') }}" 
-                       class="px-3.5 py-2 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('employee.schedules.*') ? 'bg-amber-500 text-white shadow-sm shadow-amber-500/30' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100' }}">
+                       class="px-3.5 py-2 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('employee.schedules.*') ? 'bg-amber-500 text-white shadow-sm shadow-amber-500/30' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100' }}">
                         Jadwal Shift
                     </a>
                     <a href="{{ route('employee.profile') }}" 
-                       class="px-3.5 py-2 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('employee.profile') ? 'bg-amber-500 text-white shadow-sm shadow-amber-500/30' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100' }}">
+                       class="px-3.5 py-2 rounded-xl text-sm font-semibold transition-all {{ request()->routeIs('employee.profile') ? 'bg-amber-500 text-white shadow-sm shadow-amber-500/30' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100' }}">
                         Profil Saya
                     </a>
                 </nav>
@@ -69,8 +69,8 @@
                 <!-- Right: User Avatar & Logout -->
                 <div class="flex items-center space-x-3">
                     <div class="hidden sm:flex flex-col text-right">
-                        <span class="text-xs font-bold text-slate-900 leading-tight">{{ auth()->user()->name }}</span>
-                        <span class="text-[10px] text-amber-700 font-semibold uppercase tracking-wider">Karyawan Aktif</span>
+                        <span class="text-sm font-bold text-slate-900 leading-tight">{{ auth()->user()->name }}</span>
+                        <span class="text-xs text-amber-700 font-bold uppercase tracking-wider">Karyawan Aktif</span>
                     </div>
 
                     <a href="{{ route('employee.profile') }}" 
@@ -130,11 +130,11 @@
     </main>
 
     <!-- Mobile Bottom Navigation Bar (App-Like Bottom Bar) -->
-    <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-xl border-t border-slate-200 shadow-xl px-2 py-1.5 flex items-center justify-around" style="touch-action: manipulation;">
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-xl border-t border-slate-200 shadow-xl px-2 py-2 flex items-center justify-around" style="touch-action: manipulation;">
         
         <!-- 1. Home -->
         <a href="{{ route('employee.dashboard') }}" 
-           class="flex flex-col items-center justify-center w-14 py-1 rounded-xl text-[10px] font-semibold transition-all {{ request()->routeIs('employee.dashboard') ? 'text-amber-600 font-bold' : 'text-slate-500 hover:text-slate-900' }}">
+           class="flex flex-col items-center justify-center w-16 py-1 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('employee.dashboard') ? 'text-amber-600 font-bold' : 'text-slate-500 hover:text-slate-900' }}">
             <svg class="w-5 h-5 mb-0.5 {{ request()->routeIs('employee.dashboard') ? 'stroke-[2.5]' : '' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
             </svg>
@@ -144,18 +144,18 @@
         <!-- 2. Presensi (Center Floating Style) -->
         <a href="{{ route('employee.attendance.check-in') }}" 
            class="flex flex-col items-center justify-center -mt-4 group">
-            <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-600 text-white flex items-center justify-center shadow-lg shadow-amber-500/30 group-active:scale-90 transition-all">
+            <div class="w-13 h-13 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-600 text-white flex items-center justify-center shadow-lg shadow-amber-500/30 group-active:scale-90 transition-all">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
                 </svg>
             </div>
-            <span class="text-[10px] font-bold text-amber-700 mt-1">Presensi</span>
+            <span class="text-xs font-bold text-amber-700 mt-1">Presensi</span>
         </a>
 
         <!-- 3. Cuti -->
         <a href="{{ route('employee.leaves.index') }}" 
-           class="flex flex-col items-center justify-center w-14 py-1 rounded-xl text-[10px] font-semibold transition-all {{ request()->routeIs('employee.leaves.*') ? 'text-amber-600 font-bold' : 'text-slate-500 hover:text-slate-900' }}">
+           class="flex flex-col items-center justify-center w-16 py-1 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('employee.leaves.*') ? 'text-amber-600 font-bold' : 'text-slate-500 hover:text-slate-900' }}">
             <svg class="w-5 h-5 mb-0.5 {{ request()->routeIs('employee.leaves.*') ? 'stroke-[2.5]' : '' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
             </svg>
@@ -164,7 +164,7 @@
 
         <!-- 4. Lembur -->
         <a href="{{ route('employee.overtimes.index') }}" 
-           class="flex flex-col items-center justify-center w-14 py-1 rounded-xl text-[10px] font-semibold transition-all {{ request()->routeIs('employee.overtimes.*') ? 'text-amber-600 font-bold' : 'text-slate-500 hover:text-slate-900' }}">
+           class="flex flex-col items-center justify-center w-16 py-1 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('employee.overtimes.*') ? 'text-amber-600 font-bold' : 'text-slate-500 hover:text-slate-900' }}">
             <svg class="w-5 h-5 mb-0.5 {{ request()->routeIs('employee.overtimes.*') ? 'stroke-[2.5]' : '' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
             </svg>
@@ -173,7 +173,7 @@
 
         <!-- 5. Profil -->
         <a href="{{ route('employee.profile') }}" 
-           class="flex flex-col items-center justify-center w-14 py-1 rounded-xl text-[10px] font-semibold transition-all {{ request()->routeIs('employee.profile') ? 'text-amber-600 font-bold' : 'text-slate-500 hover:text-slate-900' }}">
+           class="flex flex-col items-center justify-center w-16 py-1 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('employee.profile') ? 'text-amber-600 font-bold' : 'text-slate-500 hover:text-slate-900' }}">
             <svg class="w-5 h-5 mb-0.5 {{ request()->routeIs('employee.profile') ? 'stroke-[2.5]' : '' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
             </svg>

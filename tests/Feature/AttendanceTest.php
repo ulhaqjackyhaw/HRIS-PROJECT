@@ -6,11 +6,13 @@ use App\Models\Attendance;
 use App\Models\Department;
 use App\Models\Employee;
 use App\Models\EmployeeSchedule;
+use App\Models\Holiday;
 use App\Models\OfficeLocation;
 use App\Models\OvertimeRequest;
 use App\Models\Position;
 use App\Models\Shift;
 use App\Models\User;
+use App\Services\AttendanceService;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -307,5 +309,162 @@ class AttendanceTest extends TestCase
             'status' => 'APPROVED',
             'approved_by' => $this->employee->id,
         ]);
+    }
+
+    public function test_mass_assign_schedules_to_department(): void
+    {
+        $dept = Department::factory()->create(['name' => 'Produksi']);
+        $emp1 = Employee::factory()->create(['department_id' => $dept->id, 'is_active' => true]);
+        $emp2 = Employee::factory()->create(['department_id' => $dept->id, 'is_active' => true]);
+
+        $response = $this->post(route('schedules.mass-assign'), [
+            'target_type' => 'department',
+            'department_id' => $dept->id,
+            'start_date' => '2026-11-01',
+            'end_date' => '2026-11-03',
+            'shift_id' => $this->shift->id,
+            'office_location_id' => $this->location->id,
+            'skip_national_holidays' => '0',
+        ]);
+
+        $response->assertRedirect(route('schedules.index', ['date' => '2026-11-01']));
+        $response->assertSessionHas('success');
+
+        // Check 3 days for both employees = 6 schedules
+        $this->assertDatabaseHas('employee_schedules', [
+            'employee_id' => $emp1->id,
+            'date' => '2026-11-01',
+            'shift_id' => $this->shift->id,
+            'is_day_off' => false,
+        ]);
+        $this->assertDatabaseHas('employee_schedules', [
+            'employee_id' => $emp2->id,
+            'date' => '2026-11-03',
+            'shift_id' => $this->shift->id,
+            'is_day_off' => false,
+        ]);
+    }
+
+    public function test_auto_roster_rotates_schedules_automatically(): void
+    {
+        $dept = Department::factory()->create(['name' => 'Operasional']);
+        $emp = Employee::factory()->create(['department_id' => $dept->id, 'is_active' => true]);
+
+        // Pattern 3_2: 3 days work, 2 days off (Nov 1 to Nov 5)
+        $response = $this->post(route('schedules.auto-roster'), [
+            'target_type' => 'department',
+            'department_id' => $dept->id,
+            'start_date' => '2026-11-01',
+            'end_date' => '2026-11-05',
+            'pattern_type' => '3_2',
+            'work_shift_id' => $this->shift->id,
+            'office_location_id' => $this->location->id,
+            'skip_national_holidays' => '0',
+        ]);
+
+        $response->assertRedirect(route('schedules.index', ['date' => '2026-11-01']));
+        $response->assertSessionHas('success');
+
+        // Nov 1 (Day 1) - Work
+        $this->assertDatabaseHas('employee_schedules', [
+            'employee_id' => $emp->id,
+            'date' => '2026-11-01',
+            'shift_id' => $this->shift->id,
+            'is_day_off' => false,
+        ]);
+        // Nov 3 (Day 3) - Work
+        $this->assertDatabaseHas('employee_schedules', [
+            'employee_id' => $emp->id,
+            'date' => '2026-11-03',
+            'shift_id' => $this->shift->id,
+            'is_day_off' => false,
+        ]);
+        // Nov 4 (Day 4) - Day Off
+        $this->assertDatabaseHas('employee_schedules', [
+            'employee_id' => $emp->id,
+            'date' => '2026-11-04',
+            'is_day_off' => true,
+        ]);
+        // Nov 5 (Day 5) - Day Off
+        $this->assertDatabaseHas('employee_schedules', [
+            'employee_id' => $emp->id,
+            'date' => '2026-11-05',
+            'is_day_off' => true,
+        ]);
+    }
+
+    public function test_holidays_crud_and_seed_indonesian_holidays(): void
+    {
+        // 1. Index
+        $response = $this->get(route('holidays.index'));
+        $response->assertStatus(200);
+        $response->assertSee('Kalender Hari Libur Nasional &amp; Cuti Bersama', false);
+
+        // 2. Store Holiday
+        $response = $this->post(route('holidays.store'), [
+            'name' => 'Hari Libur Korporat HRIS',
+            'date' => '2026-10-25',
+            'type' => 'COMPANY',
+            'office_location_id' => $this->location->id,
+            'description' => 'Ulang Tahun Perusahaan',
+        ]);
+
+        $response->assertRedirect(route('holidays.index', ['year' => 2026]));
+        $this->assertDatabaseHas('holidays', [
+            'name' => 'Hari Libur Korporat HRIS',
+            'type' => 'COMPANY',
+        ]);
+
+        // 3. Seed National Holidays
+        $response = $this->post(route('holidays.seed'), ['year' => 2026]);
+        $response->assertRedirect(route('holidays.index', ['year' => 2026]));
+        $this->assertDatabaseHas('holidays', [
+            'name' => 'HUT Kemerdekaan Republik Indonesia ke-81',
+            'type' => 'NATIONAL',
+        ]);
+    }
+
+    public function test_holiday_work_automatically_creates_overtime_request(): void
+    {
+        Carbon::setTestNow('2026-08-17 08:00:00');
+
+        // Create National Holiday for Aug 17
+        $holiday = Holiday::create([
+            'name' => 'Hari Kemerdekaan RI',
+            'date' => '2026-08-17',
+            'type' => 'NATIONAL',
+        ]);
+
+        // Employee clocks in on national holiday
+        $attendanceService = app(AttendanceService::class);
+        $attendance = $attendanceService->processClockIn(
+            $this->employee,
+            (float) $this->location->latitude,
+            (float) $this->location->longitude
+        );
+
+        $this->assertTrue($attendance->is_holiday_work);
+        $this->assertEquals($holiday->id, $attendance->holiday_id);
+
+        // Employee clocks out after 4 hours
+        Carbon::setTestNow('2026-08-17 12:00:00');
+        $attendanceService->processClockOut(
+            $this->employee,
+            (float) $this->location->latitude,
+            (float) $this->location->longitude
+        );
+
+        // System automatically created an overtime request
+        $this->assertDatabaseHas('overtime_requests', [
+            'employee_id' => $this->employee->id,
+            'status' => 'PENDING',
+        ]);
+
+        $ot = OvertimeRequest::where('employee_id', $this->employee->id)->first();
+        $this->assertNotNull($ot);
+        $this->assertStringContainsString('Hari Kemerdekaan RI', $ot->reason);
+        $this->assertEquals(4.0, $ot->total_hours);
+
+        Carbon::setTestNow();
     }
 }

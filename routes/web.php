@@ -11,6 +11,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EmployeeEducationController;
 use App\Http\Controllers\EmployeePortalController;
 use App\Http\Controllers\EmployeeScheduleController;
+use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\LeaveRequestController;
 use App\Http\Controllers\ManagerApprovalController;
 use App\Http\Controllers\ModulePortalController;
@@ -151,6 +152,8 @@ Route::middleware(['auth', 'role:hr'])->group(function () {
         Route::resource('departments', DepartmentController::class);
         Route::resource('positions', PositionController::class);
         Route::resource('employees', EmployeeController::class);
+        Route::post('employees/{employee}/password', [EmployeeController::class, 'updatePassword'])
+            ->name('employees.password.update');
 
         Route::post('employees/{employee}/contracts', [EmployeeContractController::class, 'store'])
             ->name('employees.contracts.store');
@@ -183,9 +186,15 @@ Route::middleware(['auth', 'role:hr'])->group(function () {
         // Office Geofence Locations (Master Settings)
         Route::resource('locations', OfficeLocationController::class)->except(['create', 'show', 'edit']);
 
-        // Employee Schedules / Roster Assign
+        // Employee Schedules / Roster Assign, Mass Assign & Auto-Roster
         Route::post('schedules', [EmployeeScheduleController::class, 'store'])->name('schedules.store');
+        Route::post('schedules/mass-assign', [EmployeeScheduleController::class, 'massAssign'])->name('schedules.mass-assign');
+        Route::post('schedules/auto-roster', [EmployeeScheduleController::class, 'autoRoster'])->name('schedules.auto-roster');
         Route::delete('schedules/{schedule}', [EmployeeScheduleController::class, 'destroy'])->name('schedules.destroy');
+
+        // National & Company Holiday Calendar Management
+        Route::resource('holidays', HolidayController::class)->except(['create', 'show', 'edit']);
+        Route::post('holidays/seed', [HolidayController::class, 'seedIndonesianHolidays'])->name('holidays.seed');
 
         // Overtime Approvals
         Route::post('overtimes/{overtime}/approve', [OvertimeRequestController::class, 'approve'])->name('overtimes.approve');
@@ -211,6 +220,7 @@ Route::middleware(['auth', 'role:hr'])->group(function () {
         Route::patch('/applications/{application}/stage', [RecruitmentController::class, 'updateStage'])->name('applications.stage');
         Route::post('/applications/{application}/interview', [RecruitmentController::class, 'scheduleInterview'])->name('applications.interview');
         Route::post('/applications/{application}/communicate', [RecruitmentController::class, 'sendCommunication'])->name('applications.communicate');
+        Route::post('/applications/{application}/reject', [RecruitmentController::class, 'rejectApplication'])->name('applications.reject');
         Route::post('/applications/{application}/convert-employee', [RecruitmentController::class, 'convertToEmployee'])->name('applications.convert-employee');
 
         // Psychotest Monitoring & Retake Management

@@ -6,10 +6,13 @@ use App\Http\Requests\StoreEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
 use App\Models\Department;
 use App\Models\Employee;
+use App\Models\JobApplication;
 use App\Models\Position;
+use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class EmployeeController extends Controller
 {
@@ -99,22 +102,77 @@ class EmployeeController extends Controller
     public function show(Employee $employee): View
     {
         $employee->load([
+            'user',
             'department',
             'position',
             'manager',
             'subordinates.position',
+            'subordinates.department',
             'educations' => fn ($q) => $q->orderByDesc('graduation_year'),
             'contracts' => fn ($q) => $q->orderByDesc('start_date'),
             'careerHistories.oldDepartment',
             'careerHistories.newDepartment',
             'careerHistories.oldPosition',
             'careerHistories.newPosition',
+            'attendances' => fn ($q) => $q->with('shift')->orderByDesc('date')->limit(30),
+            'leaveRequests' => fn ($q) => $q->with(['leaveType', 'approver'])->orderByDesc('start_date'),
+            'overtimeRequests' => fn ($q) => $q->with('approver')->orderByDesc('date'),
+            'schedules' => fn ($q) => $q->with(['shift', 'officeLocation'])->orderByDesc('date')->limit(30),
         ]);
+
+        $jobApplications = JobApplication::with(['jobPosting', 'psychotestResults.psychotest'])
+            ->where(function ($q) use ($employee) {
+                $q->where('employee_id', $employee->id);
+                if ($employee->user_id) {
+                    $q->orWhere('user_id', $employee->user_id);
+                }
+                if ($employee->email) {
+                    $q->orWhere('applicant_email', $employee->email);
+                }
+            })
+            ->latest()
+            ->get();
 
         $departments = Department::where('is_active', true)->orderBy('name')->get();
         $positions = Position::where('is_active', true)->orderBy('title')->get();
 
-        return view('modules.core-hr.employees.show', compact('employee', 'departments', 'positions'));
+        return view('modules.core-hr.employees.show', compact('employee', 'departments', 'positions', 'jobApplications'));
+    }
+
+    public function updatePassword(Request $request, Employee $employee): RedirectResponse
+    {
+        $validated = $request->validate([
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        $user = $employee->user;
+
+        if (! $user) {
+            $user = User::where('email', $employee->email)->first();
+
+            if (! $user) {
+                $user = User::create([
+                    'name' => $employee->full_name,
+                    'email' => $employee->email,
+                    'phone' => $employee->phone_number,
+                    'password' => Hash::make($validated['password']),
+                    'user_type' => User::TYPE_EMPLOYEE,
+                ]);
+            } else {
+                $user->update([
+                    'password' => Hash::make($validated['password']),
+                ]);
+            }
+
+            $employee->update(['user_id' => $user->id]);
+        } else {
+            $user->update([
+                'password' => Hash::make($validated['password']),
+            ]);
+        }
+
+        return redirect()->route('employees.show', $employee)
+            ->with('success', "Password akun login karyawan '{$employee->full_name}' ({$user->email}) berhasil diperbarui.");
     }
 
     public function edit(Employee $employee): View

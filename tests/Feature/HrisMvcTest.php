@@ -9,6 +9,7 @@ use App\Models\EmployeeEducation;
 use App\Models\Position;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 class HrisMvcTest extends TestCase
@@ -329,5 +330,44 @@ class HrisMvcTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee($employee->full_name);
         $response->assertSee('OFFBOARDING');
+    }
+
+    public function test_employee_password_can_be_updated_by_hr(): void
+    {
+        $employee = Employee::factory()->create([
+            'email' => 'staff.test@hris.corp',
+            'full_name' => 'Staff Test',
+            'user_id' => null,
+        ]);
+
+        // 1. Password validation (min 8 chars & confirmed)
+        $response = $this->post(route('employees.password.update', $employee), [
+            'password' => 'short',
+            'password_confirmation' => 'mismatch',
+        ]);
+        $response->assertSessionHasErrors(['password']);
+
+        // 2. Successful creation and update
+        $response = $this->post(route('employees.password.update', $employee), [
+            'password' => 'SuperSecret123!',
+            'password_confirmation' => 'SuperSecret123!',
+        ]);
+
+        $response->assertRedirect(route('employees.show', $employee));
+        $response->assertSessionHas('success');
+
+        $employee->refresh();
+        $this->assertNotNull($employee->user_id);
+        $user = $employee->user;
+        $this->assertEquals('staff.test@hris.corp', $user->email);
+        $this->assertTrue(Hash::check('SuperSecret123!', $user->password));
+
+        // 3. Show page renders all tables and tabs properly
+        $response = $this->get(route('employees.show', $employee));
+        $response->assertStatus(200);
+        $response->assertSee('Staff Test');
+        $response->assertSee('Ganti Password');
+        $response->assertSee('Presensi / Absensi');
+        $response->assertSee('Cuti & Izin', false);
     }
 }

@@ -48,16 +48,16 @@
         <!-- Live Statistics Bar (while running) -->
         <div class="flex items-center space-x-4 sm:space-x-6">
             <div class="text-right">
-                <span class="text-[10px] text-slate-400 uppercase font-bold block">Kolom Aktif</span>
-                <span class="text-sm font-black text-blue-600" id="stat-column-display">Kolom 1 / {{ $columnsCount }}</span>
+                <span class="text-xs text-slate-500 uppercase font-bold block">Kolom Aktif</span>
+                <span class="text-base sm:text-lg font-black text-blue-600" id="stat-column-display">Kolom 1 / {{ $columnsCount }}</span>
             </div>
             <div class="text-right">
-                <span class="text-[10px] text-slate-400 uppercase font-bold block">Sisa Waktu Kolom</span>
-                <span class="text-base font-black text-amber-600 tabular-nums" id="stat-timer-display">{{ $secondsPerColumn }}s</span>
+                <span class="text-xs text-slate-500 uppercase font-bold block">Sisa Waktu Kolom</span>
+                <span class="text-lg sm:text-xl font-black text-amber-600 tabular-nums" id="stat-timer-display">{{ $secondsPerColumn }}s</span>
             </div>
             <div class="text-right hidden sm:block">
-                <span class="text-[10px] text-slate-400 uppercase font-bold block">Terhitung</span>
-                <span class="text-sm font-black text-emerald-600" id="stat-attempted-display">0</span>
+                <span class="text-xs text-slate-500 uppercase font-bold block">Terhitung</span>
+                <span class="text-base sm:text-lg font-black text-emerald-600" id="stat-attempted-display">0</span>
             </div>
         </div>
     </header>
@@ -81,8 +81,8 @@
             </div>
 
             <!-- Aturan Pengerjaan -->
-            <div class="bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-200 text-left space-y-2 text-xs text-slate-700">
-                <div class="font-bold text-slate-900 text-xs mb-1 flex items-center space-x-1.5">
+            <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 text-left space-y-3 text-sm text-slate-700 leading-relaxed">
+                <div class="font-bold text-slate-900 text-sm mb-1 flex items-center space-x-1.5">
                     <span>📌</span>
                     <span>Instruksi Penjumlahan Angka:</span>
                 </div>
@@ -93,7 +93,7 @@
                 <div class="flex items-start space-x-2">
                     <span class="text-blue-600 font-bold shrink-0">2.</span>
                     <span>Ketik hanya <strong>digit satuan terakhir</strong> dari hasil penjumlahan:<br/>
-                        <span class="text-slate-500 italic">Contoh: 7 + 8 = 15 &rarr; Tekan <strong class="text-blue-600">5</strong> | 3 + 4 = 7 &rarr; Tekan <strong class="text-blue-600">7</strong></span>
+                        <span class="text-slate-500 italic">Contoh: 7 + 8 = 15 &rarr; Tekan <strong class="text-blue-600 font-bold">5</strong> | 3 + 4 = 7 &rarr; Tekan <strong class="text-blue-600 font-bold">7</strong></span>
                     </span>
                 </div>
                 <div class="flex items-start space-x-2">
@@ -107,13 +107,13 @@
             </div>
 
             <!-- Interactive Practice Arena (Simulasi Langsung) -->
-            <div class="p-4 sm:p-6 rounded-2xl bg-blue-50/50 border border-blue-200 text-left space-y-4">
+            <div class="p-5 sm:p-6 rounded-2xl bg-blue-50/50 border border-blue-200 text-left space-y-4">
                 <div class="flex items-center justify-between">
                     <div>
-                        <span class="text-[10px] font-black uppercase tracking-wider text-blue-700 block">Simulasi Latihan Interaktif</span>
-                        <p class="text-xs text-slate-600 mt-0.5">Coba jumlahkan angka pada kolom latihan di bawah ini menggunakan tombol angka atau keypad.</p>
+                        <span class="text-xs font-black uppercase tracking-wider text-blue-700 block">Simulasi Latihan Interaktif</span>
+                        <p class="text-sm text-slate-600 mt-0.5">Coba jumlahkan angka pada kolom latihan di bawah ini menggunakan tombol angka atau keypad.</p>
                     </div>
-                    <span id="sim-progress-badge" class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-white text-blue-700 border border-blue-200 shrink-0">
+                    <span id="sim-progress-badge" class="px-3 py-1 rounded-full text-xs font-bold bg-white text-blue-700 border border-blue-200 shrink-0">
                         Latihan: 0/4
                     </span>
                 </div>
@@ -250,35 +250,35 @@
             </div>
 
             <!-- Score Cards -->
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-left">
-                <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
-                    <span class="text-[10px] text-slate-400 uppercase font-bold">Total Hitungan</span>
-                    <div class="text-xl font-black text-slate-900 mt-0.5" id="res-total-attempted">0</div>
-                    <span class="text-[10px] text-slate-500">Total kalkulasi</span>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3.5 text-left">
+                <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                    <span class="text-xs text-slate-500 uppercase font-bold">Total Hitungan</span>
+                    <div class="text-2xl font-black text-slate-900 mt-1" id="res-total-attempted">0</div>
+                    <span class="text-xs text-slate-500">Total kalkulasi</span>
                 </div>
-                <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
-                    <span class="text-[10px] text-slate-400 uppercase font-bold">Tingkat Akurasi</span>
-                    <div class="text-xl font-black text-emerald-600 mt-0.5" id="res-accuracy">0%</div>
-                    <span class="text-[10px] text-slate-500">Ketelitian kerja</span>
+                <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                    <span class="text-xs text-slate-500 uppercase font-bold">Tingkat Akurasi</span>
+                    <div class="text-2xl font-black text-emerald-600 mt-1" id="res-accuracy">0%</div>
+                    <span class="text-xs text-slate-500">Ketelitian kerja</span>
                 </div>
-                <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
-                    <span class="text-[10px] text-slate-400 uppercase font-bold">Jawaban Benar</span>
-                    <div class="text-xl font-extrabold text-blue-600 mt-0.5" id="res-correct">0</div>
-                    <span class="text-[10px] text-slate-500">Kalkulasi tepat</span>
+                <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                    <span class="text-xs text-slate-500 uppercase font-bold">Jawaban Benar</span>
+                    <div class="text-2xl font-extrabold text-blue-600 mt-1" id="res-correct">0</div>
+                    <span class="text-xs text-slate-500">Kalkulasi tepat</span>
                 </div>
-                <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
-                    <span class="text-[10px] text-slate-400 uppercase font-bold">Jawaban Keliru</span>
-                    <div class="text-xl font-extrabold text-rose-600 mt-0.5" id="res-incorrect">0</div>
-                    <span class="text-[10px] text-slate-500">Kalkulasi salah</span>
+                <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                    <span class="text-xs text-slate-500 uppercase font-bold">Jawaban Keliru</span>
+                    <div class="text-2xl font-extrabold text-rose-600 mt-1" id="res-incorrect">0</div>
+                    <span class="text-xs text-slate-500">Kalkulasi salah</span>
                 </div>
             </div>
 
-            <div class="p-4 rounded-2xl bg-blue-50 border border-blue-200 text-left">
+            <div class="p-5 rounded-2xl bg-blue-50 border border-blue-200 text-left">
                 <div class="flex items-center justify-between">
-                    <span class="text-xs font-bold text-blue-900">Skor Akhir Terbobot:</span>
-                    <span class="text-2xl font-black text-blue-600" id="res-final-score">0 / 100</span>
+                    <span class="text-sm font-bold text-blue-900">Skor Akhir Terbobot:</span>
+                    <span class="text-3xl font-black text-blue-600" id="res-final-score">0 / 100</span>
                 </div>
-                <div class="text-[11px] text-slate-600 mt-1" id="res-status-badge">
+                <div class="text-sm text-slate-700 mt-1.5 font-medium" id="res-status-badge">
                     Menghitung hasil kelulusan...
                 </div>
             </div>
@@ -311,42 +311,42 @@
                 </div>
 
                 <!-- Psychological Diagnostic Summary Cards -->
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-center">
-                    <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
-                        <span class="text-[9px] uppercase font-bold text-slate-400 block">Panker (Kecepatan)</span>
-                        <span class="text-xs font-black text-slate-800 mt-0.5 block" id="res-metric-panker">-</span>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1 text-center">
+                    <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                        <span class="text-xs uppercase font-bold text-slate-500 block">Panker (Kecepatan)</span>
+                        <span class="text-sm font-black text-slate-900 mt-1 block" id="res-metric-panker">-</span>
                     </div>
-                    <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
-                        <span class="text-[9px] uppercase font-bold text-slate-400 block">Tianker (Ketelitian)</span>
-                        <span class="text-xs font-black text-emerald-600 mt-0.5 block" id="res-metric-tianker">-</span>
+                    <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                        <span class="text-xs uppercase font-bold text-slate-500 block">Tianker (Ketelitian)</span>
+                        <span class="text-sm font-black text-emerald-600 mt-1 block" id="res-metric-tianker">-</span>
                     </div>
-                    <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
-                        <span class="text-[9px] uppercase font-bold text-slate-400 block">Hanker (Ketahanan)</span>
-                        <span class="text-xs font-black text-indigo-600 mt-0.5 block" id="res-metric-hanker">-</span>
+                    <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                        <span class="text-xs uppercase font-bold text-slate-500 block">Hanker (Ketahanan)</span>
+                        <span class="text-sm font-black text-indigo-600 mt-1 block" id="res-metric-hanker">-</span>
                     </div>
-                    <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
-                        <span class="text-[9px] uppercase font-bold text-slate-400 block">Janker (Stabilitas)</span>
-                        <span class="text-xs font-black text-amber-600 mt-0.5 block" id="res-metric-janker">-</span>
+                    <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                        <span class="text-xs uppercase font-bold text-slate-500 block">Janker (Stabilitas)</span>
+                        <span class="text-sm font-black text-amber-600 mt-1 block" id="res-metric-janker">-</span>
                     </div>
                 </div>
 
                 <!-- Toggle Breakdown Table Button -->
                 <div class="pt-1">
-                    <button type="button" id="btn-toggle-column-table" class="text-[11px] font-bold text-blue-600 hover:text-blue-800 flex items-center gap-1 cursor-pointer">
+                    <button type="button" id="btn-toggle-column-table" class="text-sm font-bold text-blue-600 hover:text-blue-800 flex items-center gap-1 cursor-pointer">
                         <span>▼ Lihat Tabel Rincian Tiap Kolom</span>
                     </button>
                     <div id="column-details-table-container" class="hidden mt-3 max-h-48 overflow-y-auto border border-slate-200 rounded-xl">
                         <table class="w-full text-left text-xs">
-                            <thead class="bg-slate-100 text-slate-600 text-[10px] uppercase font-bold sticky top-0">
+                            <thead class="bg-slate-100 text-slate-700 text-xs uppercase font-bold sticky top-0">
                                 <tr>
-                                    <th class="px-3 py-2">Kolom</th>
-                                    <th class="px-3 py-2 text-center">Hitungan</th>
-                                    <th class="px-3 py-2 text-center text-emerald-700">Benar</th>
-                                    <th class="px-3 py-2 text-center text-rose-700">Keliru</th>
-                                    <th class="px-3 py-2 text-right">Akurasi</th>
+                                    <th class="px-3.5 py-2.5">Kolom</th>
+                                    <th class="px-3.5 py-2.5 text-center">Hitungan</th>
+                                    <th class="px-3.5 py-2.5 text-center text-emerald-700">Benar</th>
+                                    <th class="px-3.5 py-2.5 text-center text-rose-700">Keliru</th>
+                                    <th class="px-3.5 py-2.5 text-right">Akurasi</th>
                                 </tr>
                             </thead>
-                            <tbody id="column-details-tbody" class="divide-y divide-slate-100 bg-white text-[11px]">
+                            <tbody id="column-details-tbody" class="divide-y divide-slate-100 bg-white text-xs">
                                 <!-- Rows injected via JS -->
                             </tbody>
                         </table>
@@ -356,7 +356,7 @@
 
             <a
                 href="{{ route('career.psychotests.index', $application->id) }}"
-                class="block w-full py-3.5 rounded-2xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-md shadow-blue-600/20 transition-all text-center"
+                class="block w-full py-4 rounded-2xl text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-md shadow-blue-600/20 transition-all text-center"
             >
                 Kembali ke Beranda Asesmen →
             </a>
@@ -533,7 +533,7 @@
                 for (let r = 0; r < digits.length; r++) {
                     const rowDiv = document.createElement('div');
                     rowDiv.id = `digit-${c}-${r}`;
-                    rowDiv.className = `w-10 h-9 flex items-center justify-center font-bold text-lg rounded-lg kraepelin-digit transition-colors select-none ${
+                    rowDiv.className = `w-12 h-11 sm:w-14 sm:h-12 flex items-center justify-center font-black text-xl sm:text-2xl rounded-xl kraepelin-digit transition-colors select-none ${
                         c === currentColumnIdx && (r === currentRowIdx || r === currentRowIdx + 1)
                             ? 'bg-blue-600 text-white'
                             : 'text-slate-400 font-medium'
@@ -544,7 +544,7 @@
 
                 // Column Label on Top
                 const colLabel = document.createElement('div');
-                colLabel.className = 'text-[10px] font-bold text-slate-500 uppercase mt-2';
+                colLabel.className = 'text-xs font-bold text-slate-600 uppercase mt-2';
                 colLabel.textContent = `Kolom ${c + 1}`;
                 colDiv.appendChild(colLabel);
 
@@ -562,11 +562,11 @@
                 if (!el) continue;
 
                 if (r === currentRowIdx || r === currentRowIdx + 1) {
-                    el.className = 'w-10 h-9 flex items-center justify-center font-bold text-lg rounded-lg kraepelin-digit bg-blue-600 text-white shadow-sm transition-colors select-none';
+                    el.className = 'w-12 h-11 sm:w-14 sm:h-12 flex items-center justify-center font-black text-xl sm:text-2xl rounded-xl kraepelin-digit bg-blue-600 text-white shadow-md transition-colors select-none';
                 } else if (r < currentRowIdx) {
-                    el.className = 'w-10 h-9 flex items-center justify-center font-normal text-lg rounded-lg kraepelin-digit text-slate-300 opacity-40 transition-colors select-none';
+                    el.className = 'w-12 h-11 sm:w-14 sm:h-12 flex items-center justify-center font-normal text-xl sm:text-2xl rounded-xl kraepelin-digit text-slate-300 opacity-40 transition-colors select-none';
                 } else {
-                    el.className = 'w-10 h-9 flex items-center justify-center font-bold text-lg rounded-lg kraepelin-digit text-slate-700 transition-colors select-none';
+                    el.className = 'w-12 h-11 sm:w-14 sm:h-12 flex items-center justify-center font-bold text-xl sm:text-2xl rounded-xl kraepelin-digit text-slate-700 transition-colors select-none';
                 }
             }
 
